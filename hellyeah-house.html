@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HELLYEAH HOUSE — Operative Roster</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#c8b97a;--gold-light:#e8d49a;--gold-dim:#5a5040;
+  --bg:#080806;--bg2:#0f0e0c;--bg3:#0a0908;
+  --border:#1e1c14;--border2:#2a2318;
+  --green:#3d6b3d;--red:#6b3d3d;
+  --font-head:'Cinzel',serif;--font-mono:'Share Tech Mono',monospace;
+}
+html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--font-mono);overflow:hidden}
+/* ── LAYOUT ── */
+.app{display:flex;height:100vh}
+.sidebar{width:220px;flex-shrink:0;border-right:0.5px solid var(--border);display:flex;flex-direction:column;background:var(--bg)}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+/* ── SIDEBAR ── */
+.sb-logo{padding:20px 16px 14px;border-bottom:0.5px solid var(--border)}
+.sb-logo-text{font-family:var(--font-head);font-size:13px;letter-spacing:0.18em;color:var(--gold-light)}
+.sb-logo-sub{font-size:7px;color:var(--border2);letter-spacing:0.18em;margin-top:3px;line-height:1.6}
+.sb-status{padding:8px 16px;border-bottom:0.5px solid var(--border);font-size:8px;color:var(--green);letter-spacing:0.1em}
+.sb-div-label{padding:14px 16px 6px;font-size:7px;color:var(--border2);letter-spacing:0.2em}
+.sb-agent{display:flex;align-items:center;gap:8px;padding:7px 16px;cursor:pointer;transition:background 0.15s;border-left:2px solid transparent}
+.sb-agent:hover{background:var(--bg2)}
+.sb-agent.active{background:var(--bg2);border-left-color:var(--gold)}
+.sb-avatar{width:28px;height:28px;border-radius:3px;object-fit:cover;object-position:top;filter:grayscale(30%)}
+.sb-agent.active .sb-avatar{filter:grayscale(0%)}
+.sb-agent-info{flex:1;min-width:0}
+.sb-agent-name{font-size:9px;color:var(--gold-light);letter-spacing:0.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-agent-role{font-size:7px;color:var(--gold-dim);letter-spacing:0.06em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-dot{width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0}
+.sb-lobby-btn{margin:12px;padding:8px;border:0.5px solid var(--border2);background:transparent;color:var(--gold-dim);font-family:var(--font-mono);font-size:8px;letter-spacing:0.1em;cursor:pointer;border-radius:3px;transition:all 0.15s;text-align:center}
+.sb-lobby-btn:hover,.sb-lobby-btn.active{border-color:var(--gold);color:var(--gold)}
+/* ── TOPBAR ── */
+.topbar{padding:12px 20px;border-bottom:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.topbar-name{font-family:var(--font-head);font-size:14px;letter-spacing:0.1em;color:var(--gold-light)}
+.topbar-role{font-size:8px;color:var(--gold-dim);letter-spacing:0.12em;margin-top:2px}
+.topbar-cl{font-size:8px;padding:2px 8px;border:0.5px solid;border-radius:2px;letter-spacing:0.08em}
+/* ── LOBBY ── */
+.lobby-view{flex:1;overflow-y:auto;padding:20px}
+.lobby-view::-webkit-scrollbar{width:4px}
+.lobby-view::-webkit-scrollbar-track{background:var(--bg)}
+.lobby-view::-webkit-scrollbar-thumb{background:var(--border2)}
+.div-section{margin-bottom:24px}
+.div-label{font-size:8px;color:var(--border2);letter-spacing:0.2em;margin-bottom:12px;padding-bottom:6px;border-bottom:0.5px solid var(--border)}
+.agent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.agent-card{background:var(--bg2);border:0.5px solid var(--border);border-radius:6px;overflow:hidden;cursor:pointer;transition:border-color 0.2s,transform 0.15s}
+.agent-card:hover{border-color:#c8b97a44;transform:translateY(-2px)}
+.agent-card.active{border-color:var(--gold)}
+.card-img{width:100%;aspect-ratio:3/4;object-fit:cover;object-position:top;filter:grayscale(20%) contrast(1.05) brightness(0.9);transition:filter 0.2s}
+.agent-card:hover .card-img,.agent-card.active .card-img{filter:grayscale(0%) contrast(1.1) brightness(1)}
+.card-info{padding:8px}
+.card-file{font-size:7px;color:var(--border2);letter-spacing:0.1em;margin-bottom:2px}
+.card-name{font-family:var(--font-head);font-size:10px;color:var(--gold-light);letter-spacing:0.05em;margin-bottom:1px}
+.card-role{font-size:8px;color:var(--gold-dim);letter-spacing:0.06em;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-divbadge{display:inline-block;font-size:7px;padding:1px 5px;border-radius:2px;border:0.5px solid;letter-spacing:0.06em}
+/* ── CHAT VIEW ── */
+.chat-view{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.agent-profile{padding:14px 20px;border-bottom:0.5px solid var(--border);display:flex;gap:12px;align-items:flex-start;flex-shrink:0;background:var(--bg3)}
+.profile-img{width:54px;height:72px;object-fit:cover;object-position:top;border-radius:4px;filter:contrast(1.1)}
+.profile-body{flex:1}
+.profile-quote{font-size:10px;color:var(--gold-dim);font-style:italic;border-left:1.5px solid var(--border2);padding-left:8px;margin-bottom:8px;line-height:1.5}
+.profile-caps{display:flex;flex-wrap:wrap;gap:4px}
+.profile-cap{font-size:8px;padding:2px 7px;border:0.5px solid var(--border2);border-radius:10px;color:var(--gold-dim)}
+.messages{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:10px}
+.messages::-webkit-scrollbar{width:4px}
+.messages::-webkit-scrollbar-track{background:var(--bg)}
+.messages::-webkit-scrollbar-thumb{background:var(--border2)}
+.msg{max-width:75%;padding:10px 13px;border-radius:6px;font-size:12px;line-height:1.7}
+.msg.user{align-self:flex-end;background:var(--bg2);border:0.5px solid var(--border2);color:var(--gold-light)}
+.msg.ai{align-self:flex-start;background:var(--bg3);border:0.5px solid var(--border);color:#8a7a50}
+.msg.ai .msg-name{font-size:8px;color:var(--gold);letter-spacing:0.1em;margin-bottom:4px}
+.msg.thinking{color:var(--border2);font-style:italic}
+.input-row{padding:12px 20px;border-top:0.5px solid var(--border);display:flex;gap:8px;flex-shrink:0}
+.chat-input{flex:1;background:var(--bg2);border:0.5px solid var(--border2);border-radius:4px;padding:10px 14px;color:var(--gold-light);font-family:var(--font-mono);font-size:12px;outline:none;resize:none;transition:border-color 0.15s}
+.chat-input:focus{border-color:var(--gold)44}
+.chat-input::placeholder{color:var(--border2)}
+.send-btn{padding:10px 16px;border:0.5px solid var(--gold);background:transparent;color:var(--gold);font-family:var(--font-mono);font-size:10px;letter-spacing:0.1em;cursor:pointer;border-radius:3px;transition:background 0.15s;white-space:nowrap}
+.send-btn:hover{background:#c8b97a0a}
+.send-btn:disabled{opacity:0.3;cursor:not-allowed}
+/* ── VIEWS ── */
+.view{display:none}
+.view.active{display:flex;flex-direction:column;flex:1;overflow:hidden}
+/* ── WELCOME ── */
+.welcome{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;padding:20px}
+.w-logo{font-family:var(--font-head);font-size:28px;letter-spacing:0.2em;color:var(--gold-light);margin-bottom:8px}
+.w-sub{font-size:9px;color:var(--border2);letter-spacing:0.2em}
+.w-hint{font-size:10px;color:var(--gold-dim);margin-top:16px}
+/* ── SETUP BANNER ── */
+.setup-banner{background:#120f08;border:0.5px solid #33280e;border-radius:5px;padding:10px 14px;font-size:10px;color:#7a6030;line-height:1.65;margin:16px 20px 0}
+.setup-banner a{color:var(--gold);text-decoration:none}
+/* ── API MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);display:flex;align-items:center;justify-content:center;z-index:100}
+.modal{background:var(--bg2);border:0.5px solid var(--border2);border-radius:8px;padding:24px;width:360px}
+.modal-title{font-family:var(--font-head);font-size:14px;color:var(--gold-light);letter-spacing:0.1em;margin-bottom:6px}
+.modal-sub{font-size:10px;color:var(--gold-dim);margin-bottom:16px;line-height:1.6}
+.modal-input{width:100%;background:var(--bg3);border:0.5px solid var(--border2);border-radius:4px;padding:10px 12px;color:var(--gold-light);font-family:var(--font-mono);font-size:11px;outline:none;margin-bottom:10px}
+.modal-input:focus{border-color:var(--gold)44}
+.modal-note{font-size:9px;color:var(--border2);line-height:1.6;margin-bottom:16px}
+.modal-btns{display:flex;gap:8px}
+.modal-btn{flex:1;padding:9px;border:0.5px solid var(--border2);background:transparent;color:var(--gold-dim);font-family:var(--font-mono);font-size:9px;letter-spacing:0.1em;cursor:pointer;border-radius:3px;transition:all 0.15s}
+.modal-btn.primary{border-color:var(--gold);color:var(--gold)}
+.modal-btn.primary:hover{background:#c8b97a0a}
+#clock{font-size:8px;color:var(--border2);letter-spacing:0.1em}
+</style>
+</head>
+<body>
+
+<!-- API KEY MODAL -->
+<div class="modal-overlay" id="api-modal">
+  <div class="modal">
+    <div class="modal-title">ENTER API KEY</div>
+    <div class="modal-sub">ใส่ Anthropic API Key เพื่อเปิดใช้งาน operatives<br>Key เก็บใน browser เท่านั้น ไม่ส่งไปที่ไหน</div>
+    <input class="modal-input" type="password" id="api-input" placeholder="sk-ant-api03-..." autocomplete="off">
+    <div class="modal-note">
+      ขอ API Key ได้ที่ <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a><br>
+      Key จะเก็บใน localStorage ของ browser นี้เท่านั้น
+    </div>
+    <div class="modal-btns">
+      <button class="modal-btn" onclick="skipApiKey()">SKIP (DEMO MODE)</button>
+      <button class="modal-btn primary" onclick="saveApiKey()">SAVE KEY ↗</button>
+    </div>
+  </div>
+</div>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-text">HELLYEAH HOUSE</div>
+      <div class="sb-logo-sub">BRAND OPERATIONS<br>& CREATIVE INTELLIGENCE</div>
+    </div>
+    <div class="sb-status">● <span id="op-count">12</span> OPERATIVES ACTIVE</div>
+    <button class="sb-lobby-btn active" id="lobby-btn" onclick="showLobby()">⬡ OPERATIVE ROSTER</button>
+    <div id="sidebar-agents"></div>
+    <div style="flex:1"></div>
+    <div style="padding:10px 16px;border-top:0.5px solid var(--border)">
+      <div id="clock"></div>
+      <div style="font-size:7px;color:var(--border2);margin-top:2px;cursor:pointer" onclick="clearApiKey()">RESET API KEY</div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <!-- LOBBY VIEW -->
+    <div class="view active" id="lobby-view">
+      <div class="topbar">
+        <div>
+          <div class="topbar-name">OPERATIVE ROSTER</div>
+          <div class="topbar-role">HELLYEAH HOUSE · ALL DIVISIONS</div>
+        </div>
+        <div id="clock2" style="font-size:8px;color:var(--border2);letter-spacing:0.1em"></div>
+      </div>
+      <div class="lobby-view" id="lobby-content"></div>
+    </div>
+
+    <!-- CHAT VIEW -->
+    <div class="view" id="chat-view">
+      <div class="topbar">
+        <div>
+          <div class="topbar-name" id="chat-agent-name">—</div>
+          <div class="topbar-role" id="chat-agent-role">—</div>
+        </div>
+        <span class="topbar-cl" id="chat-agent-cl">—</span>
+      </div>
+      <div class="chat-view">
+        <div class="agent-profile" id="agent-profile"></div>
+        <div class="messages" id="messages"></div>
+        <div class="input-row">
+          <textarea class="chat-input" id="chat-input" rows="1" placeholder="พิมพ์ข้อความถึง operative..."></textarea>
+          <button class="send-btn" id="send-btn" onclick="sendMessage()">SEND ↗</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var API_KEY = localStorage.getItem('hh_api_key') || '';
+var currentAgent = null;
+var chatHistories = {};
+
+// ── AGENTS DATA ──
+var agents = [
+  {id:'HYH-001',div:'CREATIVE',name:'THE INTAKE',role:'brief receiver · mission intake',cl:'ALPHA',clc:'#c8b97a',
+   quote:'"A brief with gaps is not a brief. It\'s a guess."',
+   caps:['รับบรีฟดิบทุกรูปแบบ','ถามจนครบ 9 fields','สรุป Creative Brief พร้อมส่งทีม'],
+   img:'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&q=80',
+   system:'คุณคือ Brief Intake Specialist ของ HELLYEAH HOUSE — Brand Operations & Creative Intelligence\n\nงานของคุณคือรับบรีฟจาก Design Director แล้วถามจนได้ข้อมูลครบก่อนส่งต่อทีม creative\n\nเมื่อได้รับบรีฟ ให้: สรุปสิ่งที่ได้รับ → ถามคำถามที่ยังขาด 2-3 ข้อทีละชุด → เมื่อครบ สรุปเป็น Creative Brief ฉบับสมบูรณ์\n\nข้อมูลที่ต้องได้: Brand & product, Objective, Target audience, Key message, Tone & manner, Deliverables, Timeline, Budget, Mandatory\n\nพูดตรง เป็นกันเอง ใช้ภาษาไทยผสมอังกฤษได้'},
+  {id:'HYH-002',div:'CREATIVE',name:'THE THINKER',role:'concept generator · creative intelligence',cl:'BETA',clc:'#7a9cc8',
+   quote:'"Safe ideas don\'t change anything."',
+   caps:['วิเคราะห์ core tension ใน brief','เสนอ 3 concept directions','recommend ชัดเจน ไม่อ้อมค้อม'],
+   img:'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=300&q=80',
+   system:'คุณคือ Creative Concept Generator ของ HELLYEAH HOUSE\n\nเมื่อได้รับ Creative Brief: 1) บอก core tension ที่เห็น + human truth 2) เสนอ 3 concept directions แต่ละตัวมี: CONCEPT NAME, BIG IDEA, HUMAN TRUTH, BRAND ROLE, CAMPAIGN LINE, EXECUTION HINT, WHY THIS WORKS 3) ระบุ concept ที่แนะนำพร้อมเหตุผล\n\nพูดตรง มีจุดยืน ไม่บอกว่า "ขึ้นอยู่กับ client" ใช้ภาษาไทยผสมอังกฤษ'},
+  {id:'HYH-003',div:'CREATIVE',name:'THE WRITER',role:'senior copywriter · language ops',cl:'GAMMA',clc:'#9c7ac8',
+   quote:'"Copy that doesn\'t feel anything, does nothing."',
+   caps:['เขียน copy ทุก format','เสนอ 3 angle พร้อม note','พูดตรงถ้า revision ทำให้แย่ลง'],
+   img:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=80',
+   system:'คุณคือ Senior Copywriter ของ HELLYEAH HOUSE\n\nเขียน copy ที่จำได้ ไม่ใช่ copy ที่แค่ถูกต้อง เสนอ 3 ตัวเลือกเสมอ แต่ละตัวมี angle ต่างกัน format: OPTION A — [angle] / copy / NOTE: [บอกว่า angle นี้ทำงานยังไง] ปิดด้วย RECOMMENDED: Option X เพราะ...\n\nหลีกเลี่ยง: "ดีที่สุด" "คุณภาพสูง" "นวัตกรรม" ใช้ภาษาไทยผสมอังกฤษ'},
+  {id:'HYH-004',div:'CREATIVE',name:'THE CRITIC',role:'creative reviewer · quality gate',cl:'DELTA',clc:'#c87a7a',
+   quote:'"Good enough is the enemy of what it could be."',
+   caps:['ตัดสิน APPROVED/NEEDS WORK/SEND BACK','เช็ค brand fit + strategy','revision notes ที่ actionable'],
+   img:'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&q=80',
+   system:'คุณคือ Creative Reviewer ของ HELLYEAH HOUSE — quality gate สุดท้ายก่อนงานออกจาก agency\n\nรีวิวในรูปแบบ:\nVERDICT: [APPROVED / NEEDS WORK / SEND BACK]\nON STRATEGY: ...\nON BRAND: ...\nON IDEA: ...\nON CRAFT: ...\nSTRONGEST PART: ...\nWEAKEST POINT: ...\nREVISION NOTES: → ข้อ 1 → ข้อ 2\nSEND WHEN: ...\n\nพูดตรง ไม่อ้อมค้อม ไม่ approve งานเพราะ deadline'},
+  {id:'HYH-005',div:'DESIGN',name:'THE DIRECTOR',role:'art director · visual intelligence',cl:'ALPHA',clc:'#c8b97a',
+   quote:'"If you can\'t describe it, you can\'t design it."',
+   caps:['เสนอ visual direction + mood','เขียน art direction brief','ระบุ visual reference พร้อม rationale'],
+   img:'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&q=80',
+   system:'คุณคือ Art Director ของ HELLYEAH HOUSE\n\nเมื่อได้รับ concept หรือ brief ให้เสนอ visual direction ประกอบด้วย: VISUAL CONCEPT (1 ประโยค), MOOD & FEELING, COLOR DIRECTION, TYPOGRAPHY DIRECTION, COMPOSITION STYLE, VISUAL REFERENCES (อธิบาย ไม่ต้องลิงก์), WHAT TO AVOID\n\nคิดแบบ director ที่รู้ว่างานต้องรู้สึกยังไง ไม่ใช่แค่หน้าตาเป็นยังไง'},
+  {id:'HYH-006',div:'DESIGN',name:'THE HAND',role:'graphic executor · production ops',cl:'BETA',clc:'#c87a3a',
+   quote:'"Craft is what separates vision from reality."',
+   caps:['เขียน design spec ละเอียด','describe layout, type, color system','review งานกับ brand guideline'],
+   img:'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=300&q=80',
+   system:'คุณคือ Graphic Production Specialist ของ HELLYEAH HOUSE\n\nงานคือแปลง visual direction เป็น production spec ที่ graphic designer ทำตามได้เลย ประกอบด้วย: SIZE & FORMAT, GRID & LAYOUT, TYPOGRAPHY SPEC (font, size, weight, line-height, color), COLOR PALETTE (hex codes), IMAGERY DIRECTION, SPACING & MARGIN, FILE FORMAT & DELIVERABLE\n\nพูดเป็น spec ชัดเจน ไม่ใช่ไอเดีย'},
+  {id:'HYH-007',div:'DESIGN',name:'THE MOTION',role:'motion & content · social ops',cl:'GAMMA',clc:'#9c7ac8',
+   quote:'"Static is dead. Everything moves now."',
+   caps:['คิด content format สำหรับ social','เขียน motion brief + animation direction','วาง content calendar'],
+   img:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&q=80',
+   system:'คุณคือ Motion & Social Content Specialist ของ HELLYEAH HOUSE\n\nครอบคลุม: social content strategy, motion design direction, content calendar, platform-specific format\n\nเมื่อได้รับ campaign concept ให้เสนอ: PLATFORM BREAKDOWN (IG/TikTok/Facebook แต่ละตัวทำอะไร), CONTENT FORMATS, MOTION DIRECTION (ถ้ามี animation), POSTING CADENCE, CONTENT PILLARS\n\nคิดแบบคนที่รู้ว่า algorithm ทำงานยังไงด้วย'},
+  {id:'HYH-008',div:'STRATEGY',name:'THE SCOUT',role:'researcher · intelligence ops',cl:'BETA',clc:'#3a9cc8',
+   quote:'"Numbers don\'t lie. People do."',
+   caps:['หา consumer insight + เทรนด์','สรุป market landscape','fact-check ข้อมูลก่อนใช้'],
+   img:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&q=80',
+   system:'คุณคือ Research & Intelligence Specialist ของ HELLYEAH HOUSE\n\nเมื่อถูกถามให้ research ให้สรุปในรูปแบบ: CATEGORY OVERVIEW, KEY PLAYERS & POSITIONING, CONSUMER INSIGHT (what people really want), TREND SIGNALS, WHITESPACE OPPORTUNITY, SOURCES TO VERIFY\n\nบอกตรงๆ เมื่อข้อมูลไม่แน่ใจ ไม่แต่งข้อมูล'},
+  {id:'HYH-009',div:'STRATEGY',name:'THE ACCOUNT',role:'account handler · client ops',cl:'GAMMA',clc:'#c87a3a',
+   quote:'"A client who trusts you gives you better briefs."',
+   caps:['ดราฟต์ proposal + quotation','เขียน client email ทุก scenario','ติดตาม billing milestone'],
+   img:'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=300&q=80',
+   system:'คุณคือ Account Manager ของ HELLYEAH HOUSE\n\nช่วยเรื่อง: proposal writing, quotation, scope of work, client communication, billing\n\nสไตล์การเขียน: professional แต่ไม่เย็นชา, ชัดเจน, ไม่มี jargon ที่ไม่จำเป็น\n\nเมื่อถูกขอให้เขียน email หรือ proposal ถามก่อนถ้าขาดข้อมูล: client name, context, objective, tone ที่ต้องการ'},
+  {id:'HYH-010',div:'STRATEGY',name:'THE HANDLER',role:'project manager · mission control',cl:'ALPHA',clc:'#c8b97a',
+   quote:'"A missed deadline is a broken promise."',
+   caps:['breakdown brief เป็น task + timeline','assign งานตาม role','สรุปสถานะ project ทุก checkpoint'],
+   img:'https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=300&q=80',
+   system:'คุณคือ Project Manager ของ HELLYEAH HOUSE\n\nเมื่อได้รับ project brief ให้สร้าง: PROJECT BREAKDOWN (phases + tasks), TIMELINE (สัปดาห์หรือวัน ตาม deadline), OWNER PER TASK (ระบุ division: Creative/Design/Strategy/Tech), DEPENDENCIES (งานไหนต้องรอใคร), RISK FLAGS (อะไรที่อาจทำให้ช้า)\n\nพูดตรง บอกถ้า timeline ไม่สมเหตุสมผล'},
+  {id:'HYH-011',div:'TECH',name:'THE ARCHITECT',role:'ui/ux designer · experience ops',cl:'BETA',clc:'#4a9c5a',
+   quote:'"Design is how it works, not just how it looks."',
+   caps:['วาง user flow + wireframe concept','เขียน UX spec + component description','review กับ usability principles'],
+   img:'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=300&q=80',
+   system:'คุณคือ UX/UI Designer ของ HELLYEAH HOUSE\n\nครอบคลุม: user research synthesis, information architecture, user flow, wireframe description, component spec, usability review\n\nเมื่อได้รับ requirement ให้เสนอ: USER GOAL, PROPOSED FLOW (step by step), KEY SCREENS/STATES, INTERACTION NOTES, ACCESSIBILITY CONSIDERATIONS, WHAT NOT TO DO\n\nคิดจาก user ก่อน business เสมอ'},
+  {id:'HYH-012',div:'TECH',name:'THE ENGINEER',role:'fullstack · backend & frontend ops',cl:'GAMMA',clc:'#4a9c5a',
+   quote:'"The best code is the code nobody notices."',
+   caps:['เขียน + review code ทุก layer','debug + troubleshoot ระบบ','วาง architecture + tech stack'],
+   img:'https://images.unsplash.com/photo-1566492031773-4f4e44671857?w=300&q=80',
+   system:'คุณคือ Fullstack Engineer ของ HELLYEAH HOUSE\n\nครอบคลุม frontend (HTML/CSS/JS/React), backend (Node/Python/API), database, deployment\n\nเมื่อถูกถามให้: เขียน code ที่ clean และ readable, อธิบาย logic สั้นๆ, บอก trade-off ของ approach ที่เลือก, warn ถ้าเห็น security issue\n\nไม่เขียน code ที่ตัวเองไม่เข้าใจ ถามถ้าต้องการ context เพิ่ม'}
+];
+
+var divColors = {CREATIVE:'#9c7ac8',DESIGN:'#c87a3a',STRATEGY:'#3a9cc8',TECH:'#4a9c5a'};
+
+// ── INIT ──
+function init() {
+  if(!API_KEY) {
+    document.getElementById('api-modal').style.display='flex';
+  } else {
+    document.getElementById('api-modal').style.display='none';
+  }
+  buildSidebar();
+  buildLobby();
+  startClock();
+}
+
+function saveApiKey() {
+  var k = document.getElementById('api-input').value.trim();
+  if(!k) { alert('กรุณาใส่ API Key'); return; }
+  API_KEY = k;
+  localStorage.setItem('hh_api_key', k);
+  document.getElementById('api-modal').style.display='none';
+}
+function skipApiKey() {
+  API_KEY = 'demo';
+  document.getElementById('api-modal').style.display='none';
+}
+function clearApiKey() {
+  localStorage.removeItem('hh_api_key');
+  API_KEY = '';
+  document.getElementById('api-modal').style.display='flex';
+}
+
+// ── SIDEBAR ──
+function buildSidebar() {
+  var sb = document.getElementById('sidebar-agents');
+  var divs = ['CREATIVE','DESIGN','STRATEGY','TECH'];
+  var html = '';
+  divs.forEach(function(d) {
+    html += '<div class="sb-div-label">' + d + '</div>';
+    agents.filter(function(a){return a.div===d}).forEach(function(a) {
+      html += '<div class="sb-agent" id="sb-'+a.id+'" onclick="openChat(\''+a.id+'\')">';
+      html += '<img class="sb-avatar" src="'+a.img+'" alt="'+a.name+'" onerror="this.style.background=\'#1a1812\';this.src=\'\'">';
+      html += '<div class="sb-agent-info"><div class="sb-agent-name">'+a.name+'</div><div class="sb-agent-role">'+a.role.split('·')[0].trim()+'</div></div>';
+      html += '<div class="sb-dot"></div></div>';
+    });
+  });
+  sb.innerHTML = html;
+}
+
+// ── LOBBY ──
+function buildLobby() {
+  var cont = document.getElementById('lobby-content');
+  var divs = ['CREATIVE','DESIGN','STRATEGY','TECH'];
+  var labels = {CREATIVE:'CREATIVE DIVISION',DESIGN:'DESIGN DIVISION',STRATEGY:'STRATEGY & OPS DIVISION',TECH:'TECH DIVISION'};
+  var html = '';
+  divs.forEach(function(d) {
+    var divAgents = agents.filter(function(a){return a.div===d});
+    html += '<div class="div-section"><div class="div-label">'+labels[d]+'</div><div class="agent-grid">';
+    divAgents.forEach(function(a) {
+      var dc = divColors[d]||'#c8b97a';
+      html += '<div class="agent-card" id="lc-'+a.id+'" onclick="openChat(\''+a.id+'\')">';
+      html += '<img class="card-img" src="'+a.img+'" alt="'+a.name+'" loading="lazy" onerror="this.style.background=\'#1a1812\';this.src=\'\'">';
+      html += '<div class="card-info">';
+      html += '<div class="card-file">FILE '+a.id+'</div>';
+      html += '<div class="card-name">'+a.name+'</div>';
+      html += '<div class="card-role">'+a.role+'</div>';
+      html += '<div class="card-divbadge" style="color:'+dc+';border-color:'+dc+'44">'+d+'</div>';
+      html += '</div></div>';
+    });
+    html += '</div></div>';
+  });
+  cont.innerHTML = html;
+}
+
+// ── SHOW LOBBY ──
+function showLobby() {
+  document.getElementById('lobby-view').classList.add('active');
+  document.getElementById('chat-view').classList.remove('active');
+  document.getElementById('lobby-btn').classList.add('active');
+  document.querySelectorAll('.sb-agent').forEach(function(el){el.classList.remove('active')});
+  currentAgent = null;
+}
+
+// ── OPEN CHAT ──
+function openChat(agentId) {
+  var a = agents.find(function(x){return x.id===agentId});
+  if(!a) return;
+  currentAgent = a;
+  document.getElementById('lobby-view').classList.remove('active');
+  document.getElementById('chat-view').classList.add('active');
+  document.getElementById('lobby-btn').classList.remove('active');
+  document.querySelectorAll('.sb-agent').forEach(function(el){el.classList.remove('active')});
+  var sbEl = document.getElementById('sb-'+agentId);
+  if(sbEl) sbEl.classList.add('active');
+  document.querySelectorAll('.agent-card').forEach(function(el){el.classList.remove('active')});
+  var lcEl = document.getElementById('lc-'+agentId);
+  if(lcEl) lcEl.classList.add('active');
+  document.getElementById('chat-agent-name').textContent = a.name;
+  document.getElementById('chat-agent-role').textContent = a.role.toUpperCase();
+  var clEl = document.getElementById('chat-agent-cl');
+  clEl.textContent = a.cl;
+  clEl.style.color = a.clc;
+  clEl.style.borderColor = a.clc;
+  var profile = document.getElementById('agent-profile');
+  var capsHtml = a.caps.map(function(c){return '<span class="profile-cap">'+c+'</span>'}).join('');
+  profile.innerHTML =
+    '<img src="'+a.img+'" class="profile-img" alt="'+a.name+'" onerror="this.style.background=\'#1a1812\'">' +
+    '<div class="profile-body"><div class="profile-quote">'+a.quote+'</div><div class="profile-caps">'+capsHtml+'</div></div>';
+  if(!chatHistories[agentId]) chatHistories[agentId] = [];
+  renderMessages(agentId);
+  if(chatHistories[agentId].length === 0) {
+    addSystemGreeting(a);
+  }
+  document.getElementById('chat-input').focus();
+}
+
+function addSystemGreeting(a) {
+  var greetings = {
+    'HYH-001': 'สวัสดีครับ — พร้อมรับบรีฟแล้ว โยนมาได้เลย ไม่ว่าจะยาวหรือสั้นแค่ไหน ผมจะถามต่อเองจนได้ข้อมูลครบ',
+    'HYH-002': 'พร้อมแล้ว — ส่ง Creative Brief มาได้เลย จะวิเคราะห์ tension และเสนอ concept directions ให้',
+    'HYH-003': 'พร้อมเขียน — บอกมาว่าต้องการ copy format ไหน และ concept ที่ยึดอยู่คืออะไร',
+    'HYH-004': 'พร้อม review — ส่งงานมาพร้อม brief ที่ใช้อ้างอิง จะตัดสิน APPROVED / NEEDS WORK / SEND BACK ให้ตรงๆ',
+    'HYH-005': 'พร้อมแล้ว — ส่ง concept หรือ brief มา จะเสนอ visual direction และ art direction ให้',
+    'HYH-006': 'พร้อมแล้ว — ส่ง visual direction มา จะแปลงเป็น production spec ที่ graphic ทำตามได้เลย',
+    'HYH-007': 'พร้อมแล้ว — บอก campaign concept และ platform ที่ต้องการ จะวาง content strategy และ motion direction ให้',
+    'HYH-008': 'พร้อมแล้ว — ต้องการ research เรื่องอะไร? บอก category, brand, หรือ insight ที่อยากได้',
+    'HYH-009': 'พร้อมแล้ว — ต้องการ draft อะไร? proposal, quotation, client email หรือ scope of work?',
+    'HYH-010': 'พร้อมแล้ว — ส่ง project brief มา จะ breakdown เป็น tasks + timeline + owner ให้ทันที',
+    'HYH-011': 'พร้อมแล้ว — บอก requirement หรือ problem ที่ต้องการ UX solution จะวาง flow และ spec ให้',
+    'HYH-012': 'พร้อมแล้ว — มีโจทย์ tech อะไร? code, debug, architecture หรือ stack recommendation?'
+  };
+  var msg = greetings[a.id] || 'พร้อมรับงานแล้ว';
+  chatHistories[a.id].push({role:'assistant', content:msg});
+  renderMessages(a.id);
+}
+
+function renderMessages(agentId) {
+  var msgs = document.getElementById('messages');
+  var history = chatHistories[agentId] || [];
+  var a = agents.find(function(x){return x.id===agentId});
+  msgs.innerHTML = '';
+  history.forEach(function(m) {
+    var div = document.createElement('div');
+    div.className = 'msg ' + (m.role==='user'?'user':'ai');
+    if(m.role==='assistant') {
+      div.innerHTML = '<div class="msg-name">'+a.name+'</div>' + m.content.replace(/\n/g,'<br>');
+    } else {
+      div.textContent = m.content;
+    }
+    msgs.appendChild(div);
+  });
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+// ── SEND MESSAGE ──
+async function sendMessage() {
+  if(!currentAgent) return;
+  var input = document.getElementById('chat-input');
+  var text = input.value.trim();
+  if(!text) return;
+  input.value = '';
+  input.style.height = 'auto';
+  var agentId = currentAgent.id;
+  if(!chatHistories[agentId]) chatHistories[agentId] = [];
+  chatHistories[agentId] = chatHistories[agentId].filter(function(m){return m.role!=='assistant'||m.content!=='...'});
+  chatHistories[agentId].push({role:'user', content:text});
+  renderMessages(agentId);
+  var btn = document.getElementById('send-btn');
+  btn.disabled = true;
+  chatHistories[agentId].push({role:'assistant', content:'...'});
+  renderMessages(agentId);
+  try {
+    var reply = await callClaude(currentAgent, chatHistories[agentId].filter(function(m){return m.content!=='...'}));
+    chatHistories[agentId] = chatHistories[agentId].filter(function(m){return m.content!=='...'});
+    chatHistories[agentId].push({role:'assistant', content:reply});
+  } catch(e) {
+    chatHistories[agentId] = chatHistories[agentId].filter(function(m){return m.content!=='...'});
+    chatHistories[agentId].push({role:'assistant', content:'[ERROR] ' + (e.message||'Something went wrong. Check API key.')});
+  }
+  renderMessages(agentId);
+  btn.disabled = false;
+  document.getElementById('chat-input').focus();
+}
+
+async function callClaude(agent, history) {
+  if(API_KEY === 'demo') {
+    return '[DEMO MODE] ตั้งค่า API Key ก่อนเพื่อใช้งาน operative จริง — กด RESET API KEY ที่มุมล่างซ้าย';
+  }
+  var messages = history.filter(function(m){return m.role==='user'||m.role==='assistant'});
+  var response = await fetch('https://api.anthropic.com/v1/messages', {
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'x-api-key': API_KEY,
+      'anthropic-version':'2023-06-01',
+      'anthropic-dangerous-direct-browser-access':'true'
+    },
+    body: JSON.stringify({
+      model:'claude-sonnet-4-20250514',
+      max_tokens:1024,
+      system: agent.system,
+      messages: messages
+    })
+  });
+  if(!response.ok) {
+    var err = await response.json();
+    throw new Error(err.error?.message || 'API Error ' + response.status);
+  }
+  var data = await response.json();
+  return data.content[0].text;
+}
+
+// ── CLOCK ──
+function startClock() {
+  function tick() {
+    var d = new Date();
+    var t = String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0')+' ICT';
+    var el = document.getElementById('clock');
+    var el2 = document.getElementById('clock2');
+    if(el) el.textContent = t;
+    if(el2) el2.textContent = t;
+  }
+  tick();
+  setInterval(tick, 1000);
+}
+
+// ── ENTER TO SEND ──
+document.addEventListener('DOMContentLoaded', function() {
+  var inp = document.getElementById('chat-input');
+  inp.addEventListener('keydown', function(e) {
+    if(e.key==='Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+  inp.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+  });
+});
+
+init();
+</script>
+</body>
+</html>
