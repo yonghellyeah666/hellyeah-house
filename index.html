@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0043)file:///D:/Documents/Downloads/index_1.html -->
+<!-- saved from url=(0043)file:///D:/Documents/Downloads/index_2.html -->
 <html lang="th"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -402,7 +402,7 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
   <div class="slide-wrap">
     <div class="slide-main">
       <div class="slide-stage-label">
-        <div class="slide-stage-iw"><img class="slide-stage-i" id="sl-img" src="file:///D:/Documents/Downloads/index_1.html" alt=""></div>
+        <div class="slide-stage-iw"><img class="slide-stage-i" id="sl-img" src="file:///D:/Documents/Downloads/index_2.html" alt=""></div>
         <div>
           <div style="font-size:7.5px;color:var(--bd3);letter-spacing:0.18em;margin-bottom:2px" id="sl-stage-num">STAGE 01</div>
           <div class="slide-stage-name" id="sl-stage-name">—</div>
@@ -469,7 +469,7 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
       <div class="tb-vsep"></div>
       <div><div class="tbs-v">S+H</div><div class="tbs-l">MODEL</div></div>
       <div class="tb-vsep"></div>
-      <div><div class="tb-clk" id="clock">15:35:47 ICT</div><div class="tb-pulse"><span class="pdot"></span>ACTIVE</div></div>
+      <div><div class="tb-clk" id="clock">16:10:51 ICT</div><div class="tb-pulse"><span class="pdot"></span>ACTIVE</div></div>
     </div>
   </div>
   <div class="body">
@@ -581,7 +581,7 @@ var KEY=localStorage.getItem('hh_key')||'',CUR=null,HISTS={},RUNNING=false;
 var MOUTS={},MPIPE=[],MBRIEF='',SAPPROVED={},STHREADS={};
 var DECK_SLIDES=[],DECK_IDX=0,DECK_PROMPTS={};
 var PM_PROJECTS=JSON.parse(localStorage.getItem('hh_projects')||'[]'),PM_CUR=null;
-var M_CHAT='claude-sonnet-4-20250514',M_MISSION='claude-haiku-4-5-20251001';
+var M_CHAT='claude-sonnet-4-6',M_MISSION='claude-haiku-4-5-20251001';
 
 // ── AGENTS ──
 var AG=[
@@ -1108,15 +1108,19 @@ function renderSlideText(s){
     // Creative Brief
     area.appendChild(makeBlock('CREATIVE BRIEF',out,''));
   }else if(s.aid==='HYH-002'){
-    // Concepts — split by CONCEPT A/B/C
-    var parts=out.split(/CONCEPT [A-C]/i);
-    var recs=out.match(/แนะนำ[^\n]*/i);
+    // Split by CONCEPT A/B/C — handles "CONCEPT A —" and "CONCEPT A:" formats
+    var parts=out.split(/CONCEPT\s+[A-C]\s*[—\-:]/i);
+    var recs=out.match(/แนะนำ[^\n]*/i)||out.match(/Recommended?[^\n]*/i);
     if(parts.length>1){
-      parts.slice(1,4).forEach(function(p,i){
-        var letter=['A','B','C'][i];area.appendChild(makeBlock('CONCEPT '+letter,p.trim(),''));
+      parts.slice(1,4).forEach(function(p,idx2){
+        var letter=['A','B','C'][idx2];
+        // Extract concept name from first line
+        var firstLine=p.split('\n')[0].replace(/\*\*/g,'').trim();
+        var label='CONCEPT '+letter+(firstLine?' — '+firstLine:'');
+        area.appendChild(makeBlock(label,p.trim(),''));
       });
     }else{area.appendChild(makeBlock('CONCEPTS',out,''));}
-    if(recs)area.appendChild(makeBlock('RECOMMENDATION',recs[0],'approved'));
+    if(recs)area.appendChild(makeBlock('RECOMMENDATION',recs[0].replace(/\*\*/g,''),'approved'));
   }else if(s.aid==='HYH-003'){
     // Copy — extract headline, tagline, hook
     var hl=extractSection(out,'HEADLINE');var tl=extractSection(out,'TAGLINE');var hook=extractSection(out,'SOCIAL HOOK');var mani=extractSection(out,'MANIFESTO');
@@ -1126,12 +1130,24 @@ function renderSlideText(s){
     if(mani)area.appendChild(makeBlock('MANIFESTO',mani,''));
     if(!hl&&!tl)area.appendChild(makeBlock('COPY',out,''));
   }else if(s.aid==='HYH-004'){
-    var verdict=out.match(/VERDICT[:\s]+([^\n]+)/i);var strong=extractSection(out,'จุดแข็ง');var weak=extractSection(out,'จุดอ่อน');var notes=extractSection(out,'แก้ตรงนี้');
-    if(verdict)area.appendChild(makeBlock('VERDICT',verdict[1].trim(),'approved'));
-    if(strong)area.appendChild(makeBlock('STRONGEST',strong,''));
+    // Handle both **VERDICT:** and plain VERDICT: formats
+    var verdict=out.match(/\*?\*?VERDICT\*?\*?[:\s]+([^\n]+)/i);
+    var stratFit=extractSection(out,'Strategy fit')||extractSection(out,'strategy');
+    var ideaStr=extractSection(out,'Idea strength')||extractSection(out,'idea');
+    var craft=extractSection(out,'Craft')||extractSection(out,'craft');
+    var strong=extractSection(out,'จุดแข็ง')||extractSection(out,'Strongest');
+    var weak=extractSection(out,'จุดอ่อน')||extractSection(out,'Weakest')||extractSection(out,'needs work');
+    var notes=extractSection(out,'แก้ตรงนี้')||extractSection(out,'Revision')||extractSection(out,'แก้');
+    var sendWhen=extractSection(out,'ส่งได้เมื่อ')||extractSection(out,'SEND WHEN');
+    if(verdict)area.appendChild(makeBlock('VERDICT',verdict[1].replace(/\*\*/g,'').trim(),'approved'));
+    if(stratFit)area.appendChild(makeBlock('STRATEGY FIT',stratFit,''));
+    if(ideaStr&&ideaStr!==stratFit)area.appendChild(makeBlock('IDEA STRENGTH',ideaStr,''));
+    if(craft&&craft!==ideaStr)area.appendChild(makeBlock('CRAFT',craft,''));
+    if(strong)area.appendChild(makeBlock('STRONGEST PART',strong,''));
     if(weak)area.appendChild(makeBlock('NEEDS WORK',weak,''));
     if(notes)area.appendChild(makeBlock('REVISION NOTES',notes,''));
-    if(!verdict)area.appendChild(makeBlock('REVIEW',out,''));
+    if(sendWhen)area.appendChild(makeBlock('SEND WHEN',sendWhen,''));
+    if(!verdict)area.appendChild(makeBlock('FULL REVIEW',out,''));
   }else if(s.aid==='HYH-005'){
     var vc=extractSection(out,'VISUAL CONCEPT');var mood=extractSection(out,'MOOD');var kv=extractSection(out,'KEY VISUAL');
     if(vc)area.appendChild(makeBlock('VISUAL CONCEPT',vc,'headline'));
@@ -1151,16 +1167,30 @@ function renderSlideText(s){
 
 function makeBlock(label,text,cls){
   var d=document.createElement('div');d.className='slide-block'+(cls?' '+cls:'');
-  d.innerHTML='<div class="slide-block-label">'+label+'</div><div class="slide-block-text">'+text.replace(/\n/g,'<br>')+'</div>';
+  // Strip markdown bold ** and # headers for display
+  var clean=text.replace(/\*\*/g,'').replace(/^#+\s/gm,'').replace(/^---+$/gm,'').trim();
+  d.innerHTML='<div class="slide-block-label">'+label+'</div><div class="slide-block-text">'+clean.replace(/\n/g,'<br>')+'</div>';
   return d;
 }
 
 function extractSection(text,key){
+  // Try bold markdown first (**KEY:** value)
+  var boldRe=new RegExp('\\*\\*'+key+'[^*]*\\*\\*[:\s]+([\\s\\S]*?)(?=\\*\\*[A-Z]|\n---|\$)','i');
+  var boldM=text.match(boldRe);
+  if(boldM&&boldM[1].trim())return boldM[1].trim();
+  // Try plain KEY: value
   var lines=text.split('\n');var result=[],capturing=false;
   for(var i=0;i<lines.length;i++){
     var line=lines[i];
-    if(line.toUpperCase().indexOf(key.toUpperCase())>-1&&(line.indexOf(':')>-1||line.length<key.length+5)){capturing=true;var after=line.indexOf(':')+1;result.push(line.substring(after).trim());continue;}
-    if(capturing){if(line.match(/^[A-Z\u0E00-\u0E7F]+[\s]*:/)||line.match(/^──/)){break;}result.push(line);}
+    var cleanLine=line.replace(/\*\*/g,'').trim();
+    if(cleanLine.toUpperCase().indexOf(key.toUpperCase())===0&&cleanLine.indexOf(':')>-1){
+      capturing=true;var after=line.indexOf(':')+1;var first=line.substring(after).replace(/\*\*/g,'').trim();if(first)result.push(first);continue;
+    }
+    if(capturing){
+      if(cleanLine.match(/^[A-Z\u0E00-\u0E7F]{2,}[\s]*:/)&&cleanLine.length<80){break;}
+      if(cleanLine.match(/^──/)||cleanLine.match(/^##/)){break;}
+      result.push(line.replace(/\*\*/g,''));
+    }
   }
   return result.join('\n').trim();
 }
