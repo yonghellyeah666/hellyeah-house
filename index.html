@@ -3,239 +3,339 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HELLYEAH HOUSE — Operative Roster</title>
+<title>HELLYEAH HOUSE</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --gold:#c8b97a;--gold-light:#e8d49a;--gold-dim:#5a5040;--gold-faint:#2a2318;
-  --bg:#060605;--bg2:#0f0e0c;--bg3:#0a0908;--bg4:#141210;
-  --border:#1e1c14;--border2:#2a2318;
-  --green:#3d6b3d;--red:#6b3d3d;
-  --font-head:'Cinzel',serif;--font-mono:'Share Tech Mono',monospace;
+  --gold:#c8b97a;--gl:#e8d49a;--gd:#5a5040;--gf:#2a2318;
+  --bg:#060605;--bg2:#0d0c0a;--bg3:#111009;--bg4:#181510;
+  --bd:#1e1c14;--bd2:#2a2318;--bd3:#3a3220;
+  --grn:#4a8a4a;--red:#8a4a4a;--orange:#c87a3a;
+  --H:'Cinzel',serif;--M:'Share Tech Mono',monospace;
 }
-html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--font-mono);overflow:hidden}
-
-/* ── LAYOUT ── */
+html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M);overflow:hidden;font-size:14px}
 .app{display:flex;height:100vh;flex-direction:column}
 
-/* ── TOP BANNER ── */
-.banner{flex-shrink:0;background:var(--bg);border-bottom:0.5px solid var(--border2);padding:0 28px;display:flex;align-items:stretch;justify-content:space-between;height:56px;position:relative}
-.banner::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold)20,var(--gold)60,var(--gold)20,transparent)}
-.banner-left{display:flex;align-items:center;gap:16px}
-.banner-logo{font-family:var(--font-head);font-size:16px;letter-spacing:0.22em;color:var(--gold-light);white-space:nowrap}
-.banner-sep{width:0.5px;height:20px;background:var(--border2)}
-.banner-tagline{font-size:8px;color:var(--gold-faint);letter-spacing:0.18em;line-height:1.7}
-.banner-right{display:flex;align-items:center;gap:20px}
-.banner-stat{text-align:right}
-.banner-stat-val{font-size:11px;color:var(--gold);letter-spacing:0.08em}
-.banner-stat-label{font-size:7px;color:var(--gold-faint);letter-spacing:0.14em;margin-top:1px}
-.banner-clock{font-size:11px;color:var(--gold-dim);letter-spacing:0.1em;font-variant-numeric:tabular-nums}
-.banner-status{display:flex;align-items:center;gap:5px;font-size:8px;color:var(--green);letter-spacing:0.1em}
-.status-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+/* ── TOPBAR ── */
+.topbar{height:62px;flex-shrink:0;display:flex;align-items:stretch;border-bottom:0.5px solid var(--bd2);background:var(--bg);position:relative;z-index:10}
+.topbar::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold)15,var(--gold),var(--gold)15,transparent);pointer-events:none}
+.tb-brand{display:flex;align-items:center;padding:0 26px;border-right:0.5px solid var(--bd2);gap:15px;min-width:fit-content}
+.tb-logo{font-family:var(--H);font-size:17px;letter-spacing:0.22em;color:var(--gl);white-space:nowrap}
+.tb-vsep{width:0.5px;height:22px;background:var(--bd2)}
+.tb-tag{font-size:8px;color:var(--gf);letter-spacing:0.16em;line-height:1.9}
+.tb-nav{display:flex;align-items:stretch;padding:0 6px;flex:1;overflow-x:auto}
+.tb-nav::-webkit-scrollbar{display:none}
+.tni{display:flex;align-items:center;padding:0 18px;font-size:9px;letter-spacing:0.12em;color:var(--gf);cursor:pointer;border-bottom:2.5px solid transparent;transition:all .15s;gap:7px;white-space:nowrap;flex-shrink:0}
+.tni:hover{color:var(--gd);border-bottom-color:var(--bd2)}
+.tni.on{color:var(--gl);border-bottom-color:var(--gold)}
+.tni-ico{font-size:12px}
+.tb-right{display:flex;align-items:center;gap:20px;padding:0 24px;border-left:0.5px solid var(--bd2);flex-shrink:0}
+.tbs{text-align:center}
+.tbs-v{font-size:17px;color:var(--gl);font-family:var(--H);letter-spacing:0.04em;line-height:1}
+.tbs-l{font-size:7px;color:var(--gf);letter-spacing:0.14em;margin-top:2px}
+.tb-clk{font-size:14px;color:var(--gold);letter-spacing:0.06em;font-variant-numeric:tabular-nums;line-height:1;text-align:right}
+.tb-pulse{display:flex;align-items:center;gap:4px;font-size:7.5px;color:var(--grn);letter-spacing:0.1em;margin-top:3px;justify-content:flex-end}
+.pdot{width:5px;height:5px;border-radius:50%;background:var(--grn);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.2}}
 
-/* ── BODY ROW ── */
-.body-row{display:flex;flex:1;overflow:hidden}
+/* ── BODY ── */
+.body{display:flex;flex:1;overflow:hidden}
 
 /* ── SIDEBAR ── */
-.sidebar{width:200px;flex-shrink:0;border-right:0.5px solid var(--border);display:flex;flex-direction:column;background:var(--bg);overflow-y:auto}
-.sidebar::-webkit-scrollbar{width:3px}
-.sidebar::-webkit-scrollbar-thumb{background:var(--border2)}
-.sb-lobby-btn{margin:10px;padding:8px;border:0.5px solid var(--border2);background:transparent;color:var(--gold-dim);font-family:var(--font-mono);font-size:8px;letter-spacing:0.1em;cursor:pointer;border-radius:3px;transition:all 0.15s;text-align:center}
-.sb-lobby-btn:hover,.sb-lobby-btn.on{border-color:var(--gold);color:var(--gold);background:#c8b97a08}
-.sb-div-label{padding:10px 12px 4px;font-size:7px;color:var(--border2);letter-spacing:0.2em}
-.sb-agent{display:flex;align-items:center;gap:7px;padding:6px 12px;cursor:pointer;transition:background 0.15s;border-left:2px solid transparent}
-.sb-agent:hover{background:var(--bg2)}
-.sb-agent.on{background:var(--bg2);border-left-color:var(--gold)}
-.sb-thumb{width:26px;height:34px;border-radius:2px;object-fit:cover;object-position:top;filter:grayscale(40%);flex-shrink:0;background:var(--bg4)}
-.sb-agent.on .sb-thumb{filter:grayscale(0%)}
+.sidebar{width:220px;flex-shrink:0;border-right:0.5px solid var(--bd);display:flex;flex-direction:column;background:var(--bg2);overflow-y:auto}
+.sidebar::-webkit-scrollbar{width:2px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--bd2)}
+.sb-sec{padding:14px 0 4px}
+.sb-dl{padding:0 15px 7px;font-size:7px;color:var(--bd3);letter-spacing:0.22em}
+.sb-a{display:flex;align-items:center;gap:10px;padding:8px 15px;cursor:pointer;transition:background .15s;border-left:2.5px solid transparent}
+.sb-a:hover{background:var(--bg3)}
+.sb-a.on{background:var(--bg3);border-left-color:var(--gold)}
+.sb-imgw{width:32px;height:43px;border-radius:3px;overflow:hidden;flex-shrink:0;background:var(--bg4)}
+.sb-img{width:100%;height:100%;object-fit:cover;object-position:top;filter:grayscale(50%) brightness(.72);transition:filter .2s}
+.sb-a.on .sb-img,.sb-a:hover .sb-img{filter:grayscale(5%) brightness(1)}
 .sb-info{flex:1;min-width:0}
-.sb-name{font-size:8px;color:var(--gold-light);letter-spacing:0.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sb-role{font-size:7px;color:var(--gold-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
-.sb-dot{width:4px;height:4px;border-radius:50%;background:var(--green);flex-shrink:0}
-.sb-footer{padding:10px 12px;border-top:0.5px solid var(--border);margin-top:auto}
-.sb-footer-txt{font-size:7px;color:var(--border2);letter-spacing:0.08em;cursor:pointer;line-height:1.8}
-.sb-footer-txt:hover{color:var(--gold-dim)}
+.sb-name{font-size:10px;color:var(--gl);letter-spacing:0.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2}
+.sb-role{font-size:7.5px;color:var(--gd);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-cl{font-size:7px;padding:1px 6px;border:0.5px solid;border-radius:2px;letter-spacing:0.07em;margin-top:4px;display:inline-block}
+.sb-bdr{height:0.5px;background:var(--bd);margin:5px 15px}
+.sb-foot{padding:12px 15px;border-top:0.5px solid var(--bd);margin-top:auto}
+.sb-fb{font-size:8px;color:var(--bd3);letter-spacing:0.08em;cursor:pointer;padding:3px 0;display:block;transition:color .15s}
+.sb-fb:hover{color:var(--gd)}
 
 /* ── MAIN ── */
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-
-/* ── CONTENT HEADER ── */
-.content-hdr{padding:12px 22px;border-bottom:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-shrink:0;background:var(--bg3)}
-.ch-title{font-family:var(--font-head);font-size:13px;letter-spacing:0.1em;color:var(--gold-light)}
-.ch-sub{font-size:8px;color:var(--gold-dim);letter-spacing:0.1em;margin-top:2px}
-.ch-badge{font-size:8px;padding:3px 10px;border:0.5px solid;border-radius:2px;letter-spacing:0.08em}
-
-/* ── LOBBY ── */
-.lobby{flex:1;overflow-y:auto;padding:20px 22px}
-.lobby::-webkit-scrollbar{width:4px}
-.lobby::-webkit-scrollbar-thumb{background:var(--border2)}
-.div-section{margin-bottom:28px}
-.div-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:8px;border-bottom:0.5px solid var(--border)}
-.div-name{font-size:8px;color:var(--gold-dim);letter-spacing:0.2em}
-.div-line{flex:1;height:0.5px;background:var(--border)}
-.div-count{font-size:7px;color:var(--border2);letter-spacing:0.1em}
-.agent-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
-
-/* ── AGENT CARD ── */
-.ac{background:var(--bg2);border:0.5px solid var(--border);border-radius:6px;overflow:hidden;cursor:pointer;transition:border-color 0.2s,transform 0.15s}
-.ac:hover{border-color:#c8b97a40;transform:translateY(-2px)}
-.ac.on{border-color:var(--gold)}
-.ac-img-wrap{position:relative;width:100%;aspect-ratio:3/4;background:var(--bg4);overflow:hidden}
-.ac-img{width:100%;height:100%;object-fit:cover;object-position:top center;filter:grayscale(15%) contrast(1.05) brightness(0.92);transition:filter 0.25s;display:block}
-.ac:hover .ac-img,.ac.on .ac-img{filter:grayscale(0%) contrast(1.08) brightness(1)}
-.ac-img-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--border2);font-family:var(--font-head);letter-spacing:0.1em}
-.ac-overlay{position:absolute;bottom:0;left:0;right:0;padding:20px 8px 8px;background:linear-gradient(transparent,rgba(6,6,5,0.85));opacity:0;transition:opacity 0.2s}
-.ac:hover .ac-overlay{opacity:1}
-.ac-overlay-text{font-size:8px;color:var(--gold-dim);letter-spacing:0.08em}
-.ac-meta{padding:8px 9px 7px}
-.ac-file{font-size:7px;color:var(--border2);letter-spacing:0.1em;margin-bottom:2px}
-.ac-name{font-family:var(--font-head);font-size:10px;color:var(--gold-light);letter-spacing:0.04em;margin-bottom:2px}
-.ac-role{font-size:8px;color:var(--gold-dim);letter-spacing:0.05em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ac-div{display:inline-block;font-size:7px;padding:2px 5px;border-radius:2px;border:0.5px solid;letter-spacing:0.06em;margin-top:5px}
-
-/* ── CHAT VIEW ── */
-.chat-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.op-profile{display:flex;gap:14px;padding:14px 22px;border-bottom:0.5px solid var(--border);flex-shrink:0;background:var(--bg3)}
-.op-img-wrap{width:52px;height:70px;border-radius:4px;overflow:hidden;background:var(--bg4);flex-shrink:0}
-.op-img{width:100%;height:100%;object-fit:cover;object-position:top;filter:contrast(1.08) brightness(0.95)}
-.op-body{flex:1}
-.op-quote{font-size:10px;color:var(--gold-dim);font-style:italic;border-left:1.5px solid var(--border2);padding-left:8px;margin-bottom:8px;line-height:1.55}
-.op-caps{display:flex;flex-wrap:wrap;gap:4px}
-.op-cap{font-size:8px;padding:2px 7px;border:0.5px solid var(--border2);border-radius:10px;color:var(--gold-dim)}
-.messages{flex:1;overflow-y:auto;padding:14px 22px;display:flex;flex-direction:column;gap:10px}
-.messages::-webkit-scrollbar{width:4px}
-.messages::-webkit-scrollbar-thumb{background:var(--border2)}
-.msg{max-width:78%;padding:10px 13px;border-radius:5px;font-size:12px;line-height:1.75}
-.msg.user{align-self:flex-end;background:var(--bg4);border:0.5px solid var(--border2);color:var(--gold-light)}
-.msg.ai{align-self:flex-start;background:var(--bg3);border:0.5px solid var(--border);color:#8a7a50}
-.msg-sender{font-size:7px;color:var(--gold);letter-spacing:0.12em;margin-bottom:5px}
-.input-row{padding:12px 22px;border-top:0.5px solid var(--border);display:flex;gap:8px;flex-shrink:0;background:var(--bg3)}
-.chat-in{flex:1;background:var(--bg2);border:0.5px solid var(--border2);border-radius:4px;padding:10px 13px;color:var(--gold-light);font-family:var(--font-mono);font-size:12px;outline:none;resize:none;transition:border-color 0.15s}
-.chat-in:focus{border-color:#c8b97a30}
-.chat-in::placeholder{color:var(--border2)}
-.send-btn{padding:10px 16px;border:0.5px solid var(--gold);background:transparent;color:var(--gold);font-family:var(--font-mono);font-size:9px;letter-spacing:0.1em;cursor:pointer;border-radius:3px;transition:background 0.15s;flex-shrink:0}
-.send-btn:hover{background:#c8b97a0a}
-.send-btn:disabled{opacity:0.25;cursor:not-allowed}
-
-/* ── VIEWS ── */
-.view{display:none;flex:1;overflow:hidden;flex-direction:column}
+.view{display:none;flex:1;flex-direction:column;overflow:hidden}
 .view.on{display:flex}
 
-/* ── WELCOME ── */
-.welcome{flex:1;display:flex;align-items:center;justify-content:center;text-align:center}
-.w-inner{padding:30px}
-.w-symbol{font-family:var(--font-head);font-size:40px;color:var(--border);letter-spacing:0.1em;margin-bottom:12px}
-.w-hint{font-size:10px;color:var(--gold-dim);letter-spacing:0.12em}
+/* ── CONTENT HDR ── */
+.chdr{padding:14px 28px;border-bottom:0.5px solid var(--bd);display:flex;justify-content:space-between;align-items:center;flex-shrink:0;background:var(--bg2)}
+.chdr-t{font-family:var(--H);font-size:15px;letter-spacing:0.1em;color:var(--gl)}
+.chdr-s{font-size:8.5px;color:var(--gd);letter-spacing:0.11em;margin-top:3px}
+.chdr-b{font-size:9px;padding:3px 11px;border:0.5px solid;border-radius:2px;letter-spacing:0.08em}
+
+/* ── LOBBY ── */
+.lobby{flex:1;overflow-y:auto;padding:24px 28px}
+.lobby::-webkit-scrollbar{width:4px}
+.lobby::-webkit-scrollbar-thumb{background:var(--bd2)}
+.dsec{margin-bottom:32px}
+.dhdr{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:9px;border-bottom:0.5px solid var(--bd)}
+.dname{font-size:8.5px;color:var(--gd);letter-spacing:0.22em}
+.dline{flex:1;height:0.5px;background:var(--bd)}
+.dcnt{font-size:8px;color:var(--bd3);letter-spacing:0.1em}
+.agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(162px,1fr));gap:13px}
+
+/* ── AGENT CARD ── */
+.ac{background:var(--bg3);border:0.5px solid var(--bd);border-radius:8px;overflow:hidden;cursor:pointer;transition:border-color .2s,transform .15s,box-shadow .2s}
+.ac:hover{border-color:var(--bd3);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.ac.on{border-color:var(--gold)}
+.ac-iw{position:relative;width:100%;aspect-ratio:3/4;background:var(--bg4);overflow:hidden}
+.ac-i{width:100%;height:100%;object-fit:cover;object-position:top center;filter:grayscale(20%) contrast(1.05) brightness(.86);transition:all .3s;display:block}
+.ac:hover .ac-i,.ac.on .ac-i{filter:grayscale(0%) contrast(1.1) brightness(1)}
+.ac-ph{width:100%;height:100%;display:none;align-items:center;justify-content:center;font-family:var(--H);font-size:28px;color:var(--bd2)}
+.ac-ov{position:absolute;inset:0;background:linear-gradient(transparent 30%,rgba(6,6,5,.94));opacity:0;transition:opacity .25s;display:flex;flex-direction:column;justify-content:flex-end;padding:14px 12px}
+.ac:hover .ac-ov{opacity:1}
+.ac-ovn{font-family:var(--H);font-size:12px;color:var(--gl);letter-spacing:0.06em;margin-bottom:3px}
+.ac-ovc{font-size:8.5px;color:var(--gd);letter-spacing:0.1em}
+.ac-meta{padding:12px 12px 10px}
+.ac-file{font-size:7.5px;color:var(--bd3);letter-spacing:0.12em;margin-bottom:4px}
+.ac-name{font-family:var(--H);font-size:11.5px;color:var(--gl);letter-spacing:0.05em;margin-bottom:3px}
+.ac-role{font-size:9px;color:var(--gd);letter-spacing:0.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ac-ft{display:flex;align-items:center;justify-content:space-between;margin-top:9px;padding-top:8px;border-top:0.5px solid var(--bd)}
+.ac-div{font-size:7.5px;padding:2px 6px;border-radius:2px;border:0.5px solid;letter-spacing:0.08em}
+.ac-sta{display:flex;align-items:center;gap:3px;font-size:7.5px;color:var(--grn)}
+.ac-std{width:4px;height:4px;border-radius:50%;background:var(--grn)}
+
+/* ── TOOL GRID ── */
+.tgrid{flex:1;overflow-y:auto;padding:22px 28px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;align-content:start}
+.tgrid::-webkit-scrollbar{width:4px}
+.tgrid::-webkit-scrollbar-thumb{background:var(--bd2)}
+.tc{background:var(--bg3);border:0.5px solid var(--bd);border-radius:8px;padding:16px;cursor:pointer;transition:border-color .2s,transform .15s}
+.tc:hover{border-color:var(--bd3);transform:translateY(-2px)}
+.tc-ico{font-size:22px;margin-bottom:10px}
+.tc-name{font-family:var(--H);font-size:12px;color:var(--gl);letter-spacing:0.06em;margin-bottom:5px}
+.tc-desc{font-size:10px;color:var(--gd);line-height:1.7;margin-bottom:9px}
+.tc-who{font-size:8px;color:var(--bd3);letter-spacing:0.1em;margin-bottom:10px}
+.tc-btn{width:100%;padding:8px;border:0.5px solid var(--bd2);background:transparent;color:var(--gd);font-family:var(--M);font-size:8.5px;letter-spacing:0.1em;cursor:pointer;border-radius:3px;transition:all .15s}
+.tc:hover .tc-btn{border-color:var(--gold);color:var(--gold)}
+
+/* ── MISSION ── */
+.mi-top{padding:16px 28px;border-bottom:0.5px solid var(--bd);flex-shrink:0;background:var(--bg2)}
+.mi-lbl{font-size:8.5px;color:var(--gd);letter-spacing:0.16em;margin-bottom:8px}
+.mi-ta{width:100%;background:var(--bg3);border:0.5px solid var(--bd2);border-radius:4px;padding:12px 15px;color:var(--gl);font-family:var(--M);font-size:12px;outline:none;resize:none;line-height:1.75}
+.mi-ta:focus{border-color:var(--bd3)}
+.mi-ta::placeholder{color:var(--bd2)}
+.mi-ctrl{display:flex;gap:10px;align-items:center;margin-top:10px;flex-wrap:wrap}
+.mi-sel{background:var(--bg3);border:0.5px solid var(--bd2);border-radius:3px;padding:9px 13px;color:var(--gd);font-family:var(--M);font-size:9px;letter-spacing:0.06em;outline:none;flex:1;min-width:200px;cursor:pointer}
+.mi-sel option{background:var(--bg2)}
+.mi-note{font-size:8px;color:var(--bd3);letter-spacing:0.08em;display:flex;align-items:center;gap:5px}
+.lbtn{padding:10px 22px;border:0.5px solid var(--gold);background:transparent;color:var(--gold);font-family:var(--M);font-size:9.5px;letter-spacing:0.14em;cursor:pointer;border-radius:3px;white-space:nowrap;transition:background .15s}
+.lbtn:hover{background:#c8b97a0a}
+.lbtn:disabled{opacity:.3;cursor:not-allowed}
+.pipe-wrap{flex:1;overflow-y:auto;padding:20px 28px}
+.pipe-wrap::-webkit-scrollbar{width:4px}
+.pipe-wrap::-webkit-scrollbar-thumb{background:var(--bd2)}
+
+/* ── PIPELINE STAGE ── */
+.pstage{background:var(--bg2);border:0.5px solid var(--bd);border-radius:8px;overflow:hidden;margin-bottom:10px}
+.ps-hdr{padding:15px 18px;display:flex;align-items:center;gap:13px;cursor:pointer;transition:background .15s;user-select:none}
+.ps-hdr:hover{background:var(--bg3)}
+.ps-num{width:30px;height:30px;border:0.5px solid;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.ps-iw{width:34px;height:46px;border-radius:3px;overflow:hidden;flex-shrink:0;background:var(--bg4)}
+.ps-im{width:100%;height:100%;object-fit:cover;object-position:top}
+.ps-tt{flex:1}
+.ps-an{font-family:var(--H);font-size:13px;color:var(--gl);letter-spacing:0.06em}
+.ps-ar{font-size:8.5px;color:var(--gd);margin-top:2px;letter-spacing:0.05em}
+.pss{font-size:8.5px;padding:3px 11px;border-radius:2px;border:0.5px solid;letter-spacing:0.08em;white-space:nowrap}
+.pss.w{color:var(--bd3);border-color:var(--bd)}
+.pss.r{color:var(--orange);border-color:var(--orange)44;animation:blink .7s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.pss.d{color:var(--grn);border-color:var(--grn)44}
+.pss.e{color:var(--red);border-color:var(--red)44}
+.ps-body{display:none;padding:18px 20px;border-top:0.5px solid var(--bd);background:var(--bg3)}
+.ps-body.open{display:block}
+.ps-out{font-size:12px;color:#8a7a50;line-height:1.9;white-space:pre-wrap}
+.ps-acts{display:flex;gap:8px;margin-top:13px;flex-wrap:wrap}
+.ps-abtn{padding:6px 13px;border:0.5px solid var(--bd2);background:transparent;color:var(--gd);font-family:var(--M);font-size:8.5px;letter-spacing:0.08em;cursor:pointer;border-radius:3px;transition:all .15s}
+.ps-abtn:hover{border-color:var(--gd);color:var(--gold)}
+.ps-abtn.ok{color:var(--grn);border-color:var(--grn)44}
+.parr{text-align:center;font-size:9px;color:var(--bd2);margin:-4px 0;letter-spacing:0.1em}
+.mdone{background:#0a120a;border:0.5px solid #2a4a2a;border-radius:8px;padding:18px 22px;margin-top:12px;display:none}
+.mdone.on{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.mdt-t{font-family:var(--H);font-size:13px;color:var(--gl);letter-spacing:0.1em}
+.mdt-s{font-size:8.5px;color:var(--grn);letter-spacing:0.1em;margin-top:3px}
+.mdbtn{padding:9px 17px;border:0.5px solid var(--bd3);background:transparent;color:var(--gd);font-family:var(--M);font-size:9px;letter-spacing:0.08em;cursor:pointer;border-radius:3px;transition:all .15s}
+.mdbtn:hover{border-color:var(--gold);color:var(--gold)}
+.idle{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:40px;text-align:center}
+.idle-sym{font-family:var(--H);font-size:46px;color:var(--bd);margin-bottom:10px}
+.idle-t{font-size:12px;color:var(--gd);letter-spacing:0.15em}
+.idle-s{font-size:9.5px;color:var(--bd2);letter-spacing:0.1em;line-height:1.7}
+
+/* ── CHAT ── */
+.cw{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.op-bar{display:flex;gap:16px;padding:16px 28px;border-bottom:0.5px solid var(--bd);flex-shrink:0;background:var(--bg2)}
+.op-iw{width:58px;height:78px;border-radius:5px;overflow:hidden;background:var(--bg4);flex-shrink:0}
+.op-i{width:100%;height:100%;object-fit:cover;object-position:top;filter:contrast(1.06) brightness(.93)}
+.op-inf{flex:1}
+.op-n{font-family:var(--H);font-size:16px;color:var(--gl);letter-spacing:0.08em;margin-bottom:2px}
+.op-r{font-size:9px;color:var(--gd);letter-spacing:0.1em;margin-bottom:9px}
+.op-q{font-size:11.5px;color:var(--gd);font-style:italic;border-left:2px solid var(--bd2);padding-left:10px;margin-bottom:9px;line-height:1.6}
+.op-caps{display:flex;flex-wrap:wrap;gap:6px}
+.op-cap{font-size:8.5px;padding:3px 9px;border:0.5px solid var(--bd2);border-radius:20px;color:var(--gd)}
+.msgs{flex:1;overflow-y:auto;padding:20px 28px;display:flex;flex-direction:column;gap:13px}
+.msgs::-webkit-scrollbar{width:4px}
+.msgs::-webkit-scrollbar-thumb{background:var(--bd2)}
+.msg{max-width:74%;padding:13px 16px;border-radius:6px;font-size:12.5px;line-height:1.82}
+.msg.u{align-self:flex-end;background:var(--bg3);border:0.5px solid var(--bd2);color:var(--gl)}
+.msg.a{align-self:flex-start;background:var(--bg2);border:0.5px solid var(--bd);color:#8a7a50}
+.msg-who{font-size:8px;color:var(--gold);letter-spacing:0.14em;margin-bottom:6px}
+.ibar{padding:13px 28px;border-top:0.5px solid var(--bd);display:flex;gap:10px;flex-shrink:0;background:var(--bg2)}
+.cta{flex:1;background:var(--bg3);border:0.5px solid var(--bd2);border-radius:4px;padding:12px 15px;color:var(--gl);font-family:var(--M);font-size:12.5px;outline:none;resize:none;line-height:1.72}
+.cta:focus{border-color:var(--bd3)}
+.cta::placeholder{color:var(--bd2)}
+.sbtn{padding:12px 20px;border:0.5px solid var(--gold);background:transparent;color:var(--gold);font-family:var(--M);font-size:9.5px;letter-spacing:0.12em;cursor:pointer;border-radius:3px;white-space:nowrap;transition:background .15s}
+.sbtn:hover{background:#c8b97a08}
+.sbtn:disabled{opacity:.25;cursor:not-allowed}
 
 /* ── MODAL ── */
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.88);display:flex;align-items:center;justify-content:center;z-index:200;backdrop-filter:blur(2px)}
-.modal{background:var(--bg2);border:0.5px solid var(--border2);border-radius:8px;padding:28px;width:360px}
-.modal-logo{font-family:var(--font-head);font-size:18px;letter-spacing:0.2em;color:var(--gold-light);margin-bottom:4px}
-.modal-sub{font-size:8px;color:var(--border2);letter-spacing:0.16em;margin-bottom:20px}
-.modal-label{font-size:9px;color:var(--gold-dim);letter-spacing:0.1em;margin-bottom:6px}
-.modal-in{width:100%;background:var(--bg3);border:0.5px solid var(--border2);border-radius:3px;padding:10px 12px;color:var(--gold-light);font-family:var(--font-mono);font-size:11px;outline:none;margin-bottom:8px}
-.modal-in:focus{border-color:#c8b97a30}
-.modal-note{font-size:8px;color:var(--border2);line-height:1.7;margin-bottom:18px}
-.modal-note a{color:var(--gold-dim);text-decoration:none}
-.modal-note a:hover{color:var(--gold)}
-.modal-btns{display:flex;gap:8px}
-.modal-btn{flex:1;padding:9px;border:0.5px solid var(--border2);background:transparent;color:var(--gold-dim);font-family:var(--font-mono);font-size:9px;letter-spacing:0.08em;cursor:pointer;border-radius:3px;transition:all 0.15s}
-.modal-btn.primary{border-color:var(--gold);color:var(--gold)}
-.modal-btn:hover{background:var(--bg4)}
-.modal-btn.primary:hover{background:#c8b97a08}
+.mbg{position:fixed;inset:0;background:rgba(0,0,0,.93);display:flex;align-items:center;justify-content:center;z-index:200;backdrop-filter:blur(5px)}
+.modal{background:var(--bg2);border:0.5px solid var(--bd2);border-radius:10px;padding:32px;width:380px}
+.m-logo{font-family:var(--H);font-size:20px;letter-spacing:0.2em;color:var(--gl);margin-bottom:3px}
+.m-sub{font-size:8px;color:var(--bd2);letter-spacing:0.2em;margin-bottom:24px}
+.m-lbl{font-size:9px;color:var(--gd);letter-spacing:0.14em;margin-bottom:7px}
+.m-in{width:100%;background:var(--bg3);border:0.5px solid var(--bd2);border-radius:3px;padding:12px 14px;color:var(--gl);font-family:var(--M);font-size:13px;outline:none;margin-bottom:10px}
+.m-in:focus{border-color:var(--bd3)}
+.m-note{font-size:9px;color:var(--bd2);line-height:1.8;margin-bottom:22px}
+.m-note a{color:var(--gd);text-decoration:none}
+.m-note a:hover{color:var(--gold)}
+.m-btns{display:flex;gap:10px}
+.mbtn{flex:1;padding:11px;border:0.5px solid var(--bd2);background:transparent;color:var(--gd);font-family:var(--M);font-size:9px;letter-spacing:0.1em;cursor:pointer;border-radius:3px;transition:all .15s}
+.mbtn.p{border-color:var(--gold);color:var(--gold)}
+.mbtn:hover{background:var(--bg4)}
 </style>
 </head>
 <body>
 
-<!-- MODAL -->
-<div class="modal-bg" id="modal">
+<div class="mbg" id="modal">
   <div class="modal">
-    <div class="modal-logo">HELLYEAH HOUSE</div>
-    <div class="modal-sub">BRAND OPERATIONS & CREATIVE INTELLIGENCE</div>
-    <div class="modal-label">ANTHROPIC API KEY</div>
-    <input class="modal-in" type="password" id="api-in" placeholder="sk-ant-api03-..." autocomplete="off">
-    <div class="modal-note">
-      Key เก็บใน browser เท่านั้น — ไม่ส่งไปที่ไหน<br>
-      ขอ key ได้ที่ <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>
-    </div>
-    <div class="modal-btns">
-      <button class="modal-btn" onclick="skipKey()">DEMO MODE</button>
-      <button class="modal-btn primary" onclick="saveKey()">ENTER HOUSE ↗</button>
+    <div class="m-logo">HELLYEAH HOUSE</div>
+    <div class="m-sub">BRAND OPERATIONS & CREATIVE INTELLIGENCE</div>
+    <div class="m-lbl">ANTHROPIC API KEY</div>
+    <input class="m-in" type="password" id="api-in" placeholder="sk-ant-api03-..." autocomplete="off">
+    <div class="m-note">Key เก็บใน browser เท่านั้น ไม่ส่งไปที่ไหน<br>ขอ key ได้ที่ <a href="https://console.anthropic.com" target="_blank">console.anthropic.com ↗</a></div>
+    <div class="m-btns">
+      <button class="mbtn" onclick="skipKey()">DEMO MODE</button>
+      <button class="mbtn p" onclick="saveKey()">ENTER HOUSE ↗</button>
     </div>
   </div>
 </div>
 
 <div class="app">
-
-  <!-- BANNER -->
-  <div class="banner">
-    <div class="banner-left">
-      <div class="banner-logo">HELLYEAH HOUSE</div>
-      <div class="banner-sep"></div>
-      <div class="banner-tagline">BRAND OPERATIONS<br>& CREATIVE INTELLIGENCE</div>
+  <div class="topbar">
+    <div class="tb-brand">
+      <div class="tb-logo">HELLYEAH HOUSE</div>
+      <div class="tb-vsep"></div>
+      <div class="tb-tag">BRAND OPERATIONS<br>& CREATIVE INTELLIGENCE</div>
     </div>
-    <div class="banner-right">
-      <div class="banner-stat">
-        <div class="banner-stat-val">12</div>
-        <div class="banner-stat-label">OPERATIVES</div>
-      </div>
-      <div class="banner-sep"></div>
-      <div class="banner-stat">
-        <div class="banner-stat-val">4</div>
-        <div class="banner-stat-label">DIVISIONS</div>
-      </div>
-      <div class="banner-sep"></div>
-      <div>
-        <div class="banner-status"><span class="status-dot"></span>ALL SYSTEMS ACTIVE</div>
-        <div class="banner-clock" id="clock">──:──:──</div>
-      </div>
+    <div class="tb-nav">
+      <div class="tni on" id="n-roster" onclick="sv('roster')"><span class="tni-ico">⬡</span>ROSTER</div>
+      <div class="tni" id="n-mission" onclick="sv('mission')"><span class="tni-ico">⚡</span>MISSION RUN</div>
+      <div class="tni" id="n-bdev" onclick="sv('bdev')"><span class="tni-ico">📋</span>BIZ DEV</div>
+      <div class="tni" id="n-content" onclick="sv('content')"><span class="tni-ico">📱</span>CONTENT</div>
+      <div class="tni" id="n-ops" onclick="sv('ops')"><span class="tni-ico">🗂</span>INTERNAL OPS</div>
+      <div class="tni" id="n-client" onclick="sv('client')"><span class="tni-ico">🤝</span>CLIENT</div>
+    </div>
+    <div class="tb-right">
+      <div class="tbs"><div class="tbs-v">12</div><div class="tbs-l">OPERATIVES</div></div>
+      <div class="tb-vsep"></div>
+      <div class="tbs"><div class="tbs-v" id="credit-badge">—</div><div class="tbs-l">MODEL</div></div>
+      <div class="tb-vsep"></div>
+      <div><div class="tb-clk" id="clock">──:──:──</div><div class="tb-pulse"><span class="pdot"></span>ACTIVE</div></div>
     </div>
   </div>
 
-  <div class="body-row">
-
-    <!-- SIDEBAR -->
+  <div class="body">
     <div class="sidebar">
-      <button class="sb-lobby-btn on" id="lobby-btn" onclick="showLobby()">⬡ ROSTER</button>
       <div id="sb-agents"></div>
-      <div class="sb-footer">
-        <div class="sb-footer-txt" onclick="resetKey()">⟳ RESET API KEY</div>
-        <div class="sb-footer-txt" style="margin-top:4px;color:var(--border)">v1.0 · DD CLEARANCE</div>
+      <div class="sb-foot">
+        <div class="sb-fb" onclick="resetKey()">⟳ RESET API KEY</div>
+        <div class="sb-fb" style="color:var(--bd);cursor:default;margin-top:2px">v3.1 · DD CLEARANCE</div>
       </div>
     </div>
 
-    <!-- MAIN -->
     <div class="main">
 
-      <!-- LOBBY -->
-      <div class="view on" id="v-lobby">
-        <div class="content-hdr">
-          <div>
-            <div class="ch-title">OPERATIVE ROSTER</div>
-            <div class="ch-sub">SELECT AN OPERATIVE TO BEGIN MISSION</div>
-          </div>
-          <div style="font-size:8px;color:var(--border2);letter-spacing:0.1em">HELLYEAH HOUSE · ALL DIVISIONS</div>
+      <!-- ROSTER -->
+      <div class="view on" id="v-roster">
+        <div class="chdr">
+          <div><div class="chdr-t">OPERATIVE ROSTER</div><div class="chdr-s">12 OPERATIVES · 4 DIVISIONS · CLICK TO ENGAGE</div></div>
         </div>
         <div class="lobby" id="lobby"></div>
       </div>
 
+      <!-- MISSION RUN -->
+      <div class="view" id="v-mission">
+        <div class="chdr">
+          <div><div class="chdr-t">⚡ MISSION RUN</div><div class="chdr-s">BRIEF ONCE — TEAM DELIVERS IN SEQUENCE AUTOMATICALLY</div></div>
+          <div style="font-size:9px;color:var(--bd3);letter-spacing:0.1em" id="mprog"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;flex:1;overflow:hidden">
+          <div class="mi-top">
+            <div class="mi-lbl">MISSION BRIEF — อธิบายงานที่ต้องการ</div>
+            <textarea class="mi-ta" id="mbta" rows="3" placeholder="เช่น: ทำแคมเปญ launch skincare ใหม่ target 25-35 งบ 2M ส่งเดือนหน้า ต้องการ concept, copy และ visual direction"></textarea>
+            <div class="mi-ctrl">
+              <select class="mi-sel" id="psel">
+                <option value="full">Full Pipeline — Intake → Concept → Copy → Review → Art Direction</option>
+                <option value="creative">Creative Only — Concept → Copy → Review</option>
+                <option value="concept">Quick Concept — Concept → Copy</option>
+                <option value="visual">Idea + Visual — Concept + Art Direction</option>
+              </select>
+              <button class="lbtn" id="lbtn" onclick="launchMission()">LAUNCH MISSION ↗</button>
+              <div class="mi-note">🔋 ใช้ Haiku (ประหยัด credit)</div>
+            </div>
+          </div>
+          <div class="pipe-wrap" id="pwr">
+            <div class="idle"><div class="idle-sym">⬡</div><div class="idle-t">AWAITING MISSION BRIEF</div><div class="idle-s">ใส่ brief แล้วกด LAUNCH<br>ทีมจะวิ่งต่อกันเองโดยอัตโนมัติ</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BIZ DEV -->
+      <div class="view" id="v-bdev">
+        <div class="chdr"><div><div class="chdr-t">📋 BUSINESS DEV</div><div class="chdr-s">PITCH · CREDENTIALS · PRICING · COMPETITIVE ANALYSIS</div></div></div>
+        <div class="tgrid" id="g-bdev"></div>
+      </div>
+
+      <!-- CONTENT -->
+      <div class="view" id="v-content">
+        <div class="chdr"><div><div class="chdr-t">📱 CONTENT MACHINE</div><div class="chdr-s">CALENDAR · SCRIPTS · SEO · INFLUENCER · EMAIL</div></div></div>
+        <div class="tgrid" id="g-content"></div>
+      </div>
+
+      <!-- OPS -->
+      <div class="view" id="v-ops">
+        <div class="chdr"><div><div class="chdr-t">🗂 INTERNAL OPS</div><div class="chdr-s">SOP · MEETING NOTES · JD · PERFORMANCE · NEWSLETTER</div></div></div>
+        <div class="tgrid" id="g-ops"></div>
+      </div>
+
+      <!-- CLIENT -->
+      <div class="view" id="v-client">
+        <div class="chdr"><div><div class="chdr-t">🤝 CLIENT SUCCESS</div><div class="chdr-s">REPORT · POST-MORTEM · PRESENTATION · RETAINER</div></div></div>
+        <div class="tgrid" id="g-client"></div>
+      </div>
+
       <!-- CHAT -->
       <div class="view" id="v-chat">
-        <div class="content-hdr">
-          <div>
-            <div class="ch-title" id="ch-name">—</div>
-            <div class="ch-sub" id="ch-role">—</div>
-          </div>
-          <div class="ch-badge" id="ch-cl">—</div>
+        <div class="chdr">
+          <div><div class="chdr-t" id="ch-n">—</div><div class="chdr-s" id="ch-r">—</div></div>
+          <div class="chdr-b" id="ch-cl">—</div>
         </div>
-        <div class="chat-wrap">
-          <div class="op-profile" id="op-profile"></div>
-          <div class="messages" id="messages"></div>
-          <div class="input-row">
-            <textarea class="chat-in" id="chat-in" rows="1" placeholder="พิมพ์ข้อความถึง operative... (Enter ส่ง, Shift+Enter ขึ้นบรรทัด)"></textarea>
-            <button class="send-btn" id="send-btn" onclick="doSend()">SEND ↗</button>
+        <div class="cw">
+          <div class="op-bar" id="op-bar"></div>
+          <div class="msgs" id="msgs"></div>
+          <div class="ibar">
+            <textarea class="cta" id="cta" rows="1" placeholder="พิมพ์ข้อความ... (Enter ส่ง · Shift+Enter ขึ้นบรรทัดใหม่)"></textarea>
+            <button class="sbtn" id="sbtn" onclick="doSend()">SEND ↗</button>
           </div>
         </div>
       </div>
@@ -245,259 +345,452 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--f
 </div>
 
 <script>
-var KEY = localStorage.getItem('hh_key')||'';
-var cur = null;
-var hists = {};
+var KEY=localStorage.getItem('hh_key')||'',CUR=null,HISTS={},RUNNING=false;
 
-// ── AGENTS ──
-var AGENTS = [
+// ── MODELS: Haiku for Mission (save credit), Sonnet for chat ──
+var M_CHAT='claude-sonnet-4-20250514';
+var M_MISSION='claude-haiku-4-5-20251001';
+
+var AG=[
   {id:'HYH-001',div:'CREATIVE',dc:'#9c7ac8',name:'THE INTAKE',role:'brief receiver · mission intake',cl:'ALPHA',clc:'#c8b97a',
-   quote:'"A brief with gaps is not a brief. It\'s a guess."',
-   caps:['รับบรีฟดิบทุกรูปแบบ','ถามจนครบ 9 fields','สรุป Creative Brief พร้อมส่งทีม'],
+   q:'"A brief with gaps is not a brief. It\'s a guess."',
+   caps:['รับบรีฟดิบทุกรูปแบบ','ถามจนครบ 9 fields','สรุป Creative Brief'],
    img:'images/HYH-Agent (006).png',
-   sys:'คุณคือ Brief Intake Specialist ของ HELLYEAH HOUSE — Brand Operations & Creative Intelligence\nงานของคุณคือรับบรีฟจาก Design Director แล้วถามจนได้ข้อมูลครบก่อนส่งต่อทีม creative\nเมื่อได้รับบรีฟ: สรุปสิ่งที่ได้รับ → ถามคำถามที่ขาด 2-3 ข้อทีละชุด → เมื่อครบสรุปเป็น Creative Brief ฉบับสมบูรณ์\nต้องได้: Brand, Objective, Target, Key message, Tone, Deliverables, Timeline, Budget, Mandatory\nพูดตรง เป็นกันเอง ใช้ภาษาไทยผสมอังกฤษ'},
+   sys:'คุณคือ Brief Intake Specialist ของ HELLYEAH HOUSE\nในโหมด Mission Run: รับ brief → สรุปเป็น Creative Brief ฉบับสมบูรณ์ทันทีใน format:\nBRAND:\nCAMPAIGN:\nOBJECTIVE:\nTARGET:\nKEY MESSAGE:\nTONE & MANNER:\nDELIVERABLES:\nTIMELINE:\nBUDGET:\nMANDATORY:\nASSUMED:\nในโหมดปกติ: ถามต่อเองจนได้ข้อมูลครบ ใช้ภาษาไทยผสมอังกฤษ'},
   {id:'HYH-002',div:'CREATIVE',dc:'#9c7ac8',name:'THE THINKER',role:'concept generator · creative intelligence',cl:'BETA',clc:'#7a9cc8',
-   quote:'"Safe ideas don\'t change anything."',
-   caps:['วิเคราะห์ core tension ใน brief','เสนอ 3 concept directions','recommend ชัดเจน ไม่อ้อมค้อม'],
+   q:'"Safe ideas don\'t change anything."',
+   caps:['วิเคราะห์ tension ใน brief','3 concept directions','recommend ชัดเจน'],
    img:'images/HYH-Agent (007).png',
-   sys:'คุณคือ Creative Concept Generator ของ HELLYEAH HOUSE\nเมื่อได้รับ Creative Brief: 1)บอก core tension + human truth 2)เสนอ 3 concepts แต่ละตัวมี: CONCEPT NAME, BIG IDEA, HUMAN TRUTH, BRAND ROLE, CAMPAIGN LINE, EXECUTION HINT, WHY THIS WORKS 3)ระบุ concept ที่แนะนำ\nพูดตรง มีจุดยืน ใช้ภาษาไทยผสมอังกฤษ'},
+   sys:'คุณคือ Creative Concept Generator ของ HELLYEAH HOUSE\nรับ Creative Brief → เสนอ 3 concepts:\n\nCONCEPT A — [NAME]\nBIG IDEA: ...\nHUMAN TRUTH: ...\nCAMPAIGN LINE: ...\nEXECUTION HINT: ...\n\nCONCEPT B — [NAME]\n...\n\nCONCEPT C — [NAME]\n...\n\nRECOMMENDED: Concept [X] เพราะ...\nใช้ภาษาไทยผสมอังกฤษ'},
   {id:'HYH-003',div:'CREATIVE',dc:'#9c7ac8',name:'THE WRITER',role:'senior copywriter · language ops',cl:'GAMMA',clc:'#9c7ac8',
-   quote:'"Copy that doesn\'t feel anything, does nothing."',
-   caps:['เขียน copy ทุก format','3 angle options + recommended','พูดตรงถ้า revision ทำให้แย่ลง'],
+   q:'"Copy that doesn\'t feel anything, does nothing."',
+   caps:['copy ทุก format','3 angle options','recommended set'],
    img:'images/HYH-Agent (005).png',
-   sys:'คุณคือ Senior Copywriter ของ HELLYEAH HOUSE\nเสนอ 3 ตัวเลือกเสมอ แต่ละตัวมี angle ต่างกัน: OPTION A — [angle] / copy / NOTE: [อธิบาย angle] ปิดด้วย RECOMMENDED: Option X เพราะ...\nหลีกเลี่ยง: "ดีที่สุด" "คุณภาพสูง" ใช้ภาษาไทยผสมอังกฤษ'},
+   sys:'คุณคือ Senior Copywriter ของ HELLYEAH HOUSE\nรับ concept → เขียน:\n\nHEADLINE OPTIONS:\nA: ...\nB: ...\nC: ...\n\nTAGLINE OPTIONS:\nA: ...\nB: ...\nC: ...\n\nSOCIAL HOOK: ...\nMANIFESTO (ถ้าเหมาะ): ...\n\nRECOMMENDED SET: Headline [X] + Tagline [Y] เพราะ...\nใช้ภาษาไทยผสมอังกฤษ'},
   {id:'HYH-004',div:'CREATIVE',dc:'#9c7ac8',name:'THE CRITIC',role:'creative reviewer · quality gate',cl:'DELTA',clc:'#c87a7a',
-   quote:'"Good enough is the enemy of what it could be."',
-   caps:['APPROVED/NEEDS WORK/SEND BACK','เช็ค brand fit + strategy + craft','revision notes ที่ actionable'],
+   q:'"Good enough is the enemy of what it could be."',
+   caps:['APPROVED/NEEDS WORK/SEND BACK','brand fit + craft','actionable revision'],
    img:'images/HYH-Agent (017).png',
-   sys:'คุณคือ Creative Reviewer ของ HELLYEAH HOUSE — quality gate สุดท้ายก่อนงานออกจาก agency\nformat: VERDICT / ON STRATEGY / ON BRAND / ON IDEA / ON CRAFT / STRONGEST PART / WEAKEST POINT / REVISION NOTES / SEND WHEN\nพูดตรง ไม่ approve งานเพราะ deadline'},
+   sys:'คุณคือ Creative Reviewer ของ HELLYEAH HOUSE\nVERDICT: [APPROVED / NEEDS WORK / SEND BACK]\nON STRATEGY: ...\nON IDEA: ...\nON CRAFT: ...\nSTRONGEST: ...\nWEAKEST: ...\nREVISION NOTES:\n→ ...\nFINAL CALL: ...\nพูดตรง ไม่ approve เพราะ deadline'},
   {id:'HYH-005',div:'DESIGN',dc:'#c87a3a',name:'THE DIRECTOR',role:'art director · visual intelligence',cl:'ALPHA',clc:'#c8b97a',
-   quote:'"If you can\'t describe it, you can\'t design it."',
-   caps:['เสนอ visual direction + mood','เขียน art direction brief','ระบุ visual reference + rationale'],
+   q:'"If you can\'t describe it, you can\'t design it."',
+   caps:['visual direction + mood','art direction brief','visual references'],
    img:'images/HYH-Agent (013).png',
-   sys:'คุณคือ Art Director ของ HELLYEAH HOUSE\nเมื่อได้รับ concept/brief เสนอ: VISUAL CONCEPT (1 ประโยค), MOOD & FEELING, COLOR DIRECTION, TYPOGRAPHY, COMPOSITION STYLE, VISUAL REFERENCES (อธิบาย), WHAT TO AVOID\nคิดแบบ director ที่รู้ว่างานต้องรู้สึกยังไง'},
+   sys:'คุณคือ Art Director ของ HELLYEAH HOUSE\nVISUAL CONCEPT: (1 ประโยค)\nMOOD & FEELING: ...\nCOLOR DIRECTION: ...\nTYPOGRAPHY: ...\nCOMPOSITION STYLE: ...\nKEY VISUAL IDEA: ...\nREFERENCE DIRECTION: (อธิบาย)\nAVOID: ...\nใช้ภาษาไทยผสมอังกฤษ'},
   {id:'HYH-006',div:'DESIGN',dc:'#c87a3a',name:'THE HAND',role:'graphic executor · production ops',cl:'BETA',clc:'#c87a3a',
-   quote:'"Craft is what separates vision from reality."',
-   caps:['เขียน design spec ละเอียด','describe layout, type, color','review กับ brand guideline'],
+   q:'"Craft is what separates vision from reality."',
+   caps:['design spec ละเอียด','layout + type + color hex','production ready'],
    img:'images/HYH-Agent (014).png',
-   sys:'คุณคือ Graphic Production Specialist ของ HELLYEAH HOUSE\nแปลง visual direction เป็น production spec: SIZE & FORMAT, GRID & LAYOUT, TYPOGRAPHY SPEC (font/size/weight/color), COLOR PALETTE (hex), IMAGERY, SPACING, FILE FORMAT\nพูดเป็น spec ชัดเจน'},
+   sys:'คุณคือ Graphic Production Specialist ของ HELLYEAH HOUSE\nSIZE & FORMAT:\nGRID & LAYOUT:\nTYPOGRAPHY SPEC: (font/size/weight/color hex)\nCOLOR PALETTE: (hex)\nIMAGERY DIRECTION:\nSPACING:\nFILE FORMAT & DELIVERABLES:'},
   {id:'HYH-007',div:'DESIGN',dc:'#c87a3a',name:'THE MOTION',role:'motion & content · social ops',cl:'GAMMA',clc:'#9c7ac8',
-   quote:'"Static is dead. Everything moves now."',
-   caps:['content format สำหรับ social','motion brief + animation direction','content calendar strategy'],
+   q:'"Static is dead. Everything moves now."',
+   caps:['content format สำหรับ social','motion brief + animation','content calendar'],
    img:'images/HYH-Agent (009).png',
-   sys:'คุณคือ Motion & Social Content Specialist ของ HELLYEAH HOUSE\nเสนอ: PLATFORM BREAKDOWN (IG/TikTok/Facebook), CONTENT FORMATS, MOTION DIRECTION, POSTING CADENCE, CONTENT PILLARS\nคิดแบบคนที่รู้ว่า algorithm ทำงานยังไง'},
+   sys:'คุณคือ Motion & Social Content Specialist ของ HELLYEAH HOUSE\nPLATFORM BREAKDOWN (IG/TikTok/Facebook):\nCONTENT FORMATS:\nMOTION DIRECTION:\nPOSTING CADENCE:\nCONTENT PILLARS:'},
   {id:'HYH-008',div:'STRATEGY',dc:'#3a9cc8',name:'THE SCOUT',role:'researcher · intelligence ops',cl:'BETA',clc:'#3a9cc8',
-   quote:'"Numbers don\'t lie. People do."',
-   caps:['consumer insight + เทรนด์','สรุป market landscape','fact-check ก่อนใช้'],
+   q:'"Numbers don\'t lie. People do."',
+   caps:['consumer insight + trend','market landscape','fact-check'],
    img:'images/HYH-Agent (015).png',
-   sys:'คุณคือ Research & Intelligence Specialist ของ HELLYEAH HOUSE\nสรุปใน format: CATEGORY OVERVIEW, KEY PLAYERS, CONSUMER INSIGHT, TREND SIGNALS, WHITESPACE, SOURCES TO VERIFY\nบอกตรงเมื่อข้อมูลไม่แน่ใจ'},
+   sys:'คุณคือ Research Specialist ของ HELLYEAH HOUSE\nCATEGORY OVERVIEW:\nKEY PLAYERS & POSITIONING:\nCONSUMER INSIGHT:\nTREND SIGNALS:\nWHITESPACE OPPORTUNITY:\nWHAT TO WATCH:\nบอกตรงเมื่อข้อมูลไม่แน่ใจ ไม่แต่งข้อมูล'},
   {id:'HYH-009',div:'STRATEGY',dc:'#3a9cc8',name:'THE ACCOUNT',role:'account handler · client ops',cl:'GAMMA',clc:'#c87a3a',
-   quote:'"A client who trusts you gives you better briefs."',
-   caps:['proposal + quotation + SOW','client email ทุก scenario','billing milestone'],
+   q:'"A client who trusts you gives you better briefs."',
+   caps:['proposal + quotation + SOW','client email','billing milestone'],
    img:'images/HYH-Agent (002).png',
-   sys:'คุณคือ Account Manager ของ HELLYEAH HOUSE\nช่วยเรื่อง: proposal, quotation, scope of work, client communication, billing\nสไตล์: professional แต่ไม่เย็นชา ชัดเจน ไม่มี jargon ไม่จำเป็น'},
+   sys:'คุณคือ Account Manager ของ HELLYEAH HOUSE\nช่วยเรื่อง proposal, quotation, scope of work, client email, billing\nสไตล์: professional แต่ไม่เย็นชา ชัดเจน ตรงประเด็น'},
   {id:'HYH-010',div:'STRATEGY',dc:'#3a9cc8',name:'THE HANDLER',role:'project manager · mission control',cl:'ALPHA',clc:'#c8b97a',
-   quote:'"A missed deadline is a broken promise."',
-   caps:['breakdown brief → task + timeline','assign งานตาม division','สรุปสถานะทุก checkpoint'],
+   q:'"A missed deadline is a broken promise."',
+   caps:['breakdown → task + timeline','assign ตาม division','สรุปสถานะ checkpoint'],
    img:'images/HYH-Agent (001).png',
-   sys:'คุณคือ Project Manager ของ HELLYEAH HOUSE\nเมื่อได้รับ project brief สร้าง: PROJECT BREAKDOWN, TIMELINE, OWNER PER TASK, DEPENDENCIES, RISK FLAGS\nพูดตรง บอกถ้า timeline ไม่สมเหตุสมผล'},
+   sys:'คุณคือ Project Manager ของ HELLYEAH HOUSE\nPROJECT BREAKDOWN (phases + tasks):\nTIMELINE:\nOWNER PER TASK (ระบุ division):\nDEPENDENCIES:\nRISK FLAGS:\nพูดตรง บอกถ้า timeline ไม่สมเหตุสมผล'},
   {id:'HYH-011',div:'TECH',dc:'#4a9c5a',name:'THE ARCHITECT',role:'ui/ux designer · experience ops',cl:'BETA',clc:'#4a9c5a',
-   quote:'"Design is how it works, not just how it looks."',
-   caps:['user flow + wireframe concept','UX spec + component description','review กับ usability principles'],
+   q:'"Design is how it works, not just how it looks."',
+   caps:['user flow + wireframe','UX spec + component','usability review'],
    img:'images/HYH-Agent (000).png',
-   sys:'คุณคือ UX/UI Designer ของ HELLYEAH HOUSE\nเมื่อได้รับ requirement เสนอ: USER GOAL, PROPOSED FLOW, KEY SCREENS/STATES, INTERACTION NOTES, ACCESSIBILITY, WHAT NOT TO DO\nคิดจาก user ก่อน business เสมอ'},
+   sys:'คุณคือ UX/UI Designer ของ HELLYEAH HOUSE\nUSER GOAL:\nPROPOSED FLOW:\nKEY SCREENS/STATES:\nINTERACTION NOTES:\nACCESSIBILITY:\nWHAT NOT TO DO:\nคิดจาก user ก่อน business เสมอ'},
   {id:'HYH-012',div:'TECH',dc:'#4a9c5a',name:'THE ENGINEER',role:'fullstack · backend & frontend ops',cl:'GAMMA',clc:'#4a9c5a',
-   quote:'"The best code is the code nobody notices."',
-   caps:['เขียน + review code ทุก layer','debug + troubleshoot','architecture + tech stack'],
+   q:'"The best code is the code nobody notices."',
+   caps:['code ทุก layer','debug + troubleshoot','architecture + stack'],
    img:'images/HYH-Agent (003).png',
    sys:'คุณคือ Fullstack Engineer ของ HELLYEAH HOUSE\nครอบคลุม frontend/backend/API/database/deployment\nเขียน code ที่ clean, อธิบาย logic, บอก trade-off, warn security issue\nถามถ้าต้องการ context เพิ่ม'}
 ];
 
-var GREET = {
-  'HYH-001':'สวัสดีครับ — พร้อมรับบรีฟแล้ว โยนมาได้เลย ไม่ว่าจะยาวหรือสั้นแค่ไหน จะถามต่อเองจนครบ',
-  'HYH-002':'พร้อมแล้ว — ส่ง Creative Brief มา จะวิเคราะห์ tension และเสนอ concept directions ให้',
-  'HYH-003':'พร้อมเขียน — บอก concept และ format ที่ต้องการมาได้เลย',
-  'HYH-004':'พร้อม review — ส่งงานพร้อม brief ที่ใช้อ้างอิง จะตัดสินตรงๆ',
-  'HYH-005':'พร้อมแล้ว — ส่ง concept หรือ brief มา จะเสนอ visual direction ให้',
-  'HYH-006':'พร้อมแล้ว — ส่ง visual direction มา จะแปลงเป็น production spec ที่ทำตามได้เลย',
+var GREET={
+  'HYH-001':'สวัสดีครับ — พร้อมรับบรีฟแล้ว โยนมาได้เลย จะถามต่อจนครบทุก field',
+  'HYH-002':'พร้อมแล้ว — ส่ง Creative Brief มา จะวิเคราะห์และเสนอ 3 concept directions',
+  'HYH-003':'พร้อมเขียน — บอก concept และ format ที่ต้องการ',
+  'HYH-004':'พร้อม review — ส่งงานพร้อม brief อ้างอิงมา จะตัดสินตรงๆ ไม่อ้อม',
+  'HYH-005':'พร้อมแล้ว — ส่ง concept มา จะเสนอ visual direction ครบทุก element',
+  'HYH-006':'พร้อมแล้ว — ส่ง visual direction มา จะแปลงเป็น production spec ทำตามได้เลย',
   'HYH-007':'พร้อมแล้ว — บอก campaign concept และ platform ที่ต้องการ',
-  'HYH-008':'พร้อมแล้ว — ต้องการ research เรื่องอะไร?',
-  'HYH-009':'พร้อมแล้ว — ต้องการ draft อะไร? proposal, quotation, หรือ client email?',
-  'HYH-010':'พร้อมแล้ว — ส่ง project brief มา จะ breakdown เป็น tasks + timeline ให้ทันที',
+  'HYH-008':'พร้อมแล้ว — ต้องการ research เรื่องอะไร? ยิ่งละเอียดยิ่งดี',
+  'HYH-009':'พร้อมแล้ว — ต้องการ draft อะไร? proposal, quotation หรือ client email?',
+  'HYH-010':'พร้อมแล้ว — ส่ง project brief มา จะ breakdown เป็น tasks + timeline ทันที',
   'HYH-011':'พร้อมแล้ว — บอก requirement หรือ problem ที่ต้องการ UX solution',
   'HYH-012':'พร้อมแล้ว — มีโจทย์ tech อะไร? code, debug, หรือ architecture?'
 };
 
-// ── INIT ──
-function init() {
-  if(!KEY) document.getElementById('modal').style.display='flex';
-  else document.getElementById('modal').style.display='none';
-  buildSidebar();
-  buildLobby();
-  startClock();
-}
-function saveKey() {
-  var v=document.getElementById('api-in').value.trim();
-  if(!v){alert('กรุณาใส่ API Key');return;}
-  KEY=v; localStorage.setItem('hh_key',v);
-  document.getElementById('modal').style.display='none';
-}
-function skipKey() {KEY='demo';document.getElementById('modal').style.display='none';}
-function resetKey() {localStorage.removeItem('hh_key');KEY='';document.getElementById('modal').style.display='flex';}
+var PIPES={
+  full:['HYH-001','HYH-002','HYH-003','HYH-004','HYH-005'],
+  creative:['HYH-002','HYH-003','HYH-004'],
+  concept:['HYH-002','HYH-003'],
+  visual:['HYH-002','HYH-005']
+};
 
-// ── IMG with fallback ──
-function mkImg(src,cls,alt) {
-  return '<img src="'+src+'" class="'+cls+'" alt="'+(alt||'')+'" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'">';
+var TOOLS={
+  bdev:[
+    {ico:'🎯',name:'Pitch Deck Narrative',desc:'สร้าง story structure สำหรับ pitch ลูกค้าใหม่ — problem, solution, proof, ask',who:'THE ACCOUNT + THE THINKER',ag:'HYH-009',pr:'ช่วยสร้าง pitch deck narrative structure สำหรับ agency pitch ลูกค้าใหม่'},
+    {ico:'📁',name:'Credentials Deck',desc:'เขียน credentials สำหรับ present agency — expertise, portfolio highlights, why us',who:'THE ACCOUNT',ag:'HYH-009',pr:'ช่วยเขียน agency credentials deck สำหรับ present ตัวเองให้ลูกค้าใหม่'},
+    {ico:'🏆',name:'Award Case Study',desc:'เขียน case study ผลงานสำหรับ award หรือ portfolio พร้อม insight',who:'THE WRITER + THE ACCOUNT',ag:'HYH-003',pr:'ช่วยเขียน case study ผลงาน creative agency สำหรับส่ง award หรือใส่ portfolio'},
+    {ico:'🔍',name:'Competitive Analysis',desc:'วิเคราะห์ agency คู่แข่ง — positioning, strengths, gaps, whitespace',who:'THE SCOUT',ag:'HYH-008',pr:'ช่วยทำ competitive analysis เปรียบเทียบ agency ในตลาด ระบุ category ที่ต้องการ'},
+    {ico:'💰',name:'Fee Structure & Rate Card',desc:'วาง fee structure, rate card และ pricing model ที่เหมาะกับ agency ขนาดนี้',who:'THE ACCOUNT + THE HANDLER',ag:'HYH-009',pr:'ช่วยวาง pricing strategy, fee structure และ rate card สำหรับ creative agency'},
+    {ico:'📊',name:'Brand Audit',desc:'วิเคราะห์ brand ปัจจุบันก่อน rebrand — voice, visual consistency, positioning gaps',who:'THE SCOUT + THE DIRECTOR',ag:'HYH-008',pr:'ช่วยทำ brand audit วิเคราะห์ brand ปัจจุบัน ก่อนเริ่ม rebrand หรือ refresh'}
+  ],
+  content:[
+    {ico:'📅',name:'Content Calendar 30 วัน',desc:'วาง content calendar 30 วัน แยก platform พร้อม theme, format และ posting time',who:'THE MOTION',ag:'HYH-007',pr:'ช่วยวาง content calendar 30 วัน สำหรับ brand บน social media แยก IG, TikTok, Facebook'},
+    {ico:'🎬',name:'Script Factory',desc:'เขียน script batch สำหรับ YouTube, Reels, TikTok จาก concept เดียว',who:'THE WRITER + THE MOTION',ag:'HYH-003',pr:'ช่วยเขียน script batch สำหรับ short video content หลาย format จาก concept หลักที่กำหนด'},
+    {ico:'✍️',name:'SEO Article & Blog',desc:'เขียน article, blog, landing page ที่ optimize สำหรับ search พร้อม structure',who:'THE WRITER + THE SCOUT',ag:'HYH-003',pr:'ช่วยเขียน SEO content article พร้อม keyword strategy และ heading structure'},
+    {ico:'🤳',name:'Influencer Brief',desc:'เขียน brief ให้ KOL/Influencer ที่ชัดเจน ทำตามได้จริง ไม่เปิดช่องตีความผิด',who:'THE WRITER + THE MOTION',ag:'HYH-007',pr:'ช่วยเขียน influencer brief สำหรับ KOL ทำ content ให้ brand — ระบุ platform และ objective'},
+    {ico:'📧',name:'Email / CRM Sequence',desc:'เขียน email sequence สำหรับ CRM, onboarding, nurture, retention campaign',who:'THE WRITER',ag:'HYH-003',pr:'ช่วยเขียน email sequence สำหรับ CRM campaign — ระบุ objective และ target segment'},
+    {ico:'🎙',name:'Podcast / Long-form Script',desc:'เขียน script longform สำหรับ podcast episode หรือ YouTube video',who:'THE WRITER + THE MOTION',ag:'HYH-003',pr:'ช่วยเขียน script สำหรับ podcast episode หรือ YouTube video longform — ระบุ topic และ duration'}
+  ],
+  ops:[
+    {ico:'📋',name:'SOP Writer',desc:'เขียน Standard Operating Procedure ให้ทีม ชัดเจน step-by-step ทำตามได้ทันที',who:'THE HANDLER',ag:'HYH-010',pr:'ช่วยเขียน SOP สำหรับ process ภายใน agency — ระบุ process ที่ต้องการ'},
+    {ico:'📝',name:'Meeting Notes → Action Items',desc:'ป้อน meeting notes แล้วได้สรุป + action items + owner + deadline ทันที',who:'THE HANDLER + THE ACCOUNT',ag:'HYH-010',pr:'ช่วยสรุป meeting notes และแจก action items พร้อม owner และ deadline — วาง notes ได้เลย'},
+    {ico:'👥',name:'Job Description',desc:'เขียน JD ประกาศหาคนเข้าทีม ครบทั้ง role, responsibility, requirement, culture fit',who:'THE HANDLER',ag:'HYH-010',pr:'ช่วยเขียน job description สำหรับประกาศรับสมัครงานใน creative agency — ระบุ role'},
+    {ico:'⭐',name:'Performance Review',desc:'สร้าง template ประเมินทีมที่ fair, specific, growth-oriented และ actionable',who:'THE HANDLER',ag:'HYH-010',pr:'ช่วยสร้าง performance review template สำหรับประเมินทีม agency — ระบุ role ที่ต้องการประเมิน'},
+    {ico:'📰',name:'Internal Newsletter',desc:'เขียน internal newsletter อัปเดตทีม — wins, learnings, shoutouts, culture',who:'THE WRITER',ag:'HYH-003',pr:'ช่วยเขียน internal newsletter อัปเดตข่าวและ culture ให้ทีม agency'},
+    {ico:'🎓',name:'Onboarding & Training',desc:'สร้าง onboarding guide หรือ training material สำหรับสมาชิกทีมใหม่',who:'THE HANDLER + THE WRITER',ag:'HYH-010',pr:'ช่วยสร้าง onboarding guide สำหรับทีมใหม่ใน creative agency — ระบุ role ที่ onboard'}
+  ],
+  client:[
+    {ico:'📈',name:'Campaign Performance Report',desc:'สรุปผล campaign พร้อม insight, learnings และ recommendation สำหรับ client',who:'THE SCOUT + THE ACCOUNT',ag:'HYH-008',pr:'ช่วยเขียน campaign performance report สำหรับ present ให้ client — วาง data ที่มีได้เลย'},
+    {ico:'🔄',name:'Project Post-mortem',desc:'วิเคราะห์ project ที่จบแล้ว — what worked, what didn\'t, improvement actions',who:'THE HANDLER + THE CRITIC',ag:'HYH-010',pr:'ช่วยทำ post-mortem analysis สำหรับ project ที่เพิ่ง deliver เสร็จ'},
+    {ico:'🎤',name:'Presentation Script',desc:'เขียน script เตรียม present งาน creative ให้ client — opening, walkthrough, close',who:'THE WRITER + THE ACCOUNT',ag:'HYH-003',pr:'ช่วยเขียน presentation script สำหรับ present งาน creative ให้ client'},
+    {ico:'💪',name:'Objection Handler',desc:'เตรียมคำตอบสำหรับ objections ที่ client มักถาม และวิธีพลิกสถานการณ์',who:'THE ACCOUNT + THE THINKER',ag:'HYH-009',pr:'ช่วยเตรียม objection handler สำหรับตอบข้อกังวลที่ client มักถามในการ present งาน'},
+    {ico:'🤝',name:'Retainer Proposal',desc:'เขียน proposal เสนอ long-term retainer deal พร้อม scope, value และ pricing',who:'THE ACCOUNT',ag:'HYH-009',pr:'ช่วยเขียน retainer proposal เสนอ long-term engagement กับ client ปัจจุบัน'},
+    {ico:'💌',name:'Client Relationship Touch',desc:'เขียน message ดูแล relationship — follow-up, check-in, thank you, re-engage',who:'THE ACCOUNT',ag:'HYH-009',pr:'ช่วยเขียน client relationship message สำหรับ follow-up หรือ check-in กับ client'}
+  ]
+};
+
+function ag(id){return AG.find(function(a){return a.id===id});}
+
+// ── INIT ──
+function init(){
+  document.getElementById('modal').style.display=KEY?'none':'flex';
+  document.getElementById('credit-badge').textContent='S+H';
+  buildSb(); buildLobby(); buildTools(); startClock();
+}
+function saveKey(){var v=document.getElementById('api-in').value.trim();if(!v){alert('ใส่ API Key ก่อนนะ');return;}KEY=v;localStorage.setItem('hh_key',v);document.getElementById('modal').style.display='none';}
+function skipKey(){KEY='demo';document.getElementById('modal').style.display='none';}
+function resetKey(){localStorage.removeItem('hh_key');KEY='';document.getElementById('modal').style.display='flex';}
+
+function mi(src,cls,alt){
+  return '<img src="'+src+'" class="'+cls+'" alt="'+(alt||'')+'" loading="lazy" onerror="this.style.display=\'none\';var n=this.nextElementSibling;if(n)n.style.display=\'flex\'">';
 }
 
 // ── SIDEBAR ──
-function buildSidebar() {
-  var divs=['CREATIVE','DESIGN','STRATEGY','TECH'];
-  var html='';
-  divs.forEach(function(d){
-    html+='<div class="sb-div-label">'+d+'</div>';
-    AGENTS.filter(function(a){return a.div===d}).forEach(function(a){
-      html+='<div class="sb-agent" id="sb-'+a.id+'" onclick="openChat(\''+a.id+'\')">';
-      html+='<div style="width:26px;height:34px;border-radius:2px;overflow:hidden;flex-shrink:0;background:var(--bg4)">'+mkImg(a.img,'sb-thumb',a.name)+'<div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:8px;color:var(--border2)">•</div></div>';
-      html+='<div class="sb-info"><div class="sb-name">'+a.name+'</div><div class="sb-role">'+a.role.split('·')[0].trim()+'</div></div>';
-      html+='<div class="sb-dot"></div></div>';
+function buildSb(){
+  var divs=['CREATIVE','DESIGN','STRATEGY','TECH'],html='';
+  divs.forEach(function(d,i){
+    if(i>0) html+='<div class="sb-bdr"></div>';
+    html+='<div class="sb-sec"><div class="sb-dl">'+d+'</div>';
+    AG.filter(function(a){return a.div===d}).forEach(function(a){
+      html+='<div class="sb-a" id="sb-'+a.id+'" onclick="openChat(\''+a.id+'\')">';
+      html+='<div class="sb-imgw">'+mi(a.img,'sb-img',a.name)+'</div>';
+      html+='<div class="sb-info"><div class="sb-name">'+a.name+'</div><div class="sb-role">'+a.role.split('·')[0].trim()+'</div>';
+      html+='<div class="sb-cl" style="color:'+a.clc+';border-color:'+a.clc+'44">'+a.cl+'</div></div></div>';
     });
+    html+='</div>';
   });
   document.getElementById('sb-agents').innerHTML=html;
 }
 
 // ── LOBBY ──
-function buildLobby() {
+function buildLobby(){
   var divs=['CREATIVE','DESIGN','STRATEGY','TECH'];
   var labels={CREATIVE:'CREATIVE DIVISION',DESIGN:'DESIGN DIVISION',STRATEGY:'STRATEGY & OPS',TECH:'TECH DIVISION'};
   var html='';
   divs.forEach(function(d){
-    var list=AGENTS.filter(function(a){return a.div===d});
-    html+='<div class="div-section">';
-    html+='<div class="div-header"><div class="div-name">'+labels[d]+'</div><div class="div-line"></div><div class="div-count">'+list.length+' OPERATIVES</div></div>';
-    html+='<div class="agent-grid">';
+    var list=AG.filter(function(a){return a.div===d});
+    html+='<div class="dsec"><div class="dhdr"><div class="dname">'+labels[d]+'</div><div class="dline"></div><div class="dcnt">'+list.length+' OPERATIVES</div></div>';
+    html+='<div class="agrid">';
     list.forEach(function(a){
       html+='<div class="ac" id="lc-'+a.id+'" onclick="openChat(\''+a.id+'\')">';
-      html+='<div class="ac-img-wrap">'+mkImg(a.img,'ac-img',a.name);
-      html+='<div class="ac-img-placeholder" style="display:none">'+a.name.charAt(4)+'</div>';
-      html+='<div class="ac-overlay"><div class="ac-overlay-text">ENGAGE OPERATIVE ↗</div></div></div>';
+      html+='<div class="ac-iw">'+mi(a.img,'ac-i',a.name)+'<div class="ac-ph" style="display:none">'+a.name[4]+'</div>';
+      html+='<div class="ac-ov"><div class="ac-ovn">'+a.name+'</div><div class="ac-ovc">ENGAGE OPERATIVE ↗</div></div></div>';
       html+='<div class="ac-meta"><div class="ac-file">FILE '+a.id+'</div><div class="ac-name">'+a.name+'</div><div class="ac-role">'+a.role+'</div>';
-      html+='<div class="ac-div" style="color:'+a.dc+';border-color:'+a.dc+'44">'+d+'</div></div></div>';
+      html+='<div class="ac-ft"><div class="ac-div" style="color:'+a.dc+';border-color:'+a.dc+'44">'+d+'</div>';
+      html+='<div class="ac-sta"><span class="ac-std"></span>ACTIVE</div></div></div></div>';
     });
     html+='</div></div>';
   });
   document.getElementById('lobby').innerHTML=html;
 }
 
-// ── SHOW LOBBY ──
-function showLobby() {
-  document.getElementById('v-lobby').classList.add('on');
-  document.getElementById('v-chat').classList.remove('on');
-  document.getElementById('lobby-btn').classList.add('on');
-  document.querySelectorAll('.sb-agent').forEach(function(el){el.classList.remove('on')});
-  cur=null;
+// ── TOOL GRID ──
+function buildTools(){
+  ['bdev','content','ops','client'].forEach(function(cat){
+    var g=document.getElementById('g-'+cat); if(!g) return;
+    var html='';
+    TOOLS[cat].forEach(function(t){
+      var pr=t.pr.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+      html+='<div class="tc" onclick="launchTool(\''+t.ag+'\',\''+pr+'\')">';
+      html+='<div class="tc-ico">'+t.ico+'</div>';
+      html+='<div class="tc-name">'+t.name+'</div>';
+      html+='<div class="tc-desc">'+t.desc+'</div>';
+      html+='<div class="tc-who">OPERATIVE: '+t.who+'</div>';
+      html+='<button class="tc-btn">LAUNCH ↗</button></div>';
+    });
+    g.innerHTML=html;
+  });
+}
+
+function launchTool(agId,prompt){
+  openChat(agId);
+  setTimeout(function(){
+    var ta=document.getElementById('cta');
+    if(ta){ta.value=decodeURIComponent(prompt);ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,120)+'px';}
+  },150);
+}
+
+// ── VIEWS ──
+function sv(v){
+  ['roster','mission','bdev','content','ops','client','chat'].forEach(function(id){
+    var el=document.getElementById('v-'+id); if(el) el.classList.remove('on');
+  });
+  ['roster','mission','bdev','content','ops','client'].forEach(function(id){
+    var el=document.getElementById('n-'+id); if(el) el.classList.remove('on');
+  });
+  var vEl=document.getElementById('v-'+v); if(vEl) vEl.classList.add('on');
+  var nEl=document.getElementById('n-'+v); if(nEl) nEl.classList.add('on');
+  if(v!=='chat'){
+    CUR=null;
+    document.querySelectorAll('.sb-a').forEach(function(e){e.classList.remove('on');});
+    document.querySelectorAll('.ac').forEach(function(e){e.classList.remove('on');});
+  }
 }
 
 // ── OPEN CHAT ──
-function openChat(id) {
-  var a=AGENTS.find(function(x){return x.id===id});
-  if(!a) return;
-  cur=a;
-  document.getElementById('v-lobby').classList.remove('on');
+function openChat(id){
+  var a=ag(id); if(!a) return;
+  CUR=a;
+  ['roster','mission','bdev','content','ops','client','chat'].forEach(function(vid){
+    var el=document.getElementById('v-'+vid); if(el) el.classList.remove('on');
+  });
+  ['roster','mission','bdev','content','ops','client'].forEach(function(nid){
+    var el=document.getElementById('n-'+nid); if(el) el.classList.remove('on');
+  });
   document.getElementById('v-chat').classList.add('on');
-  document.getElementById('lobby-btn').classList.remove('on');
-  document.querySelectorAll('.sb-agent').forEach(function(el){el.classList.remove('on')});
-  document.querySelectorAll('.ac').forEach(function(el){el.classList.remove('on')});
+  document.querySelectorAll('.sb-a').forEach(function(e){e.classList.remove('on');});
+  document.querySelectorAll('.ac').forEach(function(e){e.classList.remove('on');});
   var sb=document.getElementById('sb-'+id); if(sb) sb.classList.add('on');
   var lc=document.getElementById('lc-'+id); if(lc) lc.classList.add('on');
-  document.getElementById('ch-name').textContent=a.name;
-  document.getElementById('ch-role').textContent=a.role.toUpperCase();
-  var cl=document.getElementById('ch-cl');
-  cl.textContent=a.cl; cl.style.color=a.clc; cl.style.borderColor=a.clc;
-  var prof=document.getElementById('op-profile');
-  var caps=a.caps.map(function(c){return '<span class="op-cap">'+c+'</span>'}).join('');
-  prof.innerHTML='<div class="op-img-wrap">'+mkImg(a.img,'op-img',a.name)+'</div>'+
-    '<div class="op-body"><div class="op-quote">'+a.quote+'</div><div class="op-caps">'+caps+'</div></div>';
-  if(!hists[id]) hists[id]=[];
+  document.getElementById('ch-n').textContent=a.name;
+  document.getElementById('ch-r').textContent=a.role.toUpperCase();
+  var cl=document.getElementById('ch-cl'); cl.textContent=a.cl; cl.style.color=a.clc; cl.style.borderColor=a.clc;
+  var bar=document.getElementById('op-bar');
+  var caps=a.caps.map(function(c){return '<span class="op-cap">'+c+'</span>';}).join('');
+  bar.innerHTML='<div class="op-iw">'+mi(a.img,'op-i',a.name)+'</div>'+
+    '<div class="op-inf"><div class="op-n">'+a.name+'</div><div class="op-r">'+a.role.toUpperCase()+'</div>'+
+    '<div class="op-q">'+a.q+'</div><div class="op-caps">'+caps+'</div></div>';
+  if(!HISTS[id]) HISTS[id]=[];
   renderMsgs(id);
-  if(hists[id].length===0){
-    hists[id].push({r:'ai',c:GREET[id]||'พร้อมรับงานแล้วครับ'});
-    renderMsgs(id);
-  }
-  document.getElementById('chat-in').focus();
+  if(!HISTS[id].length){HISTS[id].push({r:'ai',c:GREET[id]||'พร้อมรับงานครับ'});renderMsgs(id);}
+  setTimeout(function(){document.getElementById('cta').focus();},100);
 }
 
-function renderMsgs(id) {
-  var a=AGENTS.find(function(x){return x.id===id});
-  var el=document.getElementById('messages');
-  el.innerHTML='';
-  (hists[id]||[]).forEach(function(m){
-    var d=document.createElement('div');
-    d.className='msg '+(m.r==='user'?'user':'ai');
-    if(m.r==='ai') d.innerHTML='<div class="msg-sender">'+a.name+'</div>'+m.c.replace(/\n/g,'<br>');
+// ── RENDER MESSAGES ──
+function renderMsgs(id){
+  var a=ag(id),el=document.getElementById('msgs'); el.innerHTML='';
+  (HISTS[id]||[]).forEach(function(m){
+    var d=document.createElement('div'); d.className='msg '+(m.r==='user'?'u':'a');
+    if(m.r==='ai') d.innerHTML='<div class="msg-who">'+a.name+'</div>'+m.c.replace(/\n/g,'<br>');
     else d.textContent=m.c;
     el.appendChild(d);
   });
   el.scrollTop=el.scrollHeight;
 }
 
-// ── SEND ──
-async function doSend() {
-  if(!cur) return;
-  var inp=document.getElementById('chat-in');
-  var txt=inp.value.trim(); if(!txt) return;
-  inp.value=''; inp.style.height='auto';
-  var id=cur.id;
-  if(!hists[id]) hists[id]=[];
-  hists[id].push({r:'user',c:txt});
-  renderMsgs(id);
-  var btn=document.getElementById('send-btn'); btn.disabled=true;
-  hists[id].push({r:'ai',c:'···'});
-  renderMsgs(id);
-  try {
-    var msgs=hists[id].filter(function(m){return m.c!=='···'}).map(function(m){return{role:m.r==='user'?'user':'assistant',content:m.c}});
-    var reply=await callAPI(cur,msgs);
-    hists[id]=hists[id].filter(function(m){return m.c!=='···'});
-    hists[id].push({r:'ai',c:reply});
-  } catch(e) {
-    hists[id]=hists[id].filter(function(m){return m.c!=='···'});
-    hists[id].push({r:'ai',c:'[ERROR] '+(e.message||'ตรวจสอบ API Key อีกครั้ง')});
+// ── SEND CHAT (Sonnet) ──
+async function doSend(){
+  if(!CUR) return;
+  var ta=document.getElementById('cta'),txt=ta.value.trim(); if(!txt) return;
+  ta.value=''; ta.style.height='auto';
+  var id=CUR.id; if(!HISTS[id]) HISTS[id]=[];
+  HISTS[id].push({r:'user',c:txt}); renderMsgs(id);
+  var btn=document.getElementById('sbtn'); btn.disabled=true;
+  HISTS[id].push({r:'ai',c:'···'}); renderMsgs(id);
+  try{
+    var msgs=HISTS[id].filter(function(m){return m.c!=='···';}).map(function(m){return{role:m.r==='user'?'user':'assistant',content:m.c};});
+    var rep=await callAPI(M_CHAT,CUR.sys,msgs,1500);
+    HISTS[id]=HISTS[id].filter(function(m){return m.c!=='···';});
+    HISTS[id].push({r:'ai',c:rep});
+  }catch(e){
+    HISTS[id]=HISTS[id].filter(function(m){return m.c!=='···';});
+    HISTS[id].push({r:'ai',c:'[ERROR] '+(e.message||'ตรวจสอบ API Key')});
   }
-  renderMsgs(id);
-  btn.disabled=false;
-  document.getElementById('chat-in').focus();
+  renderMsgs(id); btn.disabled=false; document.getElementById('cta').focus();
 }
 
-async function callAPI(agent,msgs) {
-  if(KEY==='demo') return '[DEMO] ใส่ Anthropic API Key เพื่อคุยกับ operative จริง — กด RESET API KEY ที่แถบซ้าย';
+// ── MISSION RUN (Haiku — save credit) ──
+async function launchMission(){
+  if(RUNNING) return;
+  var brief=document.getElementById('mbta').value.trim();
+  if(!brief){alert('ใส่ brief ก่อนนะ');return;}
+  if(KEY==='demo'){alert('Mission Run ต้องใช้ API Key จริง — กด RESET API KEY');return;}
+  var pk=document.getElementById('psel').value,pipe=PIPES[pk];
+  RUNNING=true;
+  document.getElementById('lbtn').disabled=true;
+  document.getElementById('lbtn').textContent='RUNNING...';
+  var outs={brief:brief},scroll=document.getElementById('pwr');
+  scroll.innerHTML='';
+  document.getElementById('mprog').textContent='0 / '+pipe.length+' COMPLETE';
+  // build stage cards
+  pipe.forEach(function(aid,i){
+    var a=ag(aid),card=document.createElement('div');
+    card.className='pstage'; card.id='pst-'+aid;
+    card.innerHTML=
+      '<div class="ps-hdr" onclick="tgStage(\''+aid+'\')">'+
+        '<div class="ps-num" style="color:'+a.clc+';border-color:'+a.clc+'">'+(i+1)+'</div>'+
+        '<div class="ps-iw">'+mi(a.img,'ps-im',a.name)+'</div>'+
+        '<div class="ps-tt"><div class="ps-an">'+a.name+'</div><div class="ps-ar">'+a.role+'</div></div>'+
+        '<div class="pss w" id="pss-'+aid+'">WAITING</div>'+
+      '</div>'+
+      '<div class="ps-body" id="psb-'+aid+'">'+
+        '<div class="ps-out" id="pso-'+aid+'">—</div>'+
+        '<div class="ps-acts">'+
+          '<button class="ps-abtn" onclick="cpOut(\''+aid+'\',this)">COPY OUTPUT</button>'+
+          '<button class="ps-abtn" onclick="continueChat(\''+aid+'\')">CONTINUE IN CHAT ↗</button>'+
+        '</div>'+
+      '</div>';
+    scroll.appendChild(card);
+    if(i<pipe.length-1){var arr=document.createElement('div');arr.className='parr';arr.textContent='↓ handoff';scroll.appendChild(arr);}
+  });
+  var done=document.createElement('div'); done.className='mdone'; done.id='mdone';
+  done.innerHTML=
+    '<div><div class="mdt-t">MISSION COMPLETE</div><div class="mdt-s">ALL OPERATIVES DELIVERED · AWAITING DD APPROVAL</div></div>'+
+    '<div style="display:flex;gap:8px">'+
+      '<button class="mdbtn" onclick="exportM()">EXPORT REPORT ↗</button>'+
+      '<button class="mdbtn" onclick="resetM()">NEW MISSION</button>'+
+    '</div>';
+  scroll.appendChild(done);
+  // run pipeline sequentially
+  for(var i=0;i<pipe.length;i++){
+    var aid=pipe[i],a=ag(aid);
+    var stEl=document.getElementById('pss-'+aid);
+    var outEl=document.getElementById('pso-'+aid);
+    var bEl=document.getElementById('psb-'+aid);
+    stEl.className='pss r'; stEl.textContent='RUNNING';
+    bEl.classList.add('open'); outEl.textContent='···';
+    document.getElementById('pst-'+aid).scrollIntoView({behavior:'smooth',block:'nearest'});
+    document.getElementById('mprog').textContent=(i+1)+' / '+pipe.length+' RUNNING';
+    try{
+      var prompt=buildPrompt(aid,outs);
+      var rep=await callAPI(M_MISSION,a.sys,[{role:'user',content:prompt}],1200);
+      outs[aid]=rep; outEl.textContent=rep;
+      stEl.className='pss d'; stEl.textContent='DONE ✓';
+      document.getElementById('mprog').textContent=(i+1)+' / '+pipe.length+' COMPLETE';
+    }catch(e){
+      outEl.textContent='[ERROR] '+(e.message||'API Error');
+      stEl.className='pss e'; stEl.textContent='ERROR';
+      break;
+    }
+  }
+  document.getElementById('mdone').classList.add('on');
+  RUNNING=false;
+  document.getElementById('lbtn').disabled=false;
+  document.getElementById('lbtn').textContent='LAUNCH MISSION ↗';
+}
+
+function buildPrompt(aid,outs){
+  var b=outs.brief;
+  if(aid==='HYH-001') return 'นี่คือ brief จาก Design Director:\n\n'+b+'\n\nสรุปเป็น Creative Brief ฉบับสมบูรณ์';
+  if(aid==='HYH-002') return (outs['HYH-001']?'CREATIVE BRIEF:\n'+outs['HYH-001']:b)+'\n\nเสนอ 3 concept directions พร้อม recommendation';
+  if(aid==='HYH-003'){var c=outs['HYH-002']||b;var cb=outs['HYH-001']?'CREATIVE BRIEF:\n'+outs['HYH-001']+'\n\n':'';return cb+'CONCEPT:\n'+c+'\n\nเขียน copy ชุด: headline + tagline + social hook พร้อม recommended set';}
+  if(aid==='HYH-004'){var r='BRIEF:\n'+(outs['HYH-001']||b)+'\n\nCONCEPT:\n'+(outs['HYH-002']||'');if(outs['HYH-003'])r+='\n\nCOPY:\n'+outs['HYH-003'];return r+'\n\nรีวิวงานชุดนี้ ให้ verdict + revision notes';}
+  if(aid==='HYH-005'){var co=outs['HYH-002']||b;return 'CONCEPT:\n'+co+'\n\nเสนอ visual direction ที่เหมาะกับ concept นี้';}
+  return b;
+}
+
+function tgStage(aid){document.getElementById('psb-'+aid).classList.toggle('open');}
+
+function cpOut(aid,btn){
+  navigator.clipboard.writeText(document.getElementById('pso-'+aid).textContent).then(function(){
+    btn.classList.add('ok'); btn.textContent='COPIED ✓';
+    setTimeout(function(){btn.classList.remove('ok');btn.textContent='COPY OUTPUT';},2000);
+  });
+}
+
+function continueChat(aid){
+  if(!HISTS[aid]) HISTS[aid]=[];
+  var out=document.getElementById('pso-'+aid);
+  if(out&&out.textContent&&out.textContent!=='—'&&out.textContent!=='···'){
+    HISTS[aid].push({r:'ai',c:'นี่คือ output จาก Mission Run:\n\n'+out.textContent+'\n\nอยากพัฒนาต่อหรือปรับอะไรบ้าง?'});
+  }
+  openChat(aid);
+}
+
+function exportM(){
+  var pk=document.getElementById('psel').value,pipe=PIPES[pk];
+  var out='HELLYEAH HOUSE — MISSION REPORT\n'+new Date().toLocaleString('th-TH')+'\n\n';
+  out+='══════════════════════════════════════\nORIGINAL BRIEF\n══════════════════════════════════════\n';
+  out+=document.getElementById('mbta').value+'\n\n';
+  pipe.forEach(function(aid){
+    var a=ag(aid),el=document.getElementById('pso-'+aid);
+    if(el){
+      out+='══════════════════════════════════════\n'+a.name+' — '+a.role.toUpperCase()+'\n══════════════════════════════════════\n';
+      out+=el.textContent+'\n\n';
+    }
+  });
+  var blob=new Blob([out],{type:'text/plain;charset=utf-8'});
+  var url=URL.createObjectURL(blob),tmp=document.createElement('a');
+  tmp.href=url; tmp.download='HYH-MISSION-'+Date.now()+'.txt';
+  tmp.click(); URL.revokeObjectURL(url);
+}
+
+function resetM(){
+  RUNNING=false;
+  document.getElementById('pwr').innerHTML='<div class="idle"><div class="idle-sym">⬡</div><div class="idle-t">AWAITING MISSION BRIEF</div><div class="idle-s">ใส่ brief แล้วกด LAUNCH<br>ทีมจะวิ่งต่อกันเองโดยอัตโนมัติ</div></div>';
+  document.getElementById('mbta').value='';
+  document.getElementById('mprog').textContent='';
+  document.getElementById('lbtn').disabled=false;
+  document.getElementById('lbtn').textContent='LAUNCH MISSION ↗';
+}
+
+// ── API CALL ──
+async function callAPI(model,sys,msgs,maxTok){
+  if(KEY==='demo') return '[DEMO MODE] ใส่ Anthropic API Key จริงเพื่อใช้งาน operative — กด RESET API KEY ที่แถบซ้าย';
   var res=await fetch('https://api.anthropic.com/v1/messages',{
     method:'POST',
-    headers:{'Content-Type':'application/json','x-api-key':KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-    body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1024,system:agent.sys,messages:msgs})
+    headers:{
+      'Content-Type':'application/json',
+      'x-api-key':KEY,
+      'anthropic-version':'2023-06-01',
+      'anthropic-dangerous-direct-browser-access':'true'
+    },
+    body:JSON.stringify({model:model,max_tokens:maxTok||1024,system:sys,messages:msgs})
   });
   if(!res.ok){var e=await res.json();throw new Error(e.error?.message||'API Error '+res.status);}
-  var d=await res.json(); return d.content[0].text;
+  return (await res.json()).content[0].text;
 }
 
 // ── CLOCK ──
-function startClock() {
+function startClock(){
   function t(){
-    var d=new Date();
-    var s=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0');
-    var el=document.getElementById('clock'); if(el) el.textContent=s+' ICT';
+    var d=new Date(),el=document.getElementById('clock');
+    if(el) el.textContent=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')+':'+String(d.getSeconds()).padStart(2,'0')+' ICT';
   }
   t(); setInterval(t,1000);
 }
 
-// ── ENTER TO SEND ──
+// ── KEYBOARD ──
 document.addEventListener('DOMContentLoaded',function(){
-  var inp=document.getElementById('chat-in');
-  inp.addEventListener('keydown',function(e){
+  var ta=document.getElementById('cta');
+  ta.addEventListener('keydown',function(e){
     if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();doSend();}
   });
-  inp.addEventListener('input',function(){
+  ta.addEventListener('input',function(){
     this.style.height='auto';
-    this.style.height=Math.min(this.scrollHeight,100)+'px';
+    this.style.height=Math.min(this.scrollHeight,120)+'px';
   });
   init();
 });
