@@ -982,17 +982,36 @@ function buildPrompt(aid,outs){
 
 function extractPrompts(text){
   var r={mj:{},flux:{},dalle:{}};
-  var shots=text.split(/──\s*SHOT\s*\d*[:\s]*/i);
-  shots.forEach(function(shot,i){
-    if(i===0)return;
-    var name='Shot '+i;
-    var mj=shot.match(/MIDJOURNEY[:\s]*\n([^\n]+(?:\n(?!FLUX|DALL|Positive|Negative|CONSISTENCY)[^\n]+)*)/i);
-    var fl=shot.match(/Positive[:\s]+([^\n]+(?:\n(?!Negative|DALL|CONSISTENCY)[^\n]+)*)/i);
-    var da=shot.match(/DALL-?E[^:]*[:\s]*\n([^\n]+(?:\n(?!MIDJOURNEY|FLUX|CONSISTENCY)[^\n]+)*)/i);
-    r.mj[name]=mj?mj[1].trim():'';r.flux[name]=fl?fl[1].trim():'';r.dalle[name]=da?da[1].trim():'';
-  });
-  // fallback: find any --ar line
-  if(!Object.keys(r.mj).length){
+  // Handle ## ── SHOT N: "Name" format (actual AI output format)
+  var shots=text.split(/##\s*──\s*SHOT\s*(\d+)[^\n]*/i);
+  if(shots.length>1){
+    for(var i=1;i<shots.length;i+=2){
+      var num=shots[i],body=shots[i+1]||'';
+      var name='Shot '+num;
+      var mj=body.match(/###\s*MIDJOURNEY[:\s]*\n([\s\S]*?)(?=###\s*FLUX|###\s*DALL|---\s*$|$)/i);
+      var fl=body.match(/Positive[:\s]+([\s\S]*?)(?=Negative[:\s]|###|$)/i);
+      var da=body.match(/###\s*DALL-?E[^\n]*\n([\s\S]*?)(?=###\s*CONSISTENCY|###\s*──|---\s*$|$)/i);
+      r.mj[name]=mj?mj[1].replace(/```/g,'').trim():'';
+      r.flux[name]=fl?fl[1].replace(/```/g,'').trim():'';
+      r.dalle[name]=da?da[1].replace(/```/g,'').trim():'';
+    }
+  }
+  // fallback: split by ── SHOT
+  if(!Object.keys(r.mj).filter(function(k){return r.mj[k];}).length){
+    var shots2=text.split(/──\s*SHOT/i);
+    shots2.forEach(function(shot,i){
+      if(i===0)return;
+      var name='Shot '+i;
+      var mj=shot.match(/MIDJOURNEY[:\s]*\n([\s\S]*?)(?=FLUX|DALL|Positive|$)/i);
+      var fl=shot.match(/Positive[:\s]+([\s\S]*?)(?=Negative|DALL|$)/i);
+      var da=shot.match(/DALL-?E[^:\n]*[:\s]*\n([\s\S]*?)(?=CONSISTENCY|──|$)/i);
+      r.mj[name]=mj?mj[1].replace(/```/g,'').trim():'';
+      r.flux[name]=fl?fl[1].replace(/```/g,'').trim():'';
+      r.dalle[name]=da?da[1].replace(/```/g,'').trim():'';
+    });
+  }
+  // last fallback: any --ar line
+  if(!Object.keys(r.mj).filter(function(k){return r.mj[k];}).length){
     var mjLines=text.match(/[^\n]+--ar[^\n]*/g)||[];
     mjLines.forEach(function(l,i){r.mj['Shot '+(i+1)]=l.trim();});
   }
@@ -1143,74 +1162,142 @@ function getDkPrompts(s){
 
 function parseDkContent(s,out){
   var headline='',blocks=[];
-  function ext(key){
-    var lines=out.split('\n'),res=[],on=false;
+  // Clean markdown but keep structure
+  var clean=out.replace(/\*\*/g,'').replace(/```[\s\S]*?```/g,function(m){return m.replace(/^```[^\n]*/,'').replace(/```$/,'').trim();});
+  
+  // Extract by ## Section header (AI uses ## SECTION format)
+  function extMd(key){
+    var re=new RegExp('##\\s+'+key+'[^\n]*\n([\\s\\S]*?)(?=\n##\\s|\n---\\s*$|$)','i');
+    var m=clean.match(re);
+    if(m&&m[1].trim())return m[1].trim();
+    // fallback: KEY: value on same line or next lines
+    var lines=clean.split('\n'),res=[],on=false;
     for(var i=0;i<lines.length;i++){
       var l=lines[i],c=l.trim();
-      if(c.toLowerCase().indexOf(key.toLowerCase())===0&&c.indexOf(':')>-1){on=true;var after=l.indexOf(':')+1;var first=l.substring(after).trim();if(first)res.push(first);continue;}
-      if(on){if(c.match(/^[A-Z\u0E00-\u0E7F]{2,}[\s]*:/)&&c.length<80)break;if(c.match(/^──|^##/))break;res.push(l);}
+      if(c.toLowerCase().indexOf(key.toLowerCase())===0&&(c.indexOf(':')>-1||c.length<key.length+3)){
+        on=true;var after=c.indexOf(':')+1;if(after>0){var first=c.substring(after).trim();if(first)res.push(first);}continue;
+      }
+      if(on){
+        if(c.match(/^#{1,3}\s/)||c.match(/^[A-Z฀-๿]{2,}[\s]*:/)&&c.length<80)break;
+        if(c==='---')break;
+        res.push(l);
+      }
     }
     return res.join('\n').trim();
   }
-  function addBlock(label,text,cls){if(text)blocks.push({label:label,text:text,cls:cls||''});}
+  
+  function addBlock(label,text,cls){if(text&&text.trim())blocks.push({label:label,text:text.trim(),cls:cls||''});}
 
   if(s.aid==='HYH-001'){
     headline='Creative Brief';
-    ['BRAND','CAMPAIGN','OBJECTIVE','TARGET','KEY MESSAGE','TONE','DELIVERABLES','BUDGET','MANDATORY'].forEach(function(k){addBlock(k,ext(k));});
-    if(!blocks.length)addBlock('BRIEF',out);
+    addBlock('BRAND',extMd('BRAND'));
+    addBlock('CAMPAIGN',extMd('CAMPAIGN'));
+    addBlock('OBJECTIVE',extMd('OBJECTIVE'));
+    addBlock('TARGET',extMd('TARGET'));
+    addBlock('KEY MESSAGE',extMd('KEY MESSAGE')||extMd('KEY_MESSAGE'));
+    addBlock('TONE',extMd('TONE'));
+    addBlock('DELIVERABLES',extMd('DELIVERABLES'));
+    addBlock('MANDATORY',extMd('MANDATORY'));
+    if(!blocks.length)addBlock('BRIEF',clean);
+    
   }else if(s.aid==='HYH-002'){
-    // Try to find recommended concept name for headline
-    var recLine=out.match(/แนะนำ[:\s]*Concept\s*([A-C])[^\n]*/i)||out.match(/Recommend[^:\n]*[:\s]*([A-C])[^\n]*/i);
-    headline=recLine?'Recommended: Concept '+recLine[1]:'Concept Directions';
-    var parts=out.split(/CONCEPT\s+[A-C]\s*[—\-:]/i);
-    var rec=ext('แนะนำ')||ext('Recommend');
-    parts.slice(1,4).forEach(function(p,i){
-      var letter=['A','B','C'][i];var lines=p.trim().split('\n');var title=lines[0].trim();
-      var isRec=recLine&&recLine[1]===letter;
-      addBlock('CONCEPT '+letter+(title?' — '+title:''),lines.slice(1).join('\n').trim()||p.trim(),isRec?'ok-block':'');
-    });
-    if(!blocks.length)addBlock('CONCEPTS',out);
-    if(rec)addBlock('RECOMMENDATION',rec.replace(/แนะนำ[:\s]*/i,'').trim(),'ok-block');
+    headline='Concept Directions';
+    // Split by ## CONCEPT A/B/C
+    var conceptParts=clean.split(/##\s*CONCEPT\s+([A-C])/i);
+    var rec=extMd('แนะนำ')||extMd('Recommend');
+    var recLetter=clean.match(/แนะนำ[:\s]*Concept\s*([A-C])/i);
+    if(recLetter)headline='Recommended: Concept '+recLetter[1];
+    if(conceptParts.length>1){
+      for(var ci=1;ci<conceptParts.length;ci+=2){
+        var letter=conceptParts[ci];
+        var body=conceptParts[ci+1]||'';
+        var titleMatch=body.match(/^[—\-]\s*[""]?([^"\n]+)/);
+        var title=titleMatch?titleMatch[1].trim():'';
+        var isRec=recLetter&&recLetter[1]===letter;
+        addBlock('CONCEPT '+letter+(title?' — '+title:''),body.trim(),isRec?'ok-block':'');
+      }
+    }else{addBlock('CONCEPTS',clean);}
+    if(rec)addBlock('RECOMMENDATION',rec,'ok-block');
+    
   }else if(s.aid==='HYH-003'){
-    // Find recommended headline to use as slide headline
-    var recHl=out.match(/[←←*]\s*แนะนำ[^\n]*/i);
-    var hlB=ext('HEADLINE');var tlB=ext('TAGLINE');var hookB=ext('SOCIAL HOOK');var maniB=ext('MANIFESTO');var rec2=ext('ทำไมแนะนำ')||ext('Recommend');
-    // Find the B (recommended) headline line
-    var hlLines=hlB?hlB.split('\n').filter(function(l){return l.trim();}):[]; 
-    var recHlLine=hlLines.find(function(l){return l.match(/B:|← แนะนำ|←แนะนำ/i);})||hlLines[0]||'';
-    headline=recHlLine.replace(/^[A-C]:\s*/,'').replace(/←.*$/,'').trim()||'Copy';
-    if(hlB)addBlock('HEADLINE OPTIONS',hlB,'featured');
-    if(tlB)addBlock('TAGLINE OPTIONS',tlB);if(hookB)addBlock('SOCIAL HOOK',hookB,'ok-block');if(maniB)addBlock('MANIFESTO',maniB);if(rec2)addBlock('RECOMMENDATION',rec2,'ok-block');
-    if(!blocks.length)addBlock('COPY',out);
+    // Copy — find recommended headline as slide headline
+    var hlSection=extMd('HEADLINE');
+    var recHlMatch=clean.match(/B[:\.)]\s*[""]?([^"\n←]+)[←←]?\s*[←←]?\s*แนะนำ/i)||clean.match(/แนะนำ[^\n]*\n[^\n]*B[:\.)]\s*([^\n]+)/i);
+    headline=recHlMatch?(recHlMatch[1]||recHlMatch[2]||'').trim():'Copy';
+    if(headline.length>60)headline=headline.substring(0,60)+'...';
+    if(hlSection)addBlock('HEADLINE OPTIONS',hlSection,'featured');
+    addBlock('TAGLINE',extMd('TAGLINE'));
+    addBlock('SOCIAL HOOK',extMd('SOCIAL HOOK')||extMd('HOOK'),'ok-block');
+    addBlock('MANIFESTO',extMd('MANIFESTO'));
+    var rec2=extMd('ทำไมแนะนำ')||extMd('Recommend');
+    if(rec2)addBlock('RECOMMENDATION',rec2.substring(0,500),'ok-block');
+    if(!blocks.length)addBlock('COPY',clean);
+    
   }else if(s.aid==='HYH-004'){
-    var v=out.match(/VERDICT[:\s]+([^\n]+)/i);headline=v?v[1].trim():'Creative Review';
-    addBlock('STRATEGY FIT',ext('Strategy fit')||ext('strategy'));
-    addBlock('IDEA STRENGTH',ext('Idea strength')||ext('idea'));
-    addBlock('CRAFT',ext('Craft')||ext('craft'));
-    addBlock('จุดแข็ง',ext('จุดแข็ง')||ext('Strongest'),'ok-block');
-    addBlock('จุดอ่อน',ext('จุดอ่อน')||ext('Weakest'),'warn-block');
-    addBlock('แก้ตรงนี้',ext('แก้ตรงนี้')||ext('Revision'));
-    addBlock('ส่งได้เมื่อ',ext('ส่งได้')||ext('SEND WHEN'));
-    if(!blocks.length)addBlock('FULL REVIEW',out);
+    var vm=clean.match(/VERDICT[:\s*]+([^\n]+)/i);
+    headline=vm?(vm[1]||'').trim():'Creative Review';
+    addBlock('STRATEGY FIT',extMd('STRATEGY FIT')||extMd('STRATEGY'));
+    addBlock('IDEA STRENGTH',extMd('IDEA STRENGTH')||extMd('IDEA'));
+    addBlock('CRAFT',extMd('CRAFT'));
+    var strg=extMd('จุดแข็ง')||extMd('แข็ง');
+    addBlock('จุดแข็ง',strg,'ok-block');
+    var weak=extMd('จุดอ่อน')||extMd('ต้องแก้');
+    addBlock('จุดอ่อน',weak,'warn-block');
+    addBlock('แก้ตรงนี้',extMd('แก้ตรงนี้')||extMd('ข้อแก้'));
+    if(!blocks.length)addBlock('FULL REVIEW',clean);
+    
   }else if(s.aid==='HYH-005'){
-    var vc=ext('VISUAL CONCEPT');
-    // Visual concept is the slide headline
+    var vc=extMd('VISUAL CONCEPT');
     headline=vc?vc.split('\n')[0].trim():'Art Direction';
-    var moodBlock=(ext('MOOD')||'')+(ext('FEELING')?'\n'+ext('FEELING'):'');
-    if(moodBlock.trim())addBlock('MOOD & FEELING',moodBlock.trim());
-    var colorBlock=ext('COLOR');if(colorBlock)addBlock('COLOR DIRECTION',colorBlock);
-    var typoBlock=ext('TYPOGRAPHY');if(typoBlock)addBlock('TYPOGRAPHY',typoBlock);
-    var compBlock=ext('COMPOSITION');if(compBlock)addBlock('COMPOSITION STYLE',compBlock);
-    var kvBlock=ext('KEY VISUAL');if(kvBlock)addBlock('KEY VISUAL IDEAS',kvBlock,'featured');
-    var refBlock=ext('REFERENCE');if(refBlock)addBlock('REFERENCE STYLE',refBlock);
-    var avoidBlock=ext('AVOID');if(avoidBlock)addBlock('AVOID',avoidBlock,'warn-block');
-    if(!blocks.length)addBlock('ART DIRECTION',out);
+    if(headline.length>70)headline=headline.substring(0,70)+'...';
+    addBlock('MOOD',extMd('MOOD'));
+    addBlock('COLOR',extMd('COLOR'));
+    addBlock('TYPOGRAPHY',extMd('TYPOGRAPHY'));
+    addBlock('COMPOSITION',extMd('COMPOSITION'));
+    addBlock('KEY VISUAL IDEAS',extMd('KEY VISUAL'),'featured');
+    addBlock('REFERENCE STYLE',extMd('REFERENCE'));
+    addBlock('AVOID',extMd('AVOID'),'warn-block');
+    if(!blocks.length)addBlock('ART DIRECTION',clean);
+    
   }else if(s.aid==='HYH-014'){
     headline='Image Generation Prompts';
-    var shotKeys=Object.keys(DPROMPTS.mj||{});
-    if(shotKeys.length){shotKeys.forEach(function(k){addBlock(k.toUpperCase()+' — MIDJOURNEY',DPROMPTS.mj[k]||'');});}
-    else{addBlock('PROMPTS',out.substring(0,600));}
-  }else{headline=a.name;addBlock('OUTPUT',out);}
+    // Extract shot sections by ## ── SHOT
+    var shotParts=clean.split(/##\s*──\s*SHOT\s*(\d+)[:\s]*[""]?([^"\n]*)/i);
+    if(shotParts.length>1){
+      var shotIdx=0;
+      for(var si=1;si<shotParts.length;si+=3){
+        shotIdx++;
+        var shotNum=shotParts[si];
+        var shotName=shotParts[si+1]||'';
+        var shotBody=shotParts[si+2]||'';
+        // Extract just MJ prompt
+        var mjMatch=shotBody.match(/MIDJOURNEY[:\s]*\n([\s\S]*?)(?=###\s*FLUX|###\s*DALL|$)/i);
+        var mjPrompt=mjMatch?mjMatch[1].trim():'';
+        if(mjPrompt)addBlock('SHOT '+shotNum+(shotName?' — '+shotName.trim():''),mjPrompt);
+        // Save to DPROMPTS
+        var fluxMatch=shotBody.match(/Positive[:\s]+([\s\S]*?)(?=Negative[:\s]|###|$)/i);
+        var dalleMatch=shotBody.match(/DALL-E[^\n]*[:\s]*\n([\s\S]*?)(?=###|CONSISTENCY|$)/i);
+        if(typeof DPROMPTS!=='undefined'){
+          var k='Shot '+shotNum;
+          if(!DPROMPTS.mj)DPROMPTS.mj={};
+          if(!DPROMPTS.flux)DPROMPTS.flux={};
+          if(!DPROMPTS.dalle)DPROMPTS.dalle={};
+          DPROMPTS.mj[k]=mjPrompt;
+          DPROMPTS.flux[k]=fluxMatch?fluxMatch[1].trim():'';
+          DPROMPTS.dalle[k]=dalleMatch?dalleMatch[1].trim():'';
+        }
+      }
+    }
+    if(!blocks.length){
+      // fallback: find any midjourney prompt
+      var allMj=clean.match(/MIDJOURNEY[:\s]*\n([^\n].*?--ar[^\n]*)/gi)||[];
+      allMj.forEach(function(m,i){addBlock('SHOT '+(i+1)+' — MIDJOURNEY',m.replace(/MIDJOURNEY[:\s]*\n/i,'').trim());});
+      if(!blocks.length)addBlock('PROMPTS',clean.substring(0,800));
+    }
+  }else{
+    headline=s.a.name;
+    addBlock('OUTPUT',clean.substring(0,1000));
+  }
   return{headline:headline,blocks:blocks};
 }
 
