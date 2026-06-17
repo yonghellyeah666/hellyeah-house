@@ -15,7 +15,7 @@
   --grn:#4a8a4a;--red:#8a4a4a;--orange:#c87a3a;
   --H:'Cinzel',serif;--M:'Share Tech Mono',monospace;
 }
-html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M);overflow:hidden}
+html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M);overflow:hidden;font-size:15px}
 .app{display:flex;height:100vh;flex-direction:column}
 
 /* ── TOPBAR ── */
@@ -27,7 +27,7 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
 .tb-tag{font-size:7px;color:var(--gf);letter-spacing:0.15em;line-height:2}
 .tb-nav{display:flex;align-items:stretch;padding:0 4px;flex:1;overflow-x:auto}
 .tb-nav::-webkit-scrollbar{display:none}
-.tni{display:flex;align-items:center;padding:0 14px;font-size:9px;letter-spacing:0.1em;color:var(--gf);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;gap:6px;white-space:nowrap;flex-shrink:0}
+.tni{display:flex;align-items:center;padding:0 16px;font-size:10.5px;letter-spacing:0.08em;color:var(--gf);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;gap:6px;white-space:nowrap;flex-shrink:0}
 .tni:hover{color:var(--gd)}
 .tni.on{color:var(--gl);border-bottom-color:var(--gold)}
 .tb-right{display:flex;align-items:center;gap:16px;padding:0 18px;border-left:0.5px solid var(--bd2);flex-shrink:0}
@@ -54,8 +54,8 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
 .sb-img{width:100%;height:100%;object-fit:cover;object-position:top;filter:grayscale(50%) brightness(.7);transition:filter .2s}
 .sb-a.on .sb-img,.sb-a:hover .sb-img{filter:grayscale(5%) brightness(1)}
 .sb-info{flex:1;min-width:0}
-.sb-name{font-size:9px;color:var(--gl);letter-spacing:0.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sb-role{font-size:7px;color:var(--gd);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-name{font-size:11px;color:var(--gl);letter-spacing:0.03em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-role{font-size:9px;color:var(--gd);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sb-cl{font-size:6.5px;padding:1px 5px;border:0.5px solid;border-radius:2px;letter-spacing:0.06em;margin-top:3px;display:inline-block}
 .sb-bdr{height:0.5px;background:var(--bd);margin:4px 13px}
 .sb-foot{padding:10px 13px;border-top:0.5px solid var(--bd);margin-top:auto}
@@ -67,8 +67,8 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
 .view{display:none;flex:1;flex-direction:column;overflow:hidden}
 .view.on{display:flex}
 .chdr{padding:12px 22px;border-bottom:0.5px solid var(--bd);display:flex;justify-content:space-between;align-items:center;flex-shrink:0;background:var(--bg2)}
-.chdr-t{font-family:var(--H);font-size:14px;letter-spacing:0.1em;color:var(--gl)}
-.chdr-s{font-size:8px;color:var(--gd);letter-spacing:0.1em;margin-top:3px}
+.chdr-t{font-family:var(--H);font-size:16px;letter-spacing:0.08em;color:var(--gl)}
+.chdr-s{font-size:10px;color:var(--gd);letter-spacing:0.08em;margin-top:4px}
 
 /* ── ROSTER ── */
 .lobby{flex:1;overflow-y:auto;padding:20px 22px}
@@ -93,8 +93,8 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
 .ac-ovc{font-size:7.5px;color:var(--gd);letter-spacing:0.1em}
 .ac-meta{padding:9px 10px 8px}
 .ac-file{font-size:7px;color:var(--bd3);letter-spacing:0.1em;margin-bottom:3px}
-.ac-name{font-family:var(--H);font-size:10px;color:var(--gl);letter-spacing:0.04em;margin-bottom:2px}
-.ac-role{font-size:8px;color:var(--gd);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ac-name{font-family:var(--H);font-size:12.5px;color:var(--gl);letter-spacing:0.04em;margin-bottom:3px}
+.ac-role{font-size:10px;color:var(--gd);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ac-ft{display:flex;align-items:center;justify-content:space-between;margin-top:7px;padding-top:6px;border-top:0.5px solid var(--bd)}
 .ac-div{font-size:7px;padding:1px 5px;border-radius:2px;border:0.5px solid;letter-spacing:0.07em}
 .ac-sta{display:flex;align-items:center;gap:3px;font-size:7px;color:var(--grn)}
@@ -107,8 +107,8 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
 .tc{background:var(--bg3);border:0.5px solid var(--bd);border-radius:7px;padding:13px;cursor:pointer;transition:border-color .2s,transform .15s}
 .tc:hover{border-color:var(--bd3);transform:translateY(-2px)}
 .tc-ico{font-size:19px;margin-bottom:8px}
-.tc-name{font-family:var(--H);font-size:11px;color:var(--gl);letter-spacing:0.05em;margin-bottom:4px}
-.tc-desc{font-size:9px;color:var(--gd);line-height:1.65;margin-bottom:7px}
+.tc-name{font-family:var(--H);font-size:13px;color:var(--gl);letter-spacing:0.05em;margin-bottom:5px}
+.tc-desc{font-size:11px;color:var(--gd);line-height:1.75;margin-bottom:8px}
 .tc-who{font-size:7.5px;color:var(--bd3);letter-spacing:0.1em;margin-bottom:7px}
 .tc-btn{width:100%;padding:6px;border:0.5px solid var(--bd2);background:transparent;color:var(--gd);font-family:var(--M);font-size:7.5px;letter-spacing:0.1em;cursor:pointer;border-radius:3px}
 .tc:hover .tc-btn{border-color:var(--gold);color:var(--gold)}
@@ -141,15 +141,15 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
 .pm-d-btn.danger{border-color:var(--red)44;color:var(--red)}
 .pm-field{margin-bottom:13px}
 .pm-f-label{font-size:7.5px;color:var(--bd3);letter-spacing:0.18em;margin-bottom:5px}
-.pm-f-val{font-size:11px;color:#8a7a50;line-height:1.75;background:var(--bg3);border:0.5px solid var(--bd);border-radius:4px;padding:9px 11px;white-space:pre-wrap}
+.pm-f-val{font-size:13.5px;color:#a8966a;line-height:1.9;background:var(--bg3);border:0.5px solid var(--bd);border-radius:4px;padding:13px 15px;white-space:pre-wrap}
 .pm-f-inp{width:100%;background:var(--bg3);border:0.5px solid var(--bd2);border-radius:4px;padding:8px 11px;color:var(--gl);font-family:var(--M);font-size:11px;outline:none;resize:none;line-height:1.7}
 .pm-f-inp:focus{border-color:var(--bd3)}
 .pm-f-inp::placeholder{color:var(--bd2)}
 
 /* ── MISSION ── */
 .mi-top{padding:13px 22px;border-bottom:0.5px solid var(--bd);flex-shrink:0;background:var(--bg2)}
-.mi-lbl{font-size:8px;color:var(--gd);letter-spacing:0.16em;margin-bottom:6px}
-.mi-ta{width:100%;background:var(--bg3);border:0.5px solid var(--bd2);border-radius:4px;padding:10px 13px;color:var(--gl);font-family:var(--M);font-size:12px;outline:none;resize:none;line-height:1.75}
+.mi-lbl{font-size:10px;color:var(--gd);letter-spacing:0.14em;margin-bottom:8px}
+.mi-ta{width:100%;background:var(--bg3);border:0.5px solid var(--bd2);border-radius:4px;padding:14px 17px;color:var(--gl);font-family:var(--M);font-size:14.5px;outline:none;resize:none;line-height:1.85}
 .mi-ta:focus{border-color:var(--bd3)}
 .mi-ta::placeholder{color:var(--bd2)}
 .mi-ctrl{display:flex;gap:7px;align-items:center;margin-top:8px;flex-wrap:wrap}
@@ -158,7 +158,7 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
 .mi-tmpl-btn{padding:7px 11px;border:0.5px solid var(--bd2);background:transparent;color:var(--gd);font-family:var(--M);font-size:8px;letter-spacing:0.08em;cursor:pointer;border-radius:3px}
 .mi-tmpl-btn:hover{border-color:var(--gold);color:var(--gold)}
 .mi-note{font-size:7.5px;color:var(--bd3)}
-.lbtn{padding:8px 18px;border:0.5px solid var(--gold);background:transparent;color:var(--gold);font-family:var(--M);font-size:9px;letter-spacing:0.14em;cursor:pointer;border-radius:3px;white-space:nowrap}
+.lbtn{padding:11px 22px;border:0.75px solid var(--gold);background:transparent;color:var(--gold);font-family:var(--M);font-size:10.5px;letter-spacing:0.12em;cursor:pointer;border-radius:3px;white-space:nowrap;font-weight:bold}
 .lbtn:hover{background:#c8b97a0a}
 .lbtn:disabled{opacity:.3;cursor:not-allowed}
 
@@ -173,8 +173,8 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
 .ps-iw{width:30px;height:40px;border-radius:3px;overflow:hidden;flex-shrink:0;background:var(--bg4)}
 .ps-im{width:100%;height:100%;object-fit:cover;object-position:top}
 .ps-tt{flex:1}
-.ps-an{font-family:var(--H);font-size:11.5px;color:var(--gl);letter-spacing:0.06em}
-.ps-ar{font-size:7.5px;color:var(--gd);margin-top:2px}
+.ps-an{font-family:var(--H);font-size:14px;color:var(--gl);letter-spacing:0.06em}
+.ps-ar{font-size:9.5px;color:var(--gd);margin-top:3px}
 .pss{font-size:8px;padding:3px 9px;border-radius:2px;border:0.5px solid;letter-spacing:0.08em;white-space:nowrap}
 .pss.w{color:var(--bd3);border-color:var(--bd)}
 .pss.r{color:var(--orange);border-color:var(--orange)44;animation:blink .7s infinite}
@@ -184,16 +184,16 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
 .pss.e{color:var(--red);border-color:var(--red)44}
 .ps-body{display:none;border-top:0.5px solid var(--bd);background:var(--bg3)}
 .ps-body.open{display:block}
-.ps-out{font-size:11.5px;color:#8a7a50;line-height:1.85;white-space:pre-wrap;padding:13px 15px;border-bottom:0.5px solid var(--bd)}
+.ps-out{font-size:14.5px;color:#a8966a;line-height:2.0;white-space:pre-wrap;padding:18px 20px;border-bottom:0.5px solid var(--bd)}
 .dd-panel{padding:10px 15px;background:var(--bg2);border-bottom:0.5px solid var(--bd)}
-.dd-label{font-size:7.5px;color:var(--gd);letter-spacing:0.16em;margin-bottom:6px}
+.dd-label{font-size:9.5px;color:var(--gd);letter-spacing:0.14em;margin-bottom:8px}
 .dd-btns{display:flex;gap:7px;margin-bottom:7px}
-.dd-approve{padding:6px 12px;border:0.5px solid var(--grn);background:transparent;color:var(--grn);font-family:var(--M);font-size:8px;letter-spacing:0.1em;cursor:pointer;border-radius:3px}
+.dd-approve{padding:9px 16px;border:0.5px solid var(--grn);background:transparent;color:var(--grn);font-family:var(--M);font-size:10px;letter-spacing:0.08em;cursor:pointer;border-radius:3px}
 .dd-approve:hover{background:rgba(74,138,74,.1)}
-.dd-revise{padding:6px 12px;border:0.5px solid var(--orange);background:transparent;color:var(--orange);font-family:var(--M);font-size:8px;letter-spacing:0.1em;cursor:pointer;border-radius:3px}
+.dd-revise{padding:9px 16px;border:0.5px solid var(--orange);background:transparent;color:var(--orange);font-family:var(--M);font-size:10px;letter-spacing:0.08em;cursor:pointer;border-radius:3px}
 .dd-comment-wrap{display:none}
 .dd-comment-wrap.open{display:flex;gap:7px}
-.dd-ta{flex:1;background:var(--bg3);border:0.5px solid var(--bd2);border-radius:3px;padding:7px 10px;color:var(--gl);font-family:var(--M);font-size:11px;outline:none;resize:none;line-height:1.7}
+.dd-ta{flex:1;background:var(--bg3);border:0.5px solid var(--bd2);border-radius:3px;padding:10px 13px;color:var(--gl);font-family:var(--M);font-size:13px;outline:none;resize:none;line-height:1.75}
 .dd-ta:focus{border-color:var(--bd3)}
 .dd-ta::placeholder{color:var(--bd2)}
 .dd-send{padding:7px 12px;border:0.5px solid var(--orange);background:transparent;color:var(--orange);font-family:var(--M);font-size:8px;letter-spacing:0.1em;cursor:pointer;border-radius:3px;white-space:nowrap}
@@ -205,7 +205,7 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
 .rev-who{font-size:7px;letter-spacing:0.12em;margin-bottom:3px}
 .rev-who.dd{color:var(--gold)}
 .rev-who.ai{color:var(--orange)}
-.rev-text{font-size:11px;color:#8a7a50;line-height:1.75;white-space:pre-wrap}
+.rev-text{font-size:13px;color:#a8966a;line-height:1.85;white-space:pre-wrap}
 .ps-acts{display:flex;gap:7px;padding:9px 15px;flex-wrap:wrap}
 .ps-abtn{padding:5px 11px;border:0.5px solid var(--bd2);background:transparent;color:var(--gd);font-family:var(--M);font-size:8px;letter-spacing:0.08em;cursor:pointer;border-radius:3px}
 .ps-abtn:hover{border-color:var(--gd);color:var(--gold)}
@@ -213,15 +213,15 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
 .parr{text-align:center;font-size:9px;color:var(--bd2);margin:-4px 0;letter-spacing:0.1em}
 .mdone{background:#0a120a;border:0.5px solid #2a4a2a;border-radius:7px;padding:14px 18px;margin-top:9px;display:none}
 .mdone.on{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:9px}
-.mdt-t{font-family:var(--H);font-size:12px;color:var(--gl);letter-spacing:0.1em}
-.mdt-s{font-size:8px;color:var(--grn);letter-spacing:0.1em;margin-top:2px}
-.mdbtn{padding:8px 14px;border:0.5px solid var(--bd3);background:transparent;color:var(--gd);font-family:var(--M);font-size:8.5px;letter-spacing:0.08em;cursor:pointer;border-radius:3px}
+.mdt-t{font-family:var(--H);font-size:15px;color:var(--gl);letter-spacing:0.08em}
+.mdt-s{font-size:10px;color:var(--grn);letter-spacing:0.08em;margin-top:3px}
+.mdbtn{padding:10px 17px;border:0.5px solid var(--bd3);background:transparent;color:var(--gd);font-family:var(--M);font-size:10px;letter-spacing:0.06em;cursor:pointer;border-radius:3px}
 .mdbtn:hover{border-color:var(--gold);color:var(--gold)}
 .mdbtn.pres{border-color:var(--gold)88;color:var(--gold)}
 .idle{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:40px;text-align:center}
 .idle-sym{font-family:var(--H);font-size:40px;color:var(--bd);margin-bottom:8px}
-.idle-t{font-size:11px;color:var(--gd);letter-spacing:0.14em}
-.idle-s{font-size:9px;color:var(--bd2);letter-spacing:0.1em;line-height:1.7}
+.idle-t{font-size:13px;color:var(--gd);letter-spacing:0.12em}
+.idle-s{font-size:11px;color:#5a5040;letter-spacing:0.08em;line-height:1.85}
 
 /* ── PRESENTATION DECK ── */
 .deck{position:fixed;inset:0;background:#040302;z-index:300;display:none;flex-direction:column}
@@ -245,9 +245,9 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
 .dk-agent-card{padding:20px 18px;border-bottom:0.5px solid #1a1812}
 .dk-ag-num{font-size:7px;color:#2a2318;letter-spacing:0.2em;margin-bottom:8px}
 .dk-ag-img{width:80px;height:108px;border-radius:5px;object-fit:cover;object-position:top;display:block;margin-bottom:12px;filter:contrast(1.06) brightness(.92)}
-.dk-ag-name{font-family:var(--H);font-size:13px;color:var(--gl);letter-spacing:0.06em;margin-bottom:2px}
+.dk-ag-name{font-family:var(--H);font-size:16px;color:var(--gl);letter-spacing:0.06em;margin-bottom:3px}
 .dk-ag-role{font-size:8px;color:#5a5040;letter-spacing:0.1em;margin-bottom:9px}
-.dk-ag-q{font-size:10px;color:#4a4030;font-style:italic;border-left:2px solid #1a1812;padding-left:8px;line-height:1.55}
+.dk-ag-q{font-size:11.5px;color:#6a5a40;font-style:italic;border-left:2px solid #1a1812;padding-left:9px;line-height:1.65}
 .dk-badges{margin-top:10px;display:flex;flex-direction:column;gap:5px}
 .dk-badge{display:inline-block;font-size:8px;padding:3px 10px;border:0.5px solid;border-radius:2px;letter-spacing:0.1em;width:fit-content}
 .dk-badge.verdict-ok{color:var(--grn);border-color:var(--grn)44}
@@ -279,7 +279,7 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
 .dk-blocks{display:flex;flex-direction:column;gap:14px}
 .dk-block{border:0.5px solid #1a1812;border-radius:7px;padding:18px 20px;background:#070605}
 .dk-block-lbl{font-family:var(--M);font-size:7px;color:#3a3220;letter-spacing:0.2em;margin-bottom:10px}
-.dk-block-txt{font-family:var(--M);font-size:14px;color:#9a8860;line-height:1.9;white-space:pre-wrap}
+.dk-block-txt{font-family:var(--M);font-size:16px;color:#b0a070;line-height:2.0;white-space:pre-wrap}
 .dk-block.featured{border-color:var(--gold)33;background:#0d0a06;border-width:1px}
 .dk-block.featured .dk-block-txt{font-family:var(--H);font-size:22px;color:var(--gl);letter-spacing:0.04em;line-height:1.45}
 .dk-block.ok-block{border-color:var(--grn)44;background:#060a06}
@@ -326,23 +326,23 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
 .op-iw{width:50px;height:66px;border-radius:4px;overflow:hidden;background:var(--bg4);flex-shrink:0}
 .op-i{width:100%;height:100%;object-fit:cover;object-position:top;filter:contrast(1.06) brightness(.93)}
 .op-inf{flex:1}
-.op-n{font-family:var(--H);font-size:14px;color:var(--gl);letter-spacing:0.08em;margin-bottom:2px}
-.op-r{font-size:8px;color:var(--gd);letter-spacing:0.1em;margin-bottom:7px}
-.op-q{font-size:10.5px;color:var(--gd);font-style:italic;border-left:2px solid var(--bd2);padding-left:8px;margin-bottom:7px;line-height:1.55}
+.op-n{font-family:var(--H);font-size:17px;color:var(--gl);letter-spacing:0.08em;margin-bottom:3px}
+.op-r{font-size:10px;color:var(--gd);letter-spacing:0.1em;margin-bottom:8px}
+.op-q{font-size:12.5px;color:var(--gd);font-style:italic;border-left:2px solid var(--bd2);padding-left:10px;margin-bottom:9px;line-height:1.65}
 .op-caps{display:flex;flex-wrap:wrap;gap:5px}
 .op-cap{font-size:7.5px;padding:2px 7px;border:0.5px solid var(--bd2);border-radius:20px;color:var(--gd)}
 .msgs{flex:1;overflow-y:auto;padding:16px 22px;display:flex;flex-direction:column;gap:11px}
 .msgs::-webkit-scrollbar{width:4px}
 .msgs::-webkit-scrollbar-thumb{background:var(--bd2)}
-.msg{max-width:75%;padding:11px 14px;border-radius:5px;font-size:12px;line-height:1.8}
+.msg{max-width:78%;padding:16px 19px;border-radius:6px;font-size:14.5px;line-height:1.95}
 .msg.u{align-self:flex-end;background:var(--bg3);border:0.5px solid var(--bd2);color:var(--gl)}
 .msg.a{align-self:flex-start;background:var(--bg2);border:0.5px solid var(--bd);color:#8a7a50}
-.msg-who{font-size:7.5px;color:var(--gold);letter-spacing:0.14em;margin-bottom:5px}
+.msg-who{font-size:9.5px;color:var(--gold);letter-spacing:0.12em;margin-bottom:7px}
 .ibar{padding:11px 22px;border-top:0.5px solid var(--bd);display:flex;gap:9px;flex-shrink:0;background:var(--bg2)}
-.cta{flex:1;background:var(--bg3);border:0.5px solid var(--bd2);border-radius:4px;padding:10px 13px;color:var(--gl);font-family:var(--M);font-size:12px;outline:none;resize:none;line-height:1.72}
+.cta{flex:1;background:var(--bg3);border:0.5px solid var(--bd2);border-radius:4px;padding:14px 17px;color:var(--gl);font-family:var(--M);font-size:14.5px;outline:none;resize:none;line-height:1.8}
 .cta:focus{border-color:var(--bd3)}
 .cta::placeholder{color:var(--bd2)}
-.sbtn{padding:10px 16px;border:0.5px solid var(--gold);background:transparent;color:var(--gold);font-family:var(--M);font-size:9px;letter-spacing:0.12em;cursor:pointer;border-radius:3px;white-space:nowrap}
+.sbtn{padding:13px 19px;border:0.75px solid var(--gold);background:transparent;color:var(--gold);font-family:var(--M);font-size:10.5px;letter-spacing:0.1em;cursor:pointer;border-radius:3px;white-space:nowrap}
 .sbtn:hover{background:#c8b97a08}
 .sbtn:disabled{opacity:.25;cursor:not-allowed}
 
@@ -454,7 +454,19 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
           <button class="dk-ptab" onclick="dkTab('dalle',this)">DALL-E</button>
         </div>
         <div class="dk-ptext" id="dk-ptext">—</div>
-        <button class="dk-pcopy" id="dk-pcopy" onclick="dkCopy()">COPY PROMPT</button>
+        <div style="display:flex;gap:6px;margin-top:8px">
+          <button class="dk-pcopy" id="dk-pcopy" onclick="dkCopy()" style="flex:1;margin-top:0">COPY PROMPT</button>
+          <button class="dk-pcopy" id="dk-pgen" onclick="dkGenerateImage()" style="flex:1;margin-top:0;border-color:#c8b97a66;color:#c8b97a">🎨 GENERATE</button>
+        </div>
+        <div id="dk-imgwrap" style="display:none;margin-top:10px">
+          <div id="dk-imgloading" style="display:none;text-align:center;padding:30px 10px;font-size:9px;color:#5a5040;letter-spacing:0.1em">
+            <div style="font-size:20px;margin-bottom:8px">⏳</div>
+            กำลัง generate... (10-20 วิ)
+          </div>
+          <img id="dk-genimg" src="" style="display:none;width:100%;border-radius:5px;border:0.5px solid #2a2010" alt="generated">
+          <div id="dk-imgerr" style="display:none;font-size:9px;color:#8a4a4a;padding:10px;line-height:1.6"></div>
+          <button id="dk-imgdownload" onclick="dkDownloadImage()" style="display:none;width:100%;margin-top:7px;padding:7px;border:0.5px solid #2a2010;background:transparent;color:#5a5040;font-family:var(--M);font-size:8px;letter-spacing:0.08em;cursor:pointer;border-radius:2px">⬇ DOWNLOAD IMAGE</button>
+        </div>
       </div>
     </div>
     <!-- RIGHT -->
@@ -599,23 +611,23 @@ var AG=[
   {id:'HYH-001',div:'CREATIVE',dc:'#9c7ac8',name:'THE INTAKE',role:'Brief Receiver',cl:'ALPHA',clc:'#c8b97a',
    q:'"A brief with gaps is not a brief. It\'s a guess."',caps:['รับบรีฟทุกรูปแบบ','ถามจนครบ','สรุป Creative Brief'],
    img:'images/HYH-Agent (006).png',
-   sys:'คุณคือ Brief Intake Specialist ของ HELLYEAH HOUSE\n\nรับ brief แล้วสรุปเป็น Creative Brief ทันที:\n\nBRAND: [ชื่อ brand]\nCAMPAIGN: [campaign ที่จะทำ]\nOBJECTIVE: [ต้องการให้คนรู้สึก/คิด/ทำอะไร]\nTARGET: [ใคร อายุ mindset]\nKEY MESSAGE: [สิ่งที่อยากสื่อ]\nTONE: [งานต้องรู้สึกแบบไหน]\nDELIVERABLES: [งานที่ต้องส่ง]\nTIMELINE: [วันส่ง]\nBUDGET: [งบถ้ามี]\nMANDATORY: [ต้องมี/ห้ามมี]\nASSUMED: [assumption ถ้า brief ไม่ครบ]\n\nภาษาไทยผสมอังกฤษ natural ไม่เป็นทางการ'},
+   sys:'คุณคือ Brief Intake Specialist ของ HELLYEAH HOUSE — 12 ปีในวงการ agency เห็น brief ห่วยมาเยอะจนรู้ว่า brief ที่ดูดีบนกระดาษ มักจะมี gap ที่ทำให้งานพังทีหลัง\n\nวิธีทำงาน: ก่อนสรุป ให้ถามตัวเองก่อนว่า brief นี้ตอบคำถาม WHY ได้จริงไหม — "ทำไมต้องทำตอนนี้" "ทำไมต้องเป็น message นี้" ถ้า brief บอกแค่ WHAT (อยากได้ campaign) แต่ไม่มี WHY (ทำไมต้อง premium ทำไมต้อง trial ตอนนี้) ให้ใส่ใน ASSUMED และ flag ว่าเป็นจุดเสี่ยง\n\nสรุปเป็น Creative Brief:\n\nBRAND: [ชื่อ + 1 บรรทัดว่า brand นี้คือใครในสายตาคนซื้อตอนนี้ ไม่ใช่แค่ชื่อสินค้า]\nCAMPAIGN: [ไม่ใช่แค่ชื่อ — บอกว่า campaign นี้แก้ปัญหาอะไรให้ business]\nOBJECTIVE: [แยกให้ชัดระหว่าง business objective (ขายได้/awareness) กับ communication objective (คนต้องคิด/รู้สึกอะไร) — บอกทั้งคู่]\nTARGET: [ไม่ใช่แค่ demographic — ใส่ 1 บรรทัด "เขาเชื่ออะไรอยู่ก่อนที่จะเจอ message เรา" เพราะนั่นคือสิ่งที่ creative ต้องเปลี่ยน]\nKEY MESSAGE: [ประโยคเดียวที่ต้องติดหัวคนดู ไม่ใช่ list ของ feature]\nTONE: [ห้ามตอบคำคลุมๆอย่าง "premium friendly" — ต้องบอกว่า tone นี้ทำอะไรไม่ได้บ้าง เช่น "premium แต่ห้ามดูเย่อหยิ่ง"]\nDELIVERABLES: []\nTIMELINE: []\nBUDGET: []\nMANDATORY: [กฎที่ต้องทำตาม]\nRISK FLAGGED: [ถ้า brief มี gap ที่อาจทำให้ทีมหลังเข้าใจผิด ให้บอกตรงๆ ว่า gap คืออะไร ไม่ assume เงียบๆ]\nASSUMED: [assumption ที่ทำเพื่อให้ทีมเดินต่อได้ — บอกชัดว่าเป็น assumption ไม่ใช่ fact]\n\nภาษาไทยผสมอังกฤษ natural แบบคนทำงาน agency จริงคุยกัน ไม่ใช่ภาษาราชการ'},
   {id:'HYH-002',div:'CREATIVE',dc:'#9c7ac8',name:'THE THINKER',role:'Concept Generator',cl:'BETA',clc:'#7a9cc8',
    q:'"Safe ideas don\'t change anything."',caps:['วิเคราะห์ tension','3 concept directions','recommend ชัดเจน'],
    img:'images/HYH-Agent (007).png',
-   sys:'คุณคือ Creative Concept Generator ของ HELLYEAH HOUSE\n\nรับ brief → เสนอ 3 concepts:\n\nCONCEPT A — [ชื่อ]\nแนวคิด: [big idea 2-3 ประโยค]\nInsight: [human truth]\nLine: [campaign line]\nทำอะไรได้บ้าง: [execution]\n\nCONCEPT B — [ชื่อ]\n[เหมือนกัน]\n\nCONCEPT C — [ชื่อ]\n[เหมือนกัน]\n\nแนะนำ: Concept [X] เพราะ [เหตุผล]\n\nภาษาไทยผสมอังกฤษ natural'},
+   sys:'คุณคือ Creative Concept Generator ของ HELLYEAH HOUSE — 15 ปีที่เกลียดคำว่า "premium quality trust" เพราะมันคือสิ่งที่ brand ทุกเจ้าพูดเหมือนกันหมด แล้วก็ไม่มีใครจำได้\n\nกฎเหล็กก่อนคิด: Insight ที่ดีต้องเป็นสิ่งที่ลูกค้า"รู้สึกอยู่แล้วแต่ไม่เคยพูดออกมา" ไม่ใช่ fact ทั่วไปจาก brief เช่น "คนอยากกินของดี" คือไม่ใช่ insight เพราะทุกคนก็อยากกินของดี — insight ต้องเฉพาะเจาะจงจนรู้สึกว่า "เห้ย นี่มันพูดถึงฉันจริงๆ"\n\nวิธีคิด 3 concepts: ห้ามให้ 3 concepts เป็นแค่การพูดเรื่องเดียวกันด้วยคำต่างกัน ต้องเป็น 3 มุมที่ขัดแย้งกันจริงๆ — เช่น concept หนึ่งเล่นกับ "ความน่าเชื่อถือ" อีกอันเล่นกับ "ความกล้าที่จะต่าง" อีกอันเล่นกับ "emotional ของคนใช้" ถ้า 3 concepts คล้ายกันเกินไป ให้คิดใหม่\n\nก่อนเขียนแต่ละ concept ให้ตอบในใจก่อนว่า "ถ้าลบชื่อ brand ออก คู่แข่งเอาไปใช้ได้ไหม" ถ้าได้ = concept ยังกว้างเกินไป ต้องเจาะจงกับ brand นี้มากขึ้น\n\nCONCEPT A — [ชื่อที่จำได้ ไม่ใช่ชื่อบรรยาย]\nBig Idea: [อธิบายมุมมองที่ขัดกับสิ่งที่คนคิดอยู่ก่อน ไม่ใช่แค่บอกข้อดี]\nInsight: [human truth เฉพาะเจาะจง พิสูจน์ได้ว่าทำไมต้องเชื่อ ไม่ใช่ความเห็นลอยๆ]\nทำไม insight นี้จริง: [อธิบาย 1 บรรทัดว่า insight นี้สังเกตมาจากพฤติกรรมจริงอะไร]\nLine: [campaign line ที่ฟังครั้งเดียวจำได้]\nExecution: [บอกตัวอย่าง 2-3 อย่างที่ concept นี้ทำได้ ที่ concept อื่นทำไม่ได้]\nRisk: [จุดที่ concept นี้อาจพังถ้าทำไม่ดี]\n\nCONCEPT B — [ทำเหมือนกัน มุมต่างกันจริง]\n\nCONCEPT C — [ทำเหมือนกัน มุมต่างกันจริง]\n\nแนะนำ: Concept [X] เพราะ [เหตุผลที่อ้างกับ business objective ใน brief จริงๆ ไม่ใช่เพราะ "มันดูเท่ดี"]\n\nภาษาไทยผสมอังกฤษ natural แบบคนคุยงานจริง'},
   {id:'HYH-003',div:'CREATIVE',dc:'#9c7ac8',name:'THE WRITER',role:'Senior Copywriter',cl:'GAMMA',clc:'#9c7ac8',
    q:'"Copy that doesn\'t feel anything, does nothing."',caps:['copy ทุก format','3 options each','recommended set'],
    img:'images/HYH-Agent (005).png',
-   sys:'คุณคือ Senior Copywriter ของ HELLYEAH HOUSE\n\nรับ concept → เขียน:\n\nHEADLINE\nA: ...\nB: ... ← แนะนำ\nC: ...\n\nTAGLINE\nA: ... ← แนะนำ\nB: ...\nC: ...\n\nSOCIAL HOOK: ...\nMANIFESTO (ถ้าเหมาะ): ...\n\nทำไมแนะนำ Headline B + Tagline A: [อธิบาย]\n\nภาษาไทยผสมอังกฤษ natural'},
+   sys:'คุณคือ Senior Copywriter ของ HELLYEAH HOUSE — เกลียดคำว่า "คุณภาพเหนือระดับ" "ดีที่สุด" "ตัวเลือกอันดับหนึ่ง" เพราะเป็นคำที่ไม่มีใครเชื่ออีกแล้ว และไม่มี personality\n\nกฎก่อนเขียน headline ทุกตัว ทดสอบ 2 อย่าง: (1) อ่านออกเสียงแล้วเป็นภาษาที่คนพูดกันจริงไหม หรือฟังเหมือนแปลมาจาก PowerPoint (2) ถ้าเอาชื่อ brand อื่นมาแทน ยังใช้ได้ไหม — ถ้าใช้ได้ headline นี้ไม่มีความหมาย ต้องเขียนใหม่ให้เจาะจงกับ brand นี้\n\nหลีกเลี่ยงคำพวกนี้นอกจากจำเป็นจริงๆ: คุณภาพ, มาตรฐาน, ระดับพรีเมียม, ที่สุด, อันดับหนึ่ง, เปลี่ยนชีวิต — คำเหล่านี้ฟังดูเป็น marketing speak ไม่ใช่สิ่งที่คนพูดกับเพื่อน\n\nวิธีคิด headline ที่ดี: เริ่มจากภาพหรือสถานการณ์เฉพาะเจาะจงจาก insight ไม่ใช่เริ่มจาก adjective ขายของ — headline ที่ดีควรทำให้คนเห็นภาพในหัวทันที ไม่ใช่แค่ฟังดูดี\n\nHEADLINE\nA: [option แรก — ปลอดภัย]\nB: [option ที่กล้าขึ้น เสี่ยงขึ้น แต่ sharp กว่า] ← แนะนำ\nC: [option ที่ต่างมุมไปเลย]\n\nTAGLINE\nA: [] ← แนะนำ\nB: []\nC: []\n\nSOCIAL HOOK: [ประโยคแรกที่ทำให้คนหยุดเลื่อน ต้องสร้าง curiosity หรือ tension ไม่ใช่แค่บอกข้อดีสินค้า]\n\nMANIFESTO (ถ้าเหมาะ): [สั้น กระชับ มี rhythm ไม่ใช่ paragraph ยาวเยิ่นเย้อ — manifesto ที่ดีอ่านจบใน 15 วินาที]\n\nทำไมแนะนำชุดนี้: [อธิบายว่าทำไมตัวที่เลือกเชื่อมกับ insight ของ concept ได้แน่นกว่าตัวอื่น ไม่ใช่แค่ "เพราะมันเพราะกว่า"]\n\nภาษาไทยผสมอังกฤษ natural แบบคนเขียน copy มืออาชีพคุยกัน ห้ามเขียนแบบทางการหรือเหมือนแปล'},
   {id:'HYH-004',div:'CREATIVE',dc:'#9c7ac8',name:'THE CRITIC',role:'Creative Reviewer',cl:'DELTA',clc:'#c87a7a',
    q:'"Good enough is the enemy of what it could be."',caps:['APPROVED/NEEDS WORK/SEND BACK','brand fit','revision notes'],
    img:'images/HYH-Agent (017).png',
-   sys:'คุณคือ Creative Reviewer ของ HELLYEAH HOUSE\n\nVERDICT: [APPROVED / NEEDS WORK / SEND BACK]\n\nStrategy fit: [ตรงกับ brief มั้ย]\nIdea strength: [idea แข็งพอมั้ย]\nCraft: [copy/execution ดีพอมั้ย]\nจุดแข็ง: [สิ่งที่ดีที่สุด]\nจุดอ่อน: [สิ่งที่ต้องแก้]\n\nแก้ตรงนี้:\n→ [ข้อ 1]\n→ [ข้อ 2]\n\nส่งได้เมื่อ: [เงื่อนไข]\n\nภาษาไทยผสมอังกฤษ ตรง ไม่อ้อม'},
+   sys:'คุณคือ Creative Reviewer ของ HELLYEAH HOUSE — งานของคุณคือเป็นคนสุดท้ายที่หยุดงานห่วยไม่ให้ออกไปหาลูกค้า ไม่ใช่คนที่ approve ทุกอย่างเพื่อให้ทีมแฮปปี้\n\nก่อนให้ verdict ทดสอบงานด้วยคำถามนี้ก่อน: "ถ้าฉันเห็น ad นี้ผ่านมือถือระหว่างเลื่อน social จะหยุดดูจริงไหม หรือเลื่อนผ่านไปเหมือน ad ทั่วไป" ถ้าคำตอบคือเลื่อนผ่าน ไม่ว่า copy จะเขียนสวยแค่ไหน งานนี้ NEEDS WORK\n\nระวัง bias สำคัญ: อย่า approve เพราะ "งานก็โอเคนะ ไม่มีอะไรผิด" — งานที่ไม่มีอะไรผิดแต่ก็ไม่มีอะไรน่าจำ คือ mediocre ซึ่งแย่กว่าการทำผิดชัดๆ เพราะ mediocre ทำให้เสียเงินโดยไม่มีผล ให้ตัดสินด้วยมาตรฐาน "จะจำได้ไหม" ไม่ใช่แค่ "ผิดหรือไม่ผิด"\n\nVERDICT: [APPROVED / NEEDS WORK / SEND BACK]\n\nStrategy fit: [เทียบกับ objective ใน brief ตรงๆ — ไม่ใช่แค่บอกว่า "ตรงกับ tone" แต่ต้องบอกว่าจะ drive behavior ที่ brief ต้องการได้จริงไหม]\nIdea strength: [idea นี้ unique กับ brand นี้จริงไหม หรือก็เอาไปใช้กับ brand อื่นได้]\nCraft: [คำพูด/ภาพ execution ระดับ professional หรือยังดูเป็น draft]\nจุดแข็งที่ห้ามแก้: [สิ่งที่ดีที่สุดและต้องรักษาไว้ — บอกให้ทีมรู้ว่าอันนี้อย่าไปแก้ทิ้ง]\nจุดอ่อนที่ทำให้เสีย: [จุดที่ทำให้งานนี้ไม่ pass มาตรฐาน — ระบุเฉพาะเจาะจง ไม่พูดกว้างๆ]\n\nแก้ตรงนี้:\n→ [คำสั่งที่ทำตามได้จริง ไม่ใช่ "ทำให้ดีขึ้น"]\n→ [ข้อต่อไป]\n\nส่งได้เมื่อ: [เงื่อนไขที่ตรวจสอบได้ ไม่ใช่ความรู้สึก]\n\nภาษาไทยผสมอังกฤษ ตรงและกล้าวิจารณ์ ไม่ต้องนิ่มนวลเพื่อรักษาน้ำใจทีม'},
   {id:'HYH-005',div:'DESIGN',dc:'#c87a3a',name:'THE DIRECTOR',role:'Art Director',cl:'ALPHA',clc:'#c8b97a',
    q:'"If you can\'t describe it, you can\'t design it."',caps:['visual direction + mood','art direction brief','key visual ideas'],
    img:'images/HYH-Agent (013).png',
-   sys:'คุณคือ Art Director ของ HELLYEAH HOUSE\n\nรับ concept → เสนอ visual direction:\n\nVISUAL CONCEPT: [1 ประโยคที่บอก feeling]\n\nMOOD: [รู้สึกยังไง]\nCOLOR: [palette + hex ถ้ารู้]\nTYPOGRAPHY: [font direction]\nCOMPOSITION: [layout rules]\n\nKEY VISUAL IDEAS:\nShot 1 — [hero shot อธิบายละเอียด]\nShot 2 — [supporting visual]\nShot 3 — [emotion/lifestyle shot]\n\nREFERENCE STYLE: [อธิบาย style อ้างอิง]\nAVOID: [ห้ามทำ]\n\nภาษาไทยผสมอังกฤษ'},
+   sys:'คุณคือ Art Director ของ HELLYEAH HOUSE — เชื่อว่า visual ที่ดีต้องเล่า story ได้แม้ปิดเสียง ปิด headline ถ้าดูแค่ภาพแล้วยังไม่รู้สึกอะไร แปลว่า visual direction ยังไม่แน่นพอ\n\nก่อนเสนอ mood ให้คิดก่อนว่า mood นี้ตรงข้ามกับสิ่งที่คู่แข่งในตลาดเดียวกันทำกันอยู่ไหม — ถ้า mood ที่เสนอเหมือน category convention ทั่วไป (เช่น food brand ก็ใช้แสงทอง อาหารโฮมเมด) ต้องหาทางทำให้รู้สึกเฉพาะตัวมากกว่านั้น ไม่ใช่แค่สวย\n\nVISUAL CONCEPT: [1 ประโยคที่บอก feeling เฉพาะตัว ไม่ใช่คำทั่วไปอย่าง "warm and premium"]\n\nMOOD: [อธิบายด้วยคำที่จับต้องได้ เช่นเทียบกับหนังเรื่องไหน หรือ บรรยากาศแบบไหนที่คนนึกออกทันที]\nCOLOR: [palette + hex — อธิบายว่าทำไมสีนี้ ไม่ใช่สีสวยๆทั่วไป ต้องเชื่อมกับ insight]\nTYPOGRAPHY: [font direction + เหตุผลว่าทำไม font นี้ตรงกับ personality ของ brand]\nCOMPOSITION: [layout rules ที่ทำให้ภาพ consistent ข้าม asset ต่างๆ]\n\nKEY VISUAL IDEAS — แต่ละ shot ต้องทำหน้าที่ต่างกัน ไม่ใช่ภาพสวยๆซ้ำกัน 3 มุม:\nShot 1 — Hero shot: [ภาพที่สื่อ big idea ได้ในแวบแรก ไม่ต้องอ่าน caption]\nShot 2 — Proof/Process shot: [ภาพที่ทำให้เชื่อ ไม่ใช่แค่สวย — ต้องมี detail ที่สร้าง trust]\nShot 3 — Emotion/Human shot: [ภาพที่มีคนจริงและ emotion จริง ไม่ posed เกินไป]\n\nสำหรับทุก shot อธิบายละเอียด: subject ทำอะไร, lighting มาจากไหนทำไม, composition แบบไหน, สื่ออะไร\n\nREFERENCE STYLE: [อ้างอิง category หรือ genre ของภาพ ไม่ต้องชื่อเฉพาะ]\nAVOID: [สิ่งที่ทำให้ดู generic หรือเหมือน stock photo — ระบุเฉพาะเจาะจง]\n\nภาษาไทยผสมอังกฤษ'},
   {id:'HYH-006',div:'DESIGN',dc:'#c87a3a',name:'THE HAND',role:'Graphic Production',cl:'BETA',clc:'#c87a3a',
    q:'"Craft is what separates vision from reality."',caps:['design spec','layout + type + color','production ready'],
    img:'images/HYH-Agent (014).png',
@@ -814,13 +826,31 @@ function filterPM(v){buildPMList(v);}
 function selectPM(id){
   PM_CUR=PM.find(function(p){return p.id===id;});if(!PM_CUR)return;
   buildPMList();
+  var isMission=PM_CUR.isMissionRecord;
+  var btns=isMission?
+    '<button class="pm-d-btn primary" onclick="resumeMission()">📊 VIEW AS DECK</button><button class="pm-d-btn" onclick="reloadBriefOnly()">⚡ RE-RUN BRIEF</button><button class="pm-d-btn danger" onclick="deletePM()">DELETE</button>':
+    '<button class="pm-d-btn primary" onclick="loadBriefToMission()">⚡ LAUNCH MISSION</button><button class="pm-d-btn" onclick="editPM()">✎ EDIT</button><button class="pm-d-btn danger" onclick="deletePM()">DELETE</button>';
+  var tag=isMission?'<div style="display:inline-block;font-size:7px;padding:2px 8px;border:0.5px solid #4a8a4a44;color:#4a8a4a;border-radius:2px;letter-spacing:0.1em;margin-bottom:8px">✓ COMPLETED MISSION</div><br>':'';
   document.getElementById('pm-right').innerHTML=
-    '<div style="padding:18px 20px"><div class="pm-d-name">'+PM_CUR.name+'</div><div class="pm-d-meta">'+PM_CUR.category+'</div>'+
-    '<div class="pm-d-btns"><button class="pm-d-btn primary" onclick="loadBriefToMission()">⚡ LAUNCH MISSION</button><button class="pm-d-btn" onclick="editPM()">✎ EDIT</button><button class="pm-d-btn danger" onclick="deletePM()">DELETE</button></div>'+
-    '<div class="pm-field"><div class="pm-f-label">BRIEF TEMPLATE</div><div class="pm-f-val">'+PM_CUR.brief+'</div></div>'+
+    '<div style="padding:18px 20px">'+tag+'<div class="pm-d-name">'+PM_CUR.name+'</div><div class="pm-d-meta">'+PM_CUR.category+(PM_CUR.createdAt?' · '+new Date(PM_CUR.createdAt).toLocaleString('th-TH'):'')+'</div>'+
+    '<div class="pm-d-btns">'+btns+'</div>'+
+    '<div class="pm-field"><div class="pm-f-label">BRIEF</div><div class="pm-f-val">'+PM_CUR.brief+'</div></div>'+
     (PM_CUR.notes?'<div class="pm-field"><div class="pm-f-label">NOTES</div><div class="pm-f-val">'+PM_CUR.notes+'</div></div>':'')+'</div>';
 }
 function loadBriefToMission(){if(!PM_CUR)return;sv('mission');setTimeout(function(){var ta=document.getElementById('mbta');if(ta)ta.value=PM_CUR.brief;},100);}
+function reloadBriefOnly(){if(!PM_CUR)return;sv('mission');setTimeout(function(){var ta=document.getElementById('mbta');if(ta)ta.value=PM_CUR.brief;},100);}
+
+function resumeMission(){
+  if(!PM_CUR||!PM_CUR.isMissionRecord)return;
+  // Restore full mission state from saved record
+  MPIPE=PM_CUR.pipe||[];
+  MOUTS=PM_CUR.outs||{};
+  MBRIEF=PM_CUR.brief||'';
+  SAPPROVED=PM_CUR.approved||{};
+  DPROMPTS=PM_CUR.prompts||{};
+  if(!MPIPE.length){alert('Mission นี้ไม่มีข้อมูล stage — อาจบันทึกผิดพลาด');return;}
+  openDeck();
+}
 function openPMModal(){document.getElementById('pm-modal').style.display='flex';}
 function closePMModal(){document.getElementById('pm-modal').style.display='none';['pm-name','pm-brief','pm-cat'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});}
 function savePM(){
@@ -968,6 +998,35 @@ async function launchMission(){
   }
   document.getElementById('mdone').classList.add('on');
   RUNNING=false;document.getElementById('lbtn').disabled=false;document.getElementById('lbtn').textContent='LAUNCH ↗';
+  autoSaveMission();
+}
+
+function autoSaveMission(){
+  // Auto-save completed mission into Project Memory so nothing is lost
+  try{
+    var name=MBRIEF.length>50?MBRIEF.substring(0,50)+'...':MBRIEF;
+    var proj={
+      id:'mission-'+Date.now(),
+      name:name,
+      brief:MBRIEF,
+      category:'Mission Run',
+      createdAt:Date.now(),
+      isMissionRecord:true,
+      pipe:MPIPE,
+      outs:MOUTS,
+      approved:SAPPROVED,
+      prompts:DPROMPTS
+    };
+    PM.unshift(proj);
+    if(PM.length>50)PM=PM.slice(0,50);
+    localStorage.setItem('hh_pm',JSON.stringify(PM));
+    buildPMList();
+    var note=document.createElement('div');
+    note.style.cssText='position:fixed;bottom:20px;right:20px;background:#0a120a;border:0.5px solid #2a4a2a;color:#4a8a4a;padding:10px 16px;border-radius:4px;font-family:var(--M);font-size:9px;letter-spacing:0.08em;z-index:400;box-shadow:0 4px 16px rgba(0,0,0,.5)';
+    note.textContent='✓ MISSION SAVED TO PROJECTS';
+    document.body.appendChild(note);
+    setTimeout(function(){note.style.opacity='0';note.style.transition='opacity .4s';setTimeout(function(){note.remove();},400);},2500);
+  }catch(e){console.error('autoSave failed',e);}
 }
 
 function buildPrompt(aid,outs){
@@ -1388,6 +1447,89 @@ function dkCopy(){
   var text=document.getElementById('dk-ptext').textContent;
   navigator.clipboard.writeText(text).then(function(){var btn=document.getElementById('dk-pcopy');btn.classList.add('ok');btn.textContent='COPIED!';setTimeout(function(){btn.classList.remove('ok');btn.textContent='COPY PROMPT';},2000);});
 }
+
+/* ── IMAGE GENERATION via Pollinations.ai (free, no API key) ── */
+function dkGenerateImage(){
+  var ptextEl=document.getElementById('dk-ptext');
+  var rawPrompt=ptextEl.textContent.trim();
+  if(!rawPrompt||rawPrompt==='—'){alert('ไม่มี prompt ให้ generate');return;}
+  
+  // Clean prompt: strip MJ params like --ar --style --v --q, strip "Negative:" section
+  var clean=rawPrompt
+    .replace(/--ar\s*[\d:]+/gi,'')
+    .replace(/--style\s*\w+/gi,'')
+    .replace(/--v\s*[\d.]+/gi,'')
+    .replace(/--q\s*[\d.]+/gi,'')
+    .replace(/Negative:[\s\S]*/i,'')
+    .replace(/Positive:\s*/i,'')
+    .replace(/\n+/g,' ')
+    .trim();
+  
+  if(clean.length>800)clean=clean.substring(0,800); // keep URL reasonable
+  
+  var wrap=document.getElementById('dk-imgwrap');
+  var loading=document.getElementById('dk-imgloading');
+  var imgEl=document.getElementById('dk-genimg');
+  var errEl=document.getElementById('dk-imgerr');
+  var dlBtn=document.getElementById('dk-imgdownload');
+  var genBtn=document.getElementById('dk-pgen');
+  
+  wrap.style.display='block';
+  loading.style.display='block';
+  imgEl.style.display='none';
+  errEl.style.display='none';
+  dlBtn.style.display='none';
+  genBtn.disabled=true;
+  genBtn.textContent='⏳ GENERATING...';
+  
+  var seed=Math.floor(Math.random()*100000);
+  var encoded=encodeURIComponent(clean);
+  var url='https://image.pollinations.ai/prompt/'+encoded+'?width=896&height=896&seed='+seed+'&nologo=true';
+  
+  var testImg=new Image();
+  var timedOut=false;
+  var timer=setTimeout(function(){
+    timedOut=true;
+    loading.style.display='none';
+    errEl.style.display='block';
+    errEl.textContent='⚠ Generate ใช้เวลานานเกินไป (>45s) — ลองใหม่ หรือ copy prompt ไปใช้ Midjourney/Flux โดยตรงแทน';
+    genBtn.disabled=false;genBtn.textContent='🎨 GENERATE';
+  },45000);
+  
+  testImg.onload=function(){
+    if(timedOut)return;
+    clearTimeout(timer);
+    loading.style.display='none';
+    imgEl.src=url;
+    imgEl.style.display='block';
+    dlBtn.style.display='block';
+    genBtn.disabled=false;genBtn.textContent='🎨 GENERATE';
+    imgEl.dataset.downloadUrl=url;
+  };
+  testImg.onerror=function(){
+    if(timedOut)return;
+    clearTimeout(timer);
+    loading.style.display='none';
+    errEl.style.display='block';
+    errEl.textContent='⚠ Generate ไม่สำเร็จ — เครือข่ายอาจ block หรือ prompt มีปัญหา ลอง copy prompt ไปใช้ Midjourney/Flux แทน';
+    genBtn.disabled=false;genBtn.textContent='🎨 GENERATE';
+  };
+  testImg.src=url;
+}
+
+function dkDownloadImage(){
+  var imgEl=document.getElementById('dk-genimg');
+  var url=imgEl.dataset.downloadUrl||imgEl.src;
+  if(!url)return;
+  var a=document.createElement('a');
+  a.href=url;
+  a.download='HYH-visual-'+Date.now()+'.jpg';
+  a.target='_blank';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
 function dkNav(dir){renderDk(Math.max(0,Math.min(DK_SLIDES.length-1,DK_IDX+dir)));}
 function closeDeck(){document.getElementById('deck').classList.remove('on');}
 
