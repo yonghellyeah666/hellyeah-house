@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HELLYEAH HOUSE</title>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/libs/pptxgen.bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -579,7 +579,53 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
       <div class="view" id="v-ops"><div class="chdr"><div><div class="chdr-t">🗂 OPS</div><div class="chdr-s">SOP · MEETING NOTES · JD · PERFORMANCE</div></div></div><div class="tgrid" id="g-ops"></div></div>
       <div class="view" id="v-client"><div class="chdr"><div><div class="chdr-t">🤝 CLIENT</div><div class="chdr-s">REPORT · POST-MORTEM · PRESENTATION · RETAINER</div></div></div><div class="tgrid" id="g-client"></div></div>
       <div class="view" id="v-web"><div class="chdr"><div><div class="chdr-t">🌐 WEB DESIGN</div><div class="chdr-s">LANDING PAGE · COMPONENT · WEBFLOW · HTML</div></div></div><div class="tgrid" id="g-web"></div></div>
-      <div class="view" id="v-image"><div class="chdr"><div><div class="chdr-t">🎨 IMAGE GEN</div><div class="chdr-s">MIDJOURNEY · FLUX · DALL-E · STYLE GUIDE</div></div></div><div class="tgrid" id="g-image"></div></div>
+      <div class="view" id="v-image">
+        <div class="chdr"><div><div class="chdr-t">🎨 IMAGE GEN</div><div class="chdr-s">สร้างภาพได้เลย — พิมพ์ไทยหรืออังกฤษก็ได้</div></div></div>
+        <div style="flex:1;overflow-y:auto;padding:18px 22px">
+          <!-- STANDALONE GENERATOR PANEL -->
+          <div style="background:var(--bg2);border:0.5px solid var(--bd2);border-radius:9px;padding:20px 22px;margin-bottom:22px">
+            <div style="font-size:9.5px;color:var(--gd);letter-spacing:0.14em;margin-bottom:10px">อธิบายภาพที่อยากได้ (ไทยหรืออังกฤษ)</div>
+            <textarea class="mi-ta" id="ig-input" rows="3" placeholder="เช่น: ขวดน้ำปลาพรีเมียมตั้งอยู่บนโต๊ะไม้ แสงอุ่นยามเช้า บรรยากาศโรงงานดั้งเดิม สไตล์ documentary"></textarea>
+            <div style="display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap">
+              <select class="mi-sel" id="ig-style" style="flex:0 0 200px">
+                <option value="photo">📷 Photography สมจริง</option>
+                <option value="illust">🎨 Illustration / Art</option>
+                <option value="product">📦 Product Shot สะอาด</option>
+                <option value="cinematic">🎬 Cinematic / Mood</option>
+              </select>
+              <select class="mi-sel" id="ig-ratio" style="flex:0 0 160px">
+                <option value="1:1">⬜ Square 1:1</option>
+                <option value="16:9">▭ Wide 16:9</option>
+                <option value="9:16">▯ Tall 9:16 (Story)</option>
+                <option value="4:5">▯ Portrait 4:5 (Feed)</option>
+              </select>
+              <button class="lbtn" id="ig-genbtn" onclick="standaloneGenerateImage()" style="flex:0 0 auto">✨ สร้างภาพ</button>
+            </div>
+            <div style="font-size:8px;color:var(--bd3);margin-top:8px;letter-spacing:0.04em">AI จะช่วยแปลและปรับ prompt ให้ generate ได้ดีขึ้นก่อนส่ง — ใช้ Pollinations.ai ฟรี ไม่ต้อง API key</div>
+          </div>
+
+          <!-- RESULT AREA -->
+          <div id="ig-result" style="display:none;margin-bottom:22px">
+            <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start">
+              <div id="ig-imgbox" style="width:340px;flex-shrink:0;background:var(--bg3);border:0.5px solid var(--bd);border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;min-height:240px">
+                <span style="font-size:10px;color:var(--bd3)">—</span>
+              </div>
+              <div style="flex:1;min-width:240px">
+                <div style="font-size:8px;color:var(--bd3);letter-spacing:0.16em;margin-bottom:6px">FINAL PROMPT ที่ใช้ generate</div>
+                <div id="ig-finalprompt" style="background:var(--bg3);border:0.5px solid var(--bd);border-radius:5px;padding:11px 13px;font-size:11px;color:#8a7a50;line-height:1.8;margin-bottom:12px;white-space:pre-wrap">—</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                  <button class="ps-abtn" id="ig-dlbtn" onclick="standaloneDownload()">⬇ DOWNLOAD</button>
+                  <button class="ps-abtn" onclick="standaloneRegenerate()">🔄 GENERATE ใหม่ (random seed)</button>
+                  <button class="ps-abtn" onclick="standaloneCopyPrompt()">COPY PROMPT</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="font-size:9px;color:var(--bd3);letter-spacing:0.14em;margin-bottom:12px;padding-top:6px;border-top:0.5px solid var(--bd)">หรือใช้ THE LENS ช่วยคิด prompt ละเอียดสำหรับ campaign</div>
+          <div class="tgrid" id="g-image" style="padding:0"></div>
+        </div>
+      </div>
 
       <div class="view" id="v-chat">
         <div class="chdr">
@@ -848,6 +894,7 @@ function resumeMission(){
   MBRIEF=PM_CUR.brief||'';
   SAPPROVED=PM_CUR.approved||{};
   DPROMPTS=PM_CUR.prompts||{};
+  DIMAGES=PM_CUR.images||{};
   if(!MPIPE.length){alert('Mission นี้ไม่มีข้อมูล stage — อาจบันทึกผิดพลาด');return;}
   openDeck();
 }
@@ -977,7 +1024,7 @@ async function launchMission(){
     if(i<pipe.length-1){var arr=document.createElement('div');arr.className='parr';arr.textContent='↓';scroll.appendChild(arr);}
   });
   var done=document.createElement('div');done.className='mdone';done.id='mdone';
-  done.innerHTML='<div><div class="mdt-t">MISSION COMPLETE</div><div class="mdt-s">ALL OPERATIVES DELIVERED</div></div>'+
+  done.innerHTML='<div><div class="mdt-t">MISSION COMPLETE</div><div class="mdt-s" id="mdt-status">ALL OPERATIVES DELIVERED</div></div>'+
     '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="mdbtn pres" onclick="openDeck()">📊 SLIDE DECK</button><button class="mdbtn pres" onclick="exportPPTX()" style="border-color:#c8b97a;color:#c8b97a">⬇ EXPORT PPTX</button><button class="mdbtn" onclick="exportM()">TXT</button><button class="mdbtn" onclick="resetM()">NEW MISSION</button></div>';
   scroll.appendChild(done);
   for(var i=0;i<pipe.length;i++){
@@ -989,7 +1036,14 @@ async function launchMission(){
     try{
       var rep=await callAPI(MH,a.sys,[{role:'user',content:buildPrompt(aid,MOUTS)}],1400);
       MOUTS[aid]=rep;outEl.textContent=rep;
-      if(aid==='HYH-014')DPROMPTS=extractPrompts(rep);
+      if(aid==='HYH-014'){
+        DPROMPTS=extractPrompts(rep);
+        stEl.className='pss d';stEl.textContent='GENERATING IMAGES...';
+        await autoGenerateAllShots(aid);
+        var okCount=Object.keys(DIMAGES).filter(function(k){return DIMAGES[k]&&DIMAGES[k].ok;}).length;
+        var statusEl=document.getElementById('mdt-status');
+        if(statusEl)statusEl.textContent=okCount>0?('ALL OPERATIVES DELIVERED · '+okCount+' VISUAL(S) GENERATED'):'ALL OPERATIVES DELIVERED';
+      }
       stEl.className='pss d';stEl.textContent='DONE';document.getElementById('ddp-'+aid).style.display='block';
     }catch(e){
       outEl.textContent='[ERROR] '+(e.message||'เติม credit ที่ console.anthropic.com');
@@ -1015,7 +1069,8 @@ function autoSaveMission(){
       pipe:MPIPE,
       outs:MOUTS,
       approved:SAPPROVED,
-      prompts:DPROMPTS
+      prompts:DPROMPTS,
+      images:DIMAGES
     };
     PM.unshift(proj);
     if(PM.length>50)PM=PM.slice(0,50);
@@ -1059,7 +1114,177 @@ function extractPrompts(text){
   return r;
 }
 
-/* DD review */
+/* ── AUTO IMAGE GENERATION — Pollinations.ai, no key needed ── */
+var DIMAGES={}; // { 'Shot 1': {url, status}, ... }
+
+function cleanPromptForGen(raw){
+  return raw
+    .replace(/--ar\s*[\d:]+/gi,'')
+    .replace(/--style\s*\w+/gi,'')
+    .replace(/--v\s*[\d.]+/gi,'')
+    .replace(/--q\s*[\d.]+/gi,'')
+    .replace(/Negative:[\s\S]*/i,'')
+    .replace(/Positive:\s*/i,'')
+    .replace(/\n+/g,' ')
+    .trim()
+    .substring(0,800);
+}
+
+function generateOneImage(promptText,seed){
+  return new Promise(function(resolve){
+    var clean=cleanPromptForGen(promptText);
+    if(!clean){resolve({ok:false,url:null});return;}
+    var url='https://image.pollinations.ai/prompt/'+encodeURIComponent(clean)+'?width=896&height=896&seed='+(seed||Math.floor(Math.random()*100000))+'&nologo=true';
+    var img=new Image();
+    var done=false;
+    var timer=setTimeout(function(){if(!done){done=true;resolve({ok:false,url:null});}},40000);
+    img.onload=function(){if(!done){done=true;clearTimeout(timer);resolve({ok:true,url:url});}};
+    img.onerror=function(){if(!done){done=true;clearTimeout(timer);resolve({ok:false,url:null});}};
+    img.src=url;
+  });
+}
+
+async function autoGenerateAllShots(lensAid){
+  var outEl=document.getElementById('pso-'+lensAid);
+  var shotKeys=Object.keys(DPROMPTS.mj||{}).filter(function(k){return DPROMPTS.mj[k];});
+  if(!shotKeys.length)return;
+
+  // Build inline gallery container right after the output text
+  var bodyEl=document.getElementById('psb-'+lensAid);
+  var galleryId='gallery-'+lensAid;
+  var existing=document.getElementById(galleryId);
+  if(existing)existing.remove();
+  var gallery=document.createElement('div');
+  gallery.id=galleryId;
+  gallery.style.cssText='padding:13px 15px;border-bottom:0.5px solid var(--bd);display:flex;gap:10px;flex-wrap:wrap';
+  shotKeys.forEach(function(k){
+    var card=document.createElement('div');
+    card.id='shotcard-'+lensAid+'-'+k.replace(/\s+/g,'');
+    card.style.cssText='width:180px;display:flex;flex-direction:column;gap:6px';
+    card.innerHTML='<div style="font-size:8px;color:var(--gd);letter-spacing:0.1em">'+k.toUpperCase()+'</div>'+
+      '<div style="width:100%;height:180px;background:var(--bg4);border-radius:5px;border:0.5px solid var(--bd2);display:flex;align-items:center;justify-content:center;overflow:hidden" id="shotimg-'+lensAid+'-'+k.replace(/\s+/g,'')+'"><span style="font-size:9px;color:var(--bd3)">⏳ generating...</span></div>';
+    gallery.appendChild(card);
+  });
+  if(outEl&&outEl.parentNode)outEl.parentNode.insertBefore(gallery,outEl.nextSibling);
+
+  // Generate all shots in parallel for speed
+  var promises=shotKeys.map(function(k,idx){
+    return generateOneImage(DPROMPTS.mj[k],idx*777).then(function(result){
+      DIMAGES[k]={url:result.url,ok:result.ok};
+      var slot=document.getElementById('shotimg-'+lensAid+'-'+k.replace(/\s+/g,''));
+      if(slot){
+        if(result.ok){
+          slot.innerHTML='<img src="'+result.url+'" style="width:100%;height:100%;object-fit:cover" alt="'+k+'">';
+        }else{
+          slot.innerHTML='<span style="font-size:8px;color:var(--red);text-align:center;padding:8px;line-height:1.5">⚠ generate ไม่สำเร็จ<br>ใช้ MJ prompt แทนได้</span>';
+        }
+      }
+    });
+  });
+  await Promise.all(promises);
+}
+
+/* ── STANDALONE IMAGE GENERATOR (IMAGE GEN tab) — supports Thai input ── */
+var IG_LAST={prompt:'',url:'',seed:0};
+
+function igRatioToWH(ratio){
+  var map={'1:1':[1024,1024],'16:9':[1280,720],'9:16':[720,1280],'4:5':[896,1120]};
+  return map[ratio]||[1024,1024];
+}
+
+var IG_STYLE_SUFFIX={
+  photo:'professional photography, natural lighting, realistic, high detail, sharp focus',
+  illust:'digital illustration, clean lines, vibrant colors, artistic style',
+  product:'product photography, clean studio background, soft shadows, commercial quality, minimalist',
+  cinematic:'cinematic lighting, dramatic mood, film grain, shallow depth of field, atmospheric'
+};
+
+async function standaloneGenerateImage(){
+  var rawInput=document.getElementById('ig-input').value.trim();
+  if(!rawInput){alert('พิมพ์อธิบายภาพที่อยากได้ก่อนนะ');return;}
+  var style=document.getElementById('ig-style').value;
+  var ratio=document.getElementById('ig-ratio').value;
+  var btn=document.getElementById('ig-genbtn');
+  var resultBox=document.getElementById('ig-result');
+  var imgBox=document.getElementById('ig-imgbox');
+  var promptBox=document.getElementById('ig-finalprompt');
+
+  btn.disabled=true;btn.textContent='⏳ กำลังคิด prompt...';
+  resultBox.style.display='block';
+  imgBox.innerHTML='<span style="font-size:10px;color:var(--bd3)">⏳ กำลังเตรียม prompt...</span>';
+  promptBox.textContent='—';
+
+  var finalPrompt='';
+  try{
+    if(KEY&&KEY!=='demo'){
+      // Use Claude to translate/improve the prompt (handles Thai input naturally)
+      var sysPrompt='คุณคือ AI image prompt specialist แปลงคำอธิบายภาพ (ไทยหรืออังกฤษ) ให้เป็น English prompt สำหรับ AI image generation ที่มีรายละเอียดชัดเจน เน้น: subject, lighting, composition, mood, color\\n\\nตอบแค่ prompt ภาษาอังกฤษล้วนๆ ไม่ต้องมีคำอธิบายอื่น ไม่ต้องมี quote ไม่ต้องมี markdown ความยาวไม่เกิน 2-3 ประโยค กระชับแต่ละเอียด';
+      var rep=await callAPI(MC,sysPrompt,[{role:'user',content:rawInput}],300);
+      finalPrompt=rep.trim().replace(/^["']|["']$/g,'');
+    }else{
+      finalPrompt=rawInput; // demo mode — use raw input directly
+    }
+  }catch(e){
+    console.error('prompt translation failed, using raw input',e);
+    finalPrompt=rawInput;
+  }
+
+  finalPrompt=finalPrompt+', '+IG_STYLE_SUFFIX[style];
+  promptBox.textContent=finalPrompt;
+  imgBox.innerHTML='<span style="font-size:10px;color:var(--bd3)">⏳ กำลัง generate ภาพ... (10-20 วิ)</span>';
+  btn.textContent='⏳ กำลัง generate ภาพ...';
+
+  var wh=igRatioToWH(ratio);
+  var seed=Math.floor(Math.random()*100000);
+  var url='https://image.pollinations.ai/prompt/'+encodeURIComponent(finalPrompt.substring(0,800))+'?width='+wh[0]+'&height='+wh[1]+'&seed='+seed+'&nologo=true';
+
+  var img=new Image();
+  var done=false;
+  var timer=setTimeout(function(){
+    if(!done){done=true;
+      imgBox.innerHTML='<span style="font-size:10px;color:var(--red);text-align:center;padding:20px;line-height:1.7">⚠ generate ใช้เวลานานเกินไป<br>ลองใหม่อีกครั้ง</span>';
+      btn.disabled=false;btn.textContent='✨ สร้างภาพ';
+    }
+  },45000);
+  img.onload=function(){
+    if(done)return;done=true;clearTimeout(timer);
+    imgBox.innerHTML='<img src="'+url+'" style="width:100%;height:100%;object-fit:contain" alt="generated">';
+    IG_LAST={prompt:finalPrompt,url:url,seed:seed};
+    btn.disabled=false;btn.textContent='✨ สร้างภาพ';
+  };
+  img.onerror=function(){
+    if(done)return;done=true;clearTimeout(timer);
+    imgBox.innerHTML='<span style="font-size:10px;color:var(--red);text-align:center;padding:20px;line-height:1.7">⚠ generate ไม่สำเร็จ<br>ลองเปลี่ยนคำอธิบายแล้วลองใหม่</span>';
+    btn.disabled=false;btn.textContent='✨ สร้างภาพ';
+  };
+  img.src=url;
+}
+
+function standaloneDownload(){
+  if(!IG_LAST.url){alert('ยังไม่มีภาพให้โหลด');return;}
+  var a=document.createElement('a');
+  a.href=IG_LAST.url;a.download='HYH-image-'+Date.now()+'.jpg';a.target='_blank';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+}
+function standaloneCopyPrompt(){
+  if(!IG_LAST.prompt){alert('ยังไม่มี prompt');return;}
+  navigator.clipboard.writeText(IG_LAST.prompt).then(function(){alert('Copy prompt แล้ว ✓');});
+}
+async function standaloneRegenerate(){
+  if(!IG_LAST.prompt){standaloneGenerateImage();return;}
+  var imgBox=document.getElementById('ig-imgbox');
+  var ratio=document.getElementById('ig-ratio').value;
+  var wh=igRatioToWH(ratio);
+  var seed=Math.floor(Math.random()*100000);
+  var url='https://image.pollinations.ai/prompt/'+encodeURIComponent(IG_LAST.prompt.substring(0,800))+'?width='+wh[0]+'&height='+wh[1]+'&seed='+seed+'&nologo=true';
+  imgBox.innerHTML='<span style="font-size:10px;color:var(--bd3)">⏳ กำลัง generate ใหม่...</span>';
+  var img=new Image();
+  img.onload=function(){imgBox.innerHTML='<img src="'+url+'" style="width:100%;height:100%;object-fit:contain" alt="generated">';IG_LAST.url=url;IG_LAST.seed=seed;};
+  img.onerror=function(){imgBox.innerHTML='<span style="font-size:10px;color:var(--red);text-align:center;padding:20px">⚠ generate ไม่สำเร็จ</span>';};
+  img.src=url;
+}
+
+
 function ddApprove(aid){
   SAPPROVED[aid]=true;var stEl=document.getElementById('pss-'+aid);stEl.className='pss ap';stEl.textContent='APPROVED ✓';
   document.getElementById('ddp-'+aid).style.display='none';addThread(aid,'dd','✓ APPROVED');
@@ -1203,13 +1428,49 @@ async function exportPPTX(){
 
     // ── IMAGE PLACEHOLDER SLIDES ──
     var hasVisual=MOUTS['HYH-005']||MOUTS['HYH-014'];
-    if(hasVisual){
+    var imageKeys=Object.keys(DIMAGES).filter(function(k){return DIMAGES[k]&&DIMAGES[k].ok;});
+    
+    if(imageKeys.length){
+      // Fetch each generated image as base64 and embed directly into the slide
+      for(var gi=0;gi<imageKeys.length;gi++){
+        var gk=imageKeys[gi];
+        var gUrl=DIMAGES[gk].url;
+        var base64Data=null;
+        try{
+          var imgResp=await fetch(gUrl);
+          var imgBlob=await imgResp.blob();
+          base64Data=await new Promise(function(res,rej){
+            var fr=new FileReader();
+            fr.onload=function(){res(fr.result);};
+            fr.onerror=rej;
+            fr.readAsDataURL(imgBlob);
+          });
+        }catch(e){console.error('image fetch failed for '+gk,e);}
+        
+        var sImg=pptx.addSlide();
+        sImg.background={color:'070509'};
+        addTopBar(sImg,'KEY VISUAL — '+gk.toUpperCase(),TOTAL);
+        sImg.addText(gk,{x:0.3,y:0.35,w:9.5,h:0.55,fontSize:26,bold:true,color:C.gl,fontFace:'Cambria'});
+        sImg.addShape(pptx.ShapeType.rect,{x:0.3,y:0.95,w:9.5,h:0.012,fill:{color:C.bd}});
+        
+        if(base64Data){
+          // Center the image, maintain square aspect ratio
+          sImg.addImage({data:base64Data,x:2.75,y:1.15,w:4.5,h:4.0});
+        }else{
+          sImg.addShape(pptx.ShapeType.rect,{x:2.75,y:1.15,w:4.5,h:4.0,fill:{color:'0C080F'},line:{color:C.bd,w:0.75}});
+          sImg.addText('⚠ Image fetch failed — regenerate in app',{x:2.75,y:2.9,w:4.5,h:0.4,fontSize:11,color:C.red,fontFace:'Courier New',align:'center'});
+        }
+        sImg.addText('Generated via Pollinations.ai · AI-assisted draft visual — replace with final photography/Midjourney render before client delivery',
+          {x:0.3,y:5.15,w:9.5,h:0.22,fontSize:8.5,color:'3A3020',fontFace:'Calibri',italic:true,align:'center'});
+        addFooter(sImg);
+      }
+    }else if(hasVisual){
+      // Fallback: no auto-generated images available — show placeholder with prompts
       var sp=pptx.addSlide();
       sp.background={color:'070509'};
       addTopBar(sp,'VISUAL ASSETS — INSERT GENERATED IMAGES HERE',TOTAL);
       sp.addText('Key Visuals',{x:0.3,y:0.35,w:9.5,h:0.65,fontSize:32,bold:true,color:C.gl,fontFace:'Cambria'});
       sp.addShape(pptx.ShapeType.rect,{x:0.3,y:1.02,w:9.5,h:0.012,fill:{color:C.bd}});
-      // 3 image placeholders
       [[0.3,'Shot 1: Hero Visual'],[3.55,'Shot 2: Process/Context'],[6.8,'Shot 3: Product Hero']].forEach(function(ph){
         sp.addShape(pptx.ShapeType.rect,{x:ph[0],y:1.18,w:2.95,h:3.75,fill:{color:'0C080F'},line:{color:C.bd,w:0.75}});
         sp.addText('🖼',{x:ph[0]+0.5,y:1.8,w:1.95,h:1.2,fontSize:40,align:'center'});
@@ -1232,7 +1493,7 @@ async function exportPPTX(){
   }
 }
 function resetM(){
-  RUNNING=false;MOUTS={};MPIPE=[];SAPPROVED={};STHREADS={};DPROMPTS={};
+  RUNNING=false;MOUTS={};MPIPE=[];SAPPROVED={};STHREADS={};DPROMPTS={};DIMAGES={};
   document.getElementById('pwr').innerHTML='<div class="idle"><div class="idle-sym">⬡</div><div class="idle-t">AWAITING MISSION</div><div class="idle-s">ใส่ brief → LAUNCH<br>ทีมจะทำงานต่อกันอัตโนมัติ<br>จบแล้วกด PRESENT เพื่อดู pitch deck</div></div>';
   document.getElementById('mbta').value='';document.getElementById('mprog').textContent='';document.getElementById('lbtn').disabled=false;document.getElementById('lbtn').textContent='LAUNCH ↗';
 }
@@ -1298,6 +1559,21 @@ function renderDk(idx){
     document.getElementById('dk-ptext').dataset.dalle=prompts.dalle;
     // reset tab UI
     document.querySelectorAll('.dk-ptab').forEach(function(t,i){t.classList.toggle('on',['mj','flux','dalle'][i]===DK_TAB);});
+    // Check if an image was already auto-generated for this shot during Mission Run
+    var wrap=document.getElementById('dk-imgwrap'),loading=document.getElementById('dk-imgloading'),
+        imgEl=document.getElementById('dk-genimg'),errEl=document.getElementById('dk-imgerr'),
+        dlBtn=document.getElementById('dk-imgdownload'),genBtn=document.getElementById('dk-pgen');
+    var shotKeys2=Object.keys(DIMAGES);
+    var matchKey=shotKeys2.find(function(k){return DIMAGES[k]&&DIMAGES[k].ok;});
+    if(s.aid==='HYH-014'&&matchKey){
+      wrap.style.display='block';loading.style.display='none';errEl.style.display='none';
+      imgEl.src=DIMAGES[matchKey].url;imgEl.style.display='block';imgEl.dataset.downloadUrl=DIMAGES[matchKey].url;
+      dlBtn.style.display='block';genBtn.textContent='🎨 RE-GENERATE';
+    }else{
+      wrap.style.display='none';loading.style.display='none';imgEl.style.display='none';errEl.style.display='none';dlBtn.style.display='none';
+      genBtn.textContent='🎨 GENERATE';
+    }
+    genBtn.disabled=false;
   }
 
   // RIGHT — content
