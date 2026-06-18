@@ -106,7 +106,7 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
 .tgrid::-webkit-scrollbar-thumb{background:var(--bd2)}
 .tc{background:var(--bg3);border:0.5px solid var(--bd);border-radius:7px;padding:13px;cursor:pointer;transition:border-color .2s,transform .15s}
 .tc:hover{border-color:var(--bd3);transform:translateY(-2px)}
-.tc-ico{font-size:19px;margin-bottom:8px}
+.tc-ico{margin-bottom:8px;display:flex;align-items:center}
 .tc-name{font-family:var(--H);font-size:13px;color:var(--gl);letter-spacing:0.05em;margin-bottom:5px}
 .tc-desc{font-size:11px;color:var(--gd);line-height:1.75;margin-bottom:8px}
 .tc-who{font-size:7.5px;color:var(--bd3);letter-spacing:0.1em;margin-bottom:7px}
@@ -370,6 +370,9 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
 .tmpl-item-name{font-size:11px;color:var(--gl);margin-bottom:3px}
 .tmpl-item-prev{font-size:9px;color:var(--gd);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tmpl-empty{padding:20px;text-align:center;font-size:10px;color:var(--bd3)}
+.ig-provider-btn{font-size:7.5px;padding:4px 10px;border:0.5px solid var(--bd2);background:transparent;color:var(--gd);font-family:var(--M);letter-spacing:0.04em;cursor:pointer;border-radius:20px;transition:all .15s}
+.ig-provider-btn.on{border-color:var(--gold);color:var(--gold);background:#c8b97a0d}
+.ig-provider-btn:hover{border-color:var(--gd)}
 .pm-modal{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:150;backdrop-filter:blur(3px)}
 .pm-modal-box{background:var(--bg2);border:0.5px solid var(--bd2);border-radius:7px;padding:22px;width:400px}
 .pm-m-title{font-family:var(--H);font-size:13px;color:var(--gl);letter-spacing:0.1em;margin-bottom:14px}
@@ -423,6 +426,24 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
   </div>
 </div>
 
+<!-- OPENAI KEY MODAL -->
+<div class="pm-modal" id="openai-modal" style="display:none" onclick="if(event.target===this)closeOpenAIKeyModal()">
+  <div class="pm-modal-box">
+    <div class="pm-m-title">OPENAI API KEY — สำหรับ DALL·E 3</div>
+    <label class="pm-m-label">OpenAI API Key (แยกจาก ChatGPT Plus)</label>
+    <input class="pm-m-inp" type="password" id="openai-key-in" placeholder="sk-...">
+    <div style="font-size:9px;color:var(--bd3);line-height:1.8;margin-bottom:14px">
+      Key เก็บใน browser เครื่องนี้เท่านั้น ไม่ส่งไปที่ไหน<br>
+      ขอ key ได้ที่ <a href="https://platform.openai.com/api-keys" target="_blank" style="color:var(--gd)">platform.openai.com/api-keys ↗</a><br>
+      DALL·E 3 มีค่าใช้จ่ายตาม OpenAI billing (~$0.04-0.08/ภาพ) — แยกจาก ChatGPT Plus subscription
+    </div>
+    <div class="pm-m-btns">
+      <button class="pm-m-btn" onclick="closeOpenAIKeyModal()">CANCEL</button>
+      <button class="pm-m-btn primary" onclick="saveOpenAIKey()">SAVE ↗</button>
+    </div>
+  </div>
+</div>
+
 <!-- PRESENTATION DECK -->
 <div class="deck" id="deck">
   <div class="dk-hdr">
@@ -456,7 +477,7 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
         <div class="dk-ptext" id="dk-ptext">—</div>
         <div style="display:flex;gap:6px;margin-top:8px">
           <button class="dk-pcopy" id="dk-pcopy" onclick="dkCopy()" style="flex:1;margin-top:0">COPY PROMPT</button>
-          <button class="dk-pcopy" id="dk-pgen" onclick="dkGenerateImage()" style="flex:1;margin-top:0;border-color:#c8b97a66;color:#c8b97a">🎨 GENERATE</button>
+          <button class="dk-pcopy" id="dk-pgen" onclick="dkGenerateImage()" style="flex:1;margin-top:0;border-color:#c8b97a66;color:#c8b97a"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:4px"><path d="M12 21a8 8 0 1 1 0-16c4 0 8 2.5 8 6.5 0 2-1.5 3.5-3.5 3.5h-2c-1 0-1.5.7-1.5 1.5 0 1.2.8 1.5.8 2.5 0 1.1-1 2-1.8 2z"/></svg>GENERATE</button>
         </div>
         <div id="dk-imgwrap" style="display:none;margin-top:10px">
           <div id="dk-imgloading" style="display:none;text-align:center;padding:30px 10px;font-size:9px;color:#5a5040;letter-spacing:0.1em">
@@ -465,7 +486,7 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
           </div>
           <img id="dk-genimg" src="" style="display:none;width:100%;border-radius:5px;border:0.5px solid #2a2010" alt="generated">
           <div id="dk-imgerr" style="display:none;font-size:9px;color:#8a4a4a;padding:10px;line-height:1.6"></div>
-          <button id="dk-imgdownload" onclick="dkDownloadImage()" style="display:none;width:100%;margin-top:7px;padding:7px;border:0.5px solid #2a2010;background:transparent;color:#5a5040;font-family:var(--M);font-size:8px;letter-spacing:0.08em;cursor:pointer;border-radius:2px">⬇ DOWNLOAD IMAGE</button>
+          <button id="dk-imgdownload" onclick="dkDownloadImage()" style="display:none;width:100%;margin-top:7px;padding:7px;border:0.5px solid #2a2010;background:transparent;color:#5a5040;font-family:var(--M);font-size:8px;letter-spacing:0.08em;cursor:pointer;border-radius:2px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:3px"><path d="M12 3v12m0 0l-4-4m4 4l4-4"/><path d="M5 19h14"/></svg>DOWNLOAD IMAGE</button>
         </div>
       </div>
     </div>
@@ -496,15 +517,15 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
       <div class="tb-tag">BRAND OPS<br>& CREATIVE INTELLIGENCE</div>
     </div>
     <div class="tb-nav">
-      <div class="tni on" id="n-roster" onclick="sv('roster')">⬡ ROSTER</div>
-      <div class="tni" id="n-mission" onclick="sv('mission')">⚡ MISSION RUN</div>
-      <div class="tni" id="n-projects" onclick="sv('projects')">🗃 PROJECTS</div>
-      <div class="tni" id="n-bdev" onclick="sv('bdev')">📋 BIZ DEV</div>
-      <div class="tni" id="n-content" onclick="sv('content')">📱 CONTENT</div>
-      <div class="tni" id="n-ops" onclick="sv('ops')">🗂 OPS</div>
-      <div class="tni" id="n-client" onclick="sv('client')">🤝 CLIENT</div>
-      <div class="tni" id="n-web" onclick="sv('web')">🌐 WEB</div>
-      <div class="tni" id="n-image" onclick="sv('image')">🎨 IMAGE</div>
+      <div class="tni on" id="n-roster" onclick="sv('roster')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="vertical-align:-2px;margin-right:5px"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/></svg>ROSTER</div>
+      <div class="tni" id="n-mission" onclick="sv('mission')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="vertical-align:-2px;margin-right:5px"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>MISSION RUN</div>
+      <div class="tni" id="n-projects" onclick="sv('projects')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="vertical-align:-2px;margin-right:5px"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>PROJECTS</div>
+      <div class="tni" id="n-bdev" onclick="sv('bdev')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="vertical-align:-2px;margin-right:5px"><rect x="4" y="4" width="16" height="16" rx="1.5"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>BIZ DEV</div>
+      <div class="tni" id="n-content" onclick="sv('content')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="vertical-align:-2px;margin-right:5px"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 7h6M9 11h6M9 15h4"/></svg>CONTENT</div>
+      <div class="tni" id="n-ops" onclick="sv('ops')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="vertical-align:-2px;margin-right:5px"><rect x="3" y="6" width="18" height="14" rx="1.5"/><path d="M3 10h18M8 6V4h8v2"/></svg>OPS</div>
+      <div class="tni" id="n-client" onclick="sv('client')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="vertical-align:-2px;margin-right:5px"><circle cx="8" cy="9" r="2.6"/><circle cx="17" cy="9" r="2.2"/><path d="M3 19c0-2.8 2.3-5 5-5s5 2.2 5 5M14 14.5c2.3.3 4 2.1 4 4.5"/></svg>CLIENT</div>
+      <div class="tni" id="n-web" onclick="sv('web')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="vertical-align:-2px;margin-right:5px"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 4 6 4 9s-1.5 6.5-4 9c-2.5-2.5-4-6-4-9s1.5-6.5 4-9z"/></svg>WEB</div>
+      <div class="tni" id="n-image" onclick="sv('image')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="vertical-align:-2px;margin-right:5px"><rect x="3" y="4" width="18" height="16" rx="1.5"/><circle cx="8.5" cy="9.5" r="1.8"/><path d="M3 16l5-5 4 4 3-3 6 6"/></svg>IMAGE</div>
     </div>
     <div class="tb-right">
       <div><div class="tbs-v">14</div><div class="tbs-l">OPERATIVES</div></div>
@@ -531,7 +552,7 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
 
       <div class="view" id="v-mission">
         <div class="chdr">
-          <div><div class="chdr-t">⚡ MISSION RUN</div><div class="chdr-s">BRIEF → TEAM DELIVERS → PITCH DECK พร้อม PRESENT</div></div>
+          <div><div class="chdr-t"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="vertical-align:-2px;margin-right:6px"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>MISSION RUN</div><div class="chdr-s">BRIEF → TEAM DELIVERS → PITCH DECK พร้อม PRESENT</div></div>
           <div style="font-size:9px;color:var(--bd3);letter-spacing:0.1em" id="mprog"></div>
         </div>
         <div style="display:flex;flex-direction:column;flex:1;overflow:hidden">
@@ -545,14 +566,14 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
                 <option value="concept">Quick — Concept → Copy</option>
                 <option value="visual">Idea+Visual — Concept → Art Direction → Image Prompts</option>
               </select>
-              <button class="mi-tmpl-btn" onclick="openTmplPicker()">📂 TEMPLATE</button>
+              <button class="mi-tmpl-btn" onclick="openTmplPicker()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:3px"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>TEMPLATE</button>
               <button class="lbtn" id="lbtn" onclick="launchMission()">LAUNCH ↗</button>
               <div class="mi-note">🔋 Haiku (ประหยัด)</div>
             </div>
           </div>
           <div class="pipe-wrap" id="pwr">
             <div class="idle">
-              <div class="idle-sym">⬡</div>
+              <div class="idle-sym"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M12 2l8 4.6v10.8L12 22l-8-4.6V6.6z"/></svg></div>
               <div class="idle-t">AWAITING MISSION</div>
               <div class="idle-s">ใส่ brief → LAUNCH<br>ทีมจะทำงานต่อกันอัตโนมัติ<br>จบแล้วกด PRESENT เพื่อดู pitch deck</div>
             </div>
@@ -561,7 +582,7 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
       </div>
 
       <div class="view" id="v-projects">
-        <div class="chdr"><div><div class="chdr-t">🗃 PROJECTS</div><div class="chdr-s">CLIENT PROFILES · BRIEF TEMPLATES</div></div><button style="padding:5px 12px;border:0.5px solid var(--gold);background:transparent;color:var(--gold);font-family:var(--M);font-size:8px;letter-spacing:0.08em;cursor:pointer;border-radius:3px" onclick="openPMModal()">+ NEW</button></div>
+        <div class="chdr"><div><div class="chdr-t"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="vertical-align:-2px;margin-right:6px"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>PROJECTS</div><div class="chdr-s">CLIENT PROFILES · BRIEF TEMPLATES</div></div><button style="padding:5px 12px;border:0.5px solid var(--gold);background:transparent;color:var(--gold);font-family:var(--M);font-size:8px;letter-spacing:0.08em;cursor:pointer;border-radius:3px" onclick="openPMModal()">+ NEW</button></div>
         <div class="pm-wrap">
           <div class="pm-left">
             <input class="pm-search" id="pm-search" placeholder="ค้นหา..." oninput="filterPM(this.value)">
@@ -569,39 +590,46 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
             <div class="pm-add"><button class="pm-add-btn" onclick="openPMModal()">+ ADD CLIENT</button></div>
           </div>
           <div class="pm-right" id="pm-right">
-            <div class="pm-empty"><div class="pm-empty-sym">🗃</div><div class="pm-empty-t">NO PROJECT SELECTED</div><div class="pm-empty-s">เลือก client จากซ้าย<br>หรือเพิ่มใหม่</div></div>
+            <div class="pm-empty"><div class="pm-empty-sym"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg></div><div class="pm-empty-t">NO PROJECT SELECTED</div><div class="pm-empty-s">เลือก client จากซ้าย<br>หรือเพิ่มใหม่</div></div>
           </div>
         </div>
       </div>
 
-      <div class="view" id="v-bdev"><div class="chdr"><div><div class="chdr-t">📋 BIZ DEV</div><div class="chdr-s">PITCH · CREDENTIALS · PRICING · ANALYSIS</div></div></div><div class="tgrid" id="g-bdev"></div></div>
-      <div class="view" id="v-content"><div class="chdr"><div><div class="chdr-t">📱 CONTENT</div><div class="chdr-s">CALENDAR · SCRIPTS · SEO · INFLUENCER · EMAIL</div></div></div><div class="tgrid" id="g-content"></div></div>
-      <div class="view" id="v-ops"><div class="chdr"><div><div class="chdr-t">🗂 OPS</div><div class="chdr-s">SOP · MEETING NOTES · JD · PERFORMANCE</div></div></div><div class="tgrid" id="g-ops"></div></div>
-      <div class="view" id="v-client"><div class="chdr"><div><div class="chdr-t">🤝 CLIENT</div><div class="chdr-s">REPORT · POST-MORTEM · PRESENTATION · RETAINER</div></div></div><div class="tgrid" id="g-client"></div></div>
-      <div class="view" id="v-web"><div class="chdr"><div><div class="chdr-t">🌐 WEB DESIGN</div><div class="chdr-s">LANDING PAGE · COMPONENT · WEBFLOW · HTML</div></div></div><div class="tgrid" id="g-web"></div></div>
+      <div class="view" id="v-bdev"><div class="chdr"><div><div class="chdr-t"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="vertical-align:-2px;margin-right:6px"><rect x="4" y="4" width="16" height="16" rx="1.5"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>BIZ DEV</div><div class="chdr-s">PITCH · CREDENTIALS · PRICING · ANALYSIS</div></div></div><div class="tgrid" id="g-bdev"></div></div>
+      <div class="view" id="v-content"><div class="chdr"><div><div class="chdr-t"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="vertical-align:-2px;margin-right:6px"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M9 7h6M9 11h6M9 15h4"/></svg>CONTENT</div><div class="chdr-s">CALENDAR · SCRIPTS · SEO · INFLUENCER · EMAIL</div></div></div><div class="tgrid" id="g-content"></div></div>
+      <div class="view" id="v-ops"><div class="chdr"><div><div class="chdr-t"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="vertical-align:-2px;margin-right:6px"><rect x="3" y="6" width="18" height="14" rx="1.5"/><path d="M3 10h18M8 6V4h8v2"/></svg>OPS</div><div class="chdr-s">SOP · MEETING NOTES · JD · PERFORMANCE</div></div></div><div class="tgrid" id="g-ops"></div></div>
+      <div class="view" id="v-client"><div class="chdr"><div><div class="chdr-t"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="vertical-align:-2px;margin-right:6px"><circle cx="8" cy="9" r="2.6"/><circle cx="17" cy="9" r="2.2"/><path d="M3 19c0-2.8 2.3-5 5-5s5 2.2 5 5M14 14.5c2.3.3 4 2.1 4 4.5"/></svg>CLIENT</div><div class="chdr-s">REPORT · POST-MORTEM · PRESENTATION · RETAINER</div></div></div><div class="tgrid" id="g-client"></div></div>
+      <div class="view" id="v-web"><div class="chdr"><div><div class="chdr-t"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="vertical-align:-2px;margin-right:6px"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 4 6 4 9s-1.5 6.5-4 9c-2.5-2.5-4-6-4-9s1.5-6.5 4-9z"/></svg>WEB DESIGN</div><div class="chdr-s">LANDING PAGE · COMPONENT · WEBFLOW · HTML</div></div></div><div class="tgrid" id="g-web"></div></div>
       <div class="view" id="v-image">
-        <div class="chdr"><div><div class="chdr-t">🎨 IMAGE GEN</div><div class="chdr-s">สร้างภาพได้เลย — พิมพ์ไทยหรืออังกฤษก็ได้</div></div></div>
+        <div class="chdr"><div><div class="chdr-t">IMAGE GEN</div><div class="chdr-s">สร้างภาพได้เลย — พิมพ์ไทยหรืออังกฤษก็ได้</div></div></div>
         <div style="flex:1;overflow-y:auto;padding:18px 22px">
           <!-- STANDALONE GENERATOR PANEL -->
           <div style="background:var(--bg2);border:0.5px solid var(--bd2);border-radius:9px;padding:20px 22px;margin-bottom:22px">
-            <div style="font-size:9.5px;color:var(--gd);letter-spacing:0.14em;margin-bottom:10px">อธิบายภาพที่อยากได้ (ไทยหรืออังกฤษ)</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+              <div style="font-size:9.5px;color:var(--gd);letter-spacing:0.14em">อธิบายภาพที่อยากได้ (ไทยหรืออังกฤษ)</div>
+              <div style="display:flex;gap:6px;align-items:center">
+                <button class="ig-provider-btn on" id="ig-prov-poll" onclick="setIgProvider('poll')">Pollinations · ฟรี</button>
+                <button class="ig-provider-btn" id="ig-prov-dalle" onclick="setIgProvider('dalle')">DALL·E 3 · พรีเมียม</button>
+                <button class="ps-abtn" onclick="openOpenAIKeyModal()" style="padding:5px 9px" title="ตั้งค่า OpenAI API Key"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3h0a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9v0a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+              </div>
+            </div>
             <textarea class="mi-ta" id="ig-input" rows="3" placeholder="เช่น: ขวดน้ำปลาพรีเมียมตั้งอยู่บนโต๊ะไม้ แสงอุ่นยามเช้า บรรยากาศโรงงานดั้งเดิม สไตล์ documentary"></textarea>
             <div style="display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap">
               <select class="mi-sel" id="ig-style" style="flex:0 0 200px">
-                <option value="photo">📷 Photography สมจริง</option>
-                <option value="illust">🎨 Illustration / Art</option>
-                <option value="product">📦 Product Shot สะอาด</option>
-                <option value="cinematic">🎬 Cinematic / Mood</option>
+                <option value="photo">Photography สมจริง</option>
+                <option value="illust">Illustration / Art</option>
+                <option value="product">Product Shot สะอาด</option>
+                <option value="cinematic">Cinematic / Mood</option>
               </select>
               <select class="mi-sel" id="ig-ratio" style="flex:0 0 160px">
-                <option value="1:1">⬜ Square 1:1</option>
-                <option value="16:9">▭ Wide 16:9</option>
-                <option value="9:16">▯ Tall 9:16 (Story)</option>
-                <option value="4:5">▯ Portrait 4:5 (Feed)</option>
+                <option value="1:1">Square 1:1</option>
+                <option value="16:9">Wide 16:9</option>
+                <option value="9:16">Tall 9:16 (Story)</option>
+                <option value="4:5">Portrait 4:5 (Feed)</option>
               </select>
-              <button class="lbtn" id="ig-genbtn" onclick="standaloneGenerateImage()" style="flex:0 0 auto">✨ สร้างภาพ</button>
+              <button class="lbtn" id="ig-genbtn" onclick="standaloneGenerateImage()" style="flex:0 0 auto">สร้างภาพ</button>
             </div>
-            <div style="font-size:8px;color:var(--bd3);margin-top:8px;letter-spacing:0.04em">AI จะช่วยแปลและปรับ prompt ให้ generate ได้ดีขึ้นก่อนส่ง — ใช้ Pollinations.ai ฟรี ไม่ต้อง API key</div>
+            <div style="font-size:8px;color:var(--bd3);margin-top:8px;letter-spacing:0.04em" id="ig-provider-note">AI จะช่วยแปลและปรับ prompt ให้ generate ได้ดีขึ้นก่อนส่ง — ใช้ Pollinations.ai ฟรี ไม่ต้อง API key</div>
           </div>
 
           <!-- RESULT AREA -->
@@ -614,8 +642,8 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
                 <div style="font-size:8px;color:var(--bd3);letter-spacing:0.16em;margin-bottom:6px">FINAL PROMPT ที่ใช้ generate</div>
                 <div id="ig-finalprompt" style="background:var(--bg3);border:0.5px solid var(--bd);border-radius:5px;padding:11px 13px;font-size:11px;color:#8a7a50;line-height:1.8;margin-bottom:12px;white-space:pre-wrap">—</div>
                 <div style="display:flex;gap:8px;flex-wrap:wrap">
-                  <button class="ps-abtn" id="ig-dlbtn" onclick="standaloneDownload()">⬇ DOWNLOAD</button>
-                  <button class="ps-abtn" onclick="standaloneRegenerate()">🔄 GENERATE ใหม่ (random seed)</button>
+                  <button class="ps-abtn" id="ig-dlbtn" onclick="standaloneDownload()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:3px"><path d="M12 3v12m0 0l-4-4m4 4l4-4"/><path d="M5 19h14"/></svg>DOWNLOAD</button>
+                  <button class="ps-abtn" onclick="standaloneRegenerate()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:3px"><path d="M4 12a8 8 0 0 1 14.5-4.7M20 12a8 8 0 0 1-14.5 4.7"/><path d="M18 4v4h-4M6 20v-4h4"/></svg>GENERATE ใหม่ (random seed)</button>
                   <button class="ps-abtn" onclick="standaloneCopyPrompt()">COPY PROMPT</button>
                 </div>
               </div>
@@ -648,6 +676,7 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
 
 <script>
 var KEY=localStorage.getItem('hh_key')||'',CUR=null,HISTS={},RUNNING=false;
+var OPENAI_KEY=localStorage.getItem('hh_openai_key')||'',IG_PROVIDER='poll';
 var MOUTS={},MPIPE=[],MBRIEF='',SAPPROVED={},STHREADS={},DPROMPTS={};
 var DK_IDX=0,DK_SLIDES=[],DK_TAB='mj';
 var PM=JSON.parse(localStorage.getItem('hh_pm')||'[]'),PM_CUR=null;
@@ -738,52 +767,52 @@ var PIPES={
 
 var TOOLS={
   bdev:[
-    {ico:'🎯',name:'Pitch Deck',desc:'story structure สำหรับ pitch ลูกค้าใหม่',who:'THE ACCOUNT',ag:'HYH-009',pr:'ช่วยสร้าง pitch deck narrative structure สำหรับ agency pitch ลูกค้าใหม่'},
-    {ico:'📁',name:'Credentials',desc:'เขียน credentials สำหรับ present agency',who:'THE ACCOUNT',ag:'HYH-009',pr:'ช่วยเขียน agency credentials deck สำหรับ present ตัวเองให้ลูกค้า'},
-    {ico:'🏆',name:'Case Study',desc:'case study ผลงานสำหรับ award / portfolio',who:'THE WRITER',ag:'HYH-003',pr:'ช่วยเขียน case study ผลงาน creative agency สำหรับส่ง award หรือ portfolio'},
-    {ico:'🔍',name:'Competitive Analysis',desc:'วิเคราะห์ agency คู่แข่ง',who:'THE SCOUT',ag:'HYH-008',pr:'ช่วยทำ competitive analysis เปรียบเทียบ agency ในตลาด'},
-    {ico:'💰',name:'Rate Card',desc:'วาง fee structure และ pricing model',who:'THE ACCOUNT',ag:'HYH-009',pr:'ช่วยวาง pricing strategy และ rate card สำหรับ creative agency'},
-    {ico:'📊',name:'Brand Audit',desc:'วิเคราะห์ brand ปัจจุบันก่อน rebrand',who:'THE SCOUT',ag:'HYH-008',pr:'ช่วยทำ brand audit วิเคราะห์ brand ปัจจุบันก่อน rebrand'}
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="0.8" fill="currentColor"/></svg>',name:'Pitch Deck',desc:'story structure สำหรับ pitch ลูกค้าใหม่',who:'THE ACCOUNT',ag:'HYH-009',pr:'ช่วยสร้าง pitch deck narrative structure สำหรับ agency pitch ลูกค้าใหม่'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>',name:'Credentials',desc:'เขียน credentials สำหรับ present agency',who:'THE ACCOUNT',ag:'HYH-009',pr:'ช่วยเขียน agency credentials deck สำหรับ present ตัวเองให้ลูกค้า'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><path d="M8 4h8v5a4 4 0 0 1-8 0V4z"/><path d="M8 5H5a2 2 0 0 0 0 4h.5M16 5h3a2 2 0 0 1 0 4h-.5"/><path d="M10 16h4v3h-4z"/><path d="M8 20h8"/></svg>',name:'Case Study',desc:'case study ผลงานสำหรับ award / portfolio',who:'THE WRITER',ag:'HYH-003',pr:'ช่วยเขียน case study ผลงาน creative agency สำหรับส่ง award หรือ portfolio'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.3-4.3"/></svg>',name:'Competitive Analysis',desc:'วิเคราะห์ agency คู่แข่ง',who:'THE SCOUT',ag:'HYH-008',pr:'ช่วยทำ competitive analysis เปรียบเทียบ agency ในตลาด'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><rect x="3" y="7" width="18" height="12" rx="2"/><circle cx="12" cy="13" r="2.5"/><path d="M3 10h2M19 10h2M3 16h2M19 16h2"/></svg>',name:'Rate Card',desc:'วาง fee structure และ pricing model',who:'THE ACCOUNT',ag:'HYH-009',pr:'ช่วยวาง pricing strategy และ rate card สำหรับ creative agency'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><path d="M4 19V9M11 19V4M18 19v-7"/><path d="M3 19h18"/></svg>',name:'Brand Audit',desc:'วิเคราะห์ brand ปัจจุบันก่อน rebrand',who:'THE SCOUT',ag:'HYH-008',pr:'ช่วยทำ brand audit วิเคราะห์ brand ปัจจุบันก่อน rebrand'}
   ],
   content:[
-    {ico:'📅',name:'Content Calendar',desc:'30 วัน แยก platform พร้อม format',who:'THE MOTION',ag:'HYH-007',pr:'ช่วยวาง content calendar 30 วัน สำหรับ brand บน IG, TikTok, Facebook'},
-    {ico:'🎬',name:'Script Batch',desc:'script สำหรับ Reels, TikTok, YouTube',who:'THE WRITER',ag:'HYH-003',pr:'ช่วยเขียน script batch สำหรับ short video content'},
-    {ico:'✍️',name:'SEO Article',desc:'article, blog ที่ optimize สำหรับ search',who:'THE WRITER',ag:'HYH-003',pr:'ช่วยเขียน SEO content article พร้อม keyword strategy'},
-    {ico:'🤳',name:'Influencer Brief',desc:'brief ให้ KOL ที่ชัด ทำตามได้จริง',who:'THE MOTION',ag:'HYH-007',pr:'ช่วยเขียน influencer brief สำหรับ KOL'},
-    {ico:'📧',name:'Email Sequence',desc:'CRM, onboarding, retention',who:'THE WRITER',ag:'HYH-003',pr:'ช่วยเขียน email sequence สำหรับ CRM campaign'},
-    {ico:'🎙',name:'Podcast Script',desc:'script longform สำหรับ podcast / YouTube',who:'THE WRITER',ag:'HYH-003',pr:'ช่วยเขียน script สำหรับ podcast หรือ YouTube'}
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',name:'Content Calendar',desc:'30 วัน แยก platform พร้อม format',who:'THE MOTION',ag:'HYH-007',pr:'ช่วยวาง content calendar 30 วัน สำหรับ brand บน IG, TikTok, Facebook'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><path d="M3 7l2-3h2l-1.5 3M9 7l1.5-3h2L11 7M15 7l1.5-3h2L17 7"/><rect x="3" y="7" width="18" height="13" rx="1.5"/></svg>',name:'Script Batch',desc:'script สำหรับ Reels, TikTok, YouTube',who:'THE WRITER',ag:'HYH-003',pr:'ช่วยเขียน script batch สำหรับ short video content'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><path d="M4 20h4l11-11-4-4L4 16v4z"/><path d="M14.5 6.5l4 4"/></svg>',name:'SEO Article',desc:'article, blog ที่ optimize สำหรับ search',who:'THE WRITER',ag:'HYH-003',pr:'ช่วยเขียน SEO content article พร้อม keyword strategy'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><rect x="6" y="2" width="12" height="20" rx="2"/><circle cx="12" cy="18" r="0.7" fill="currentColor"/></svg>',name:'Influencer Brief',desc:'brief ให้ KOL ที่ชัด ทำตามได้จริง',who:'THE MOTION',ag:'HYH-007',pr:'ช่วยเขียน influencer brief สำหรับ KOL'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>',name:'Email Sequence',desc:'CRM, onboarding, retention',who:'THE WRITER',ag:'HYH-003',pr:'ช่วยเขียน email sequence สำหรับ CRM campaign'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"/></svg>',name:'Podcast Script',desc:'script longform สำหรับ podcast / YouTube',who:'THE WRITER',ag:'HYH-003',pr:'ช่วยเขียน script สำหรับ podcast หรือ YouTube'}
   ],
   ops:[
-    {ico:'📋',name:'SOP',desc:'process ที่ทำตามได้ทันที',who:'THE HANDLER',ag:'HYH-010',pr:'ช่วยเขียน SOP สำหรับ process ภายใน agency'},
-    {ico:'📝',name:'Meeting → Actions',desc:'notes → action items + owner + deadline',who:'THE HANDLER',ag:'HYH-010',pr:'ช่วยสรุป meeting notes และแจก action items — วาง notes ได้เลย'},
-    {ico:'👥',name:'Job Description',desc:'JD ประกาศรับสมัคร',who:'THE HANDLER',ag:'HYH-010',pr:'ช่วยเขียน job description สำหรับ creative agency'},
-    {ico:'⭐',name:'Performance Review',desc:'template ประเมินทีมที่ actionable',who:'THE HANDLER',ag:'HYH-010',pr:'ช่วยสร้าง performance review template'},
-    {ico:'📰',name:'Internal Newsletter',desc:'อัปเดตทีม — wins, learnings',who:'THE WRITER',ag:'HYH-003',pr:'ช่วยเขียน internal newsletter สำหรับทีม'},
-    {ico:'🎓',name:'Onboarding Guide',desc:'guide สำหรับทีมใหม่',who:'THE HANDLER',ag:'HYH-010',pr:'ช่วยสร้าง onboarding guide สำหรับทีมใหม่'}
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 2h6v3H9z"/><path d="M9 11h6M9 15h6"/></svg>',name:'SOP',desc:'process ที่ทำตามได้ทันที',who:'THE HANDLER',ag:'HYH-010',pr:'ช่วยเขียน SOP สำหรับ process ภายใน agency'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><path d="M4 20h4l11-11-4-4L4 16v4z"/><path d="M14.5 6.5l4 4"/></svg>',name:'Meeting → Actions',desc:'notes → action items + owner + deadline',who:'THE HANDLER',ag:'HYH-010',pr:'ช่วยสรุป meeting notes และแจก action items — วาง notes ได้เลย'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M3 20c0-3 2.7-5.4 6-5.4s6 2.4 6 5.4M15 14.6c2.4.4 4 2.4 4 5.4"/></svg>',name:'Job Description',desc:'JD ประกาศรับสมัคร',who:'THE HANDLER',ag:'HYH-010',pr:'ช่วยเขียน job description สำหรับ creative agency'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><path d="M12 3l2.6 5.6 6 .7-4.4 4.3 1 6-5.2-3-5.2 3 1-6-4.4-4.3 6-.7z"/></svg>',name:'Performance Review',desc:'template ประเมินทีมที่ actionable',who:'THE HANDLER',ag:'HYH-010',pr:'ช่วยสร้าง performance review template'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><rect x="3" y="4" width="14" height="16" rx="1.5"/><path d="M17 8h4v9a2 2 0 0 1-2 2h-2"/><path d="M6 8h8M6 11h8M6 14h5"/></svg>',name:'Internal Newsletter',desc:'อัปเดตทีม — wins, learnings',who:'THE WRITER',ag:'HYH-003',pr:'ช่วยเขียน internal newsletter สำหรับทีม'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><path d="M12 4 2 9l10 5 10-5-10-5z"/><path d="M6 11.5V17c0 1.5 3 3 6 3s6-1.5 6-3v-5.5"/></svg>',name:'Onboarding Guide',desc:'guide สำหรับทีมใหม่',who:'THE HANDLER',ag:'HYH-010',pr:'ช่วยสร้าง onboarding guide สำหรับทีมใหม่'}
   ],
   client:[
-    {ico:'📈',name:'Campaign Report',desc:'สรุปผล พร้อม insight + recommendation',who:'THE SCOUT',ag:'HYH-008',pr:'ช่วยเขียน campaign performance report สำหรับ present ให้ client'},
-    {ico:'🔄',name:'Post-mortem',desc:'วิเคราะห์ project ที่จบ',who:'THE HANDLER',ag:'HYH-010',pr:'ช่วยทำ post-mortem analysis'},
-    {ico:'🎤',name:'Presentation Script',desc:'script present งาน creative',who:'THE WRITER',ag:'HYH-003',pr:'ช่วยเขียน presentation script สำหรับ present งานให้ client'},
-    {ico:'💪',name:'Objection Handler',desc:'คำตอบ objections ที่ client มักถาม',who:'THE ACCOUNT',ag:'HYH-009',pr:'ช่วยเตรียม objection handler สำหรับตอบข้อกังวล client'},
-    {ico:'🤝',name:'Retainer Proposal',desc:'เสนอ long-term retainer deal',who:'THE ACCOUNT',ag:'HYH-009',pr:'ช่วยเขียน retainer proposal เสนอ long-term engagement'},
-    {ico:'💌',name:'Relationship Touch',desc:'follow-up, check-in message',who:'THE ACCOUNT',ag:'HYH-009',pr:'ช่วยเขียน client relationship message สำหรับ follow-up'}
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><path d="M4 17l5-5 4 3 7-8"/><path d="M16 6h4v4"/></svg>',name:'Campaign Report',desc:'สรุปผล พร้อม insight + recommendation',who:'THE SCOUT',ag:'HYH-008',pr:'ช่วยเขียน campaign performance report สำหรับ present ให้ client'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><path d="M4 12a8 8 0 0 1 14.5-4.7M20 12a8 8 0 0 1-14.5 4.7"/><path d="M18 4v4h-4M6 20v-4h4"/></svg>',name:'Post-mortem',desc:'วิเคราะห์ project ที่จบ',who:'THE HANDLER',ag:'HYH-010',pr:'ช่วยทำ post-mortem analysis'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6"/></svg>',name:'Presentation Script',desc:'script present งาน creative',who:'THE WRITER',ag:'HYH-003',pr:'ช่วยเขียน presentation script สำหรับ present งานให้ client'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><path d="M7 12V8a2 2 0 0 1 4 0M11 8V6a2 2 0 0 1 4 0v8a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4v-2a2 2 0 0 1 4 0"/></svg>',name:'Objection Handler',desc:'คำตอบ objections ที่ client มักถาม',who:'THE ACCOUNT',ag:'HYH-009',pr:'ช่วยเตรียม objection handler สำหรับตอบข้อกังวล client'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><path d="M3 12l4-3 4 2 4-3 6 4M7 17l3-2 4 2 3-3"/></svg>',name:'Retainer Proposal',desc:'เสนอ long-term retainer deal',who:'THE ACCOUNT',ag:'HYH-009',pr:'ช่วยเขียน retainer proposal เสนอ long-term engagement'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>',name:'Relationship Touch',desc:'follow-up, check-in message',who:'THE ACCOUNT',ag:'HYH-009',pr:'ช่วยเขียน client relationship message สำหรับ follow-up'}
   ],
   web:[
-    {ico:'🏠',name:'Landing Page',desc:'structure ครบ: hero, sections, CTA',who:'THE WEB',ag:'HYH-013',pr:'ช่วยออกแบบ landing page — บอก objective และ brand มาด้วย'},
-    {ico:'⚡',name:'HTML Prototype',desc:'generate HTML + CSS prototype',who:'THE WEB',ag:'HYH-013',pr:'generate HTML prototype สำหรับ landing page — บอก concept และ brand'},
-    {ico:'📐',name:'Component System',desc:'component library สำหรับ web',who:'THE WEB',ag:'HYH-013',pr:'ออกแบบ component system สำหรับ website'},
-    {ico:'🎯',name:'Webflow Brief',desc:'brief ให้ Webflow developer',who:'THE WEB',ag:'HYH-013',pr:'เขียน Webflow brief — บอก design direction และ sections'},
-    {ico:'📱',name:'Framer Brief',desc:'spec สำหรับ Framer / no-code',who:'THE WEB',ag:'HYH-013',pr:'เขียน brief สำหรับ Framer หรือ no-code builder'},
-    {ico:'🔍',name:'UX Flow',desc:'user flow + wireframe spec',who:'THE ARCHITECT',ag:'HYH-011',pr:'วาง UX flow และ wireframe spec'}
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/><path d="M10 20v-6h4v6"/></svg>',name:'Landing Page',desc:'structure ครบ: hero, sections, CTA',who:'THE WEB',ag:'HYH-013',pr:'ช่วยออกแบบ landing page — บอก objective และ brand มาด้วย'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>',name:'HTML Prototype',desc:'generate HTML + CSS prototype',who:'THE WEB',ag:'HYH-013',pr:'generate HTML prototype สำหรับ landing page — บอก concept และ brand'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><path d="M4 20 14 4l6 16z"/><path d="M9 14h6"/></svg>',name:'Component System',desc:'component library สำหรับ web',who:'THE WEB',ag:'HYH-013',pr:'ออกแบบ component system สำหรับ website'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="0.8" fill="currentColor"/></svg>',name:'Webflow Brief',desc:'brief ให้ Webflow developer',who:'THE WEB',ag:'HYH-013',pr:'เขียน Webflow brief — บอก design direction และ sections'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><rect x="6" y="2" width="12" height="20" rx="2"/><circle cx="12" cy="18" r="0.7" fill="currentColor"/></svg>',name:'Framer Brief',desc:'spec สำหรับ Framer / no-code',who:'THE WEB',ag:'HYH-013',pr:'เขียน brief สำหรับ Framer หรือ no-code builder'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.3-4.3"/></svg>',name:'UX Flow',desc:'user flow + wireframe spec',who:'THE ARCHITECT',ag:'HYH-011',pr:'วาง UX flow และ wireframe spec'}
   ],
   image:[
-    {ico:'🖼',name:'Campaign Key Visual',desc:'prompts สำหรับ key visual ของ campaign',who:'THE LENS',ag:'HYH-014',pr:'สร้าง prompts สำหรับ campaign key visual — บอก brand, concept และ platform'},
-    {ico:'🎨',name:'Brand Style Guide',desc:'style guide + consistent prompts',who:'THE LENS',ag:'HYH-014',pr:'สร้าง visual style guide พร้อม prompt templates ที่ consistent'},
-    {ico:'📸',name:'Product Photography',desc:'prompts สำหรับ product photography',who:'THE LENS',ag:'HYH-014',pr:'สร้าง product photography prompts — บอก product และ aesthetic'},
-    {ico:'👤',name:'Character & Talent',desc:'prompts สำหรับ character / lifestyle',who:'THE LENS',ag:'HYH-014',pr:'สร้าง character และ talent direction prompts'},
-    {ico:'🏙',name:'Environment & Scene',desc:'prompts สำหรับ scene / atmospheric',who:'THE LENS',ag:'HYH-014',pr:'สร้าง environment และ scene prompts — บอก mood และ setting'},
-    {ico:'🔄',name:'Prompt Variations',desc:'10 variations จาก concept เดียว',who:'THE LENS',ag:'HYH-014',pr:'สร้าง prompt variations 10 แบบจาก visual concept เดียว'}
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><rect x="3" y="4" width="18" height="16" rx="1.5"/><circle cx="8.5" cy="9.5" r="1.8"/><path d="M3 16l5-5 4 4 3-3 6 6"/></svg>',name:'Campaign Key Visual',desc:'prompts สำหรับ key visual ของ campaign',who:'THE LENS',ag:'HYH-014',pr:'สร้าง prompts สำหรับ campaign key visual — บอก brand, concept และ platform'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><path d="M12 21a8 8 0 1 1 0-16c4 0 8 2.5 8 6.5 0 2-1.5 3.5-3.5 3.5h-2c-1 0-1.5.7-1.5 1.5 0 1.2.8 1.5.8 2.5 0 1.1-1 2-1.8 2z"/><circle cx="8" cy="11" r="1" fill="currentColor"/><circle cx="12" cy="8" r="1" fill="currentColor"/><circle cx="16" cy="11" r="1" fill="currentColor"/></svg>',name:'Brand Style Guide',desc:'style guide + consistent prompts',who:'THE LENS',ag:'HYH-014',pr:'สร้าง visual style guide พร้อม prompt templates ที่ consistent'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.5"/></svg>',name:'Product Photography',desc:'prompts สำหรับ product photography',who:'THE LENS',ag:'HYH-014',pr:'สร้าง product photography prompts — บอก product และ aesthetic'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/></svg>',name:'Character & Talent',desc:'prompts สำหรับ character / lifestyle',who:'THE LENS',ag:'HYH-014',pr:'สร้าง character และ talent direction prompts'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><path d="M4 21V10l5-4 5 4v11M14 21V7l4-3 4 3v14"/><path d="M4 21h18"/></svg>',name:'Environment & Scene',desc:'prompts สำหรับ scene / atmospheric',who:'THE LENS',ag:'HYH-014',pr:'สร้าง environment และ scene prompts — บอก mood และ setting'},
+    {ico:'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="color:var(--gold)"><path d="M4 12a8 8 0 0 1 14.5-4.7M20 12a8 8 0 0 1-14.5 4.7"/><path d="M18 4v4h-4M6 20v-4h4"/></svg>',name:'Prompt Variations',desc:'10 variations จาก concept เดียว',who:'THE LENS',ag:'HYH-014',pr:'สร้าง prompt variations 10 แบบจาก visual concept เดียว'}
   ]
 };
 
@@ -796,6 +825,32 @@ function init(){
 function saveKey(){var v=document.getElementById('api-in').value.trim();if(!v){alert('ใส่ API Key ก่อนนะ');return;}KEY=v;localStorage.setItem('hh_key',v);document.getElementById('modal').style.display='none';}
 function skipKey(){KEY='demo';document.getElementById('modal').style.display='none';}
 function resetKey(){localStorage.removeItem('hh_key');KEY='';document.getElementById('modal').style.display='flex';}
+
+function openOpenAIKeyModal(){
+  document.getElementById('openai-key-in').value=OPENAI_KEY;
+  document.getElementById('openai-modal').style.display='flex';
+}
+function closeOpenAIKeyModal(){document.getElementById('openai-modal').style.display='none';}
+function saveOpenAIKey(){
+  var v=document.getElementById('openai-key-in').value.trim();
+  OPENAI_KEY=v;
+  if(v)localStorage.setItem('hh_openai_key',v);else localStorage.removeItem('hh_openai_key');
+  closeOpenAIKeyModal();
+  if(v){alert('บันทึก OpenAI Key แล้ว ✓ — เลือก DALL·E 3 ได้เลย');}
+}
+function setIgProvider(p){
+  if(p==='dalle'&&!OPENAI_KEY){
+    openOpenAIKeyModal();
+    return;
+  }
+  IG_PROVIDER=p;
+  document.getElementById('ig-prov-poll').classList.toggle('on',p==='poll');
+  document.getElementById('ig-prov-dalle').classList.toggle('on',p==='dalle');
+  var note=document.getElementById('ig-provider-note');
+  note.textContent=p==='dalle'
+    ? 'ใช้ DALL·E 3 ผ่าน OpenAI API ของคุณ — คุณภาพสูงกว่า มีค่าใช้จ่ายตาม OpenAI billing'
+    : 'AI จะช่วยแปลและปรับ prompt ให้ generate ได้ดีขึ้นก่อนส่ง — ใช้ Pollinations.ai ฟรี ไม่ต้อง API key';
+}
 
 function mi(src,cls,alt){
   return '<img src="'+src+'" class="'+cls+'" alt="'+(alt||'')+'" loading="lazy" onerror="this.style.display=\'none\';var n=this.nextElementSibling;if(n)n.style.display=\'flex\'">';
@@ -874,8 +929,8 @@ function selectPM(id){
   buildPMList();
   var isMission=PM_CUR.isMissionRecord;
   var btns=isMission?
-    '<button class="pm-d-btn primary" onclick="resumeMission()">📊 VIEW AS DECK</button><button class="pm-d-btn" onclick="reloadBriefOnly()">⚡ RE-RUN BRIEF</button><button class="pm-d-btn danger" onclick="deletePM()">DELETE</button>':
-    '<button class="pm-d-btn primary" onclick="loadBriefToMission()">⚡ LAUNCH MISSION</button><button class="pm-d-btn" onclick="editPM()">✎ EDIT</button><button class="pm-d-btn danger" onclick="deletePM()">DELETE</button>';
+    '<button class="pm-d-btn primary" onclick="resumeMission()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:3px"><path d="M4 19V9M11 19V4M18 19v-7"/><path d="M3 19h18"/></svg>VIEW AS DECK</button><button class="pm-d-btn" onclick="reloadBriefOnly()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:3px"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>RE-RUN BRIEF</button><button class="pm-d-btn danger" onclick="deletePM()">DELETE</button>':
+    '<button class="pm-d-btn primary" onclick="loadBriefToMission()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:3px"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>LAUNCH MISSION</button><button class="pm-d-btn" onclick="editPM()">✎ EDIT</button><button class="pm-d-btn danger" onclick="deletePM()">DELETE</button>';
   var tag=isMission?'<div style="display:inline-block;font-size:7px;padding:2px 8px;border:0.5px solid #4a8a4a44;color:#4a8a4a;border-radius:2px;letter-spacing:0.1em;margin-bottom:8px">✓ COMPLETED MISSION</div><br>':'';
   document.getElementById('pm-right').innerHTML=
     '<div style="padding:18px 20px">'+tag+'<div class="pm-d-name">'+PM_CUR.name+'</div><div class="pm-d-meta">'+PM_CUR.category+(PM_CUR.createdAt?' · '+new Date(PM_CUR.createdAt).toLocaleString('th-TH'):'')+'</div>'+
@@ -927,11 +982,11 @@ function saveEditPM(){
 function deletePM(){
   if(!PM_CUR||!confirm('ลบ '+PM_CUR.name+'?'))return;
   PM=PM.filter(function(p){return p.id!==PM_CUR.id;});localStorage.setItem('hh_pm',JSON.stringify(PM));PM_CUR=null;buildPMList();
-  document.getElementById('pm-right').innerHTML='<div class="pm-empty"><div class="pm-empty-sym">🗃</div><div class="pm-empty-t">DELETED</div></div>';
+  document.getElementById('pm-right').innerHTML='<div class="pm-empty"><div class="pm-empty-sym"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg></div><div class="pm-empty-t">DELETED</div></div>';
 }
 function openTmplPicker(){
   var list=document.getElementById('tmpl-list');
-  list.innerHTML=PM.length?PM.map(function(p){return'<div class="tmpl-item" onclick="selectTmpl(\''+p.id+'\')"><div class="tmpl-item-name">'+p.name+'</div><div class="tmpl-item-prev">'+p.brief.substring(0,80)+'...</div></div>';}).join(''):'<div class="tmpl-empty">ยังไม่มี project — เพิ่มได้ที่ 🗃 PROJECTS</div>';
+  list.innerHTML=PM.length?PM.map(function(p){return'<div class="tmpl-item" onclick="selectTmpl(\''+p.id+'\')"><div class="tmpl-item-name">'+p.name+'</div><div class="tmpl-item-prev">'+p.brief.substring(0,80)+'...</div></div>';}).join(''):'<div class="tmpl-empty">ยังไม่มี project — เพิ่มได้ที่ PROJECTS</div>';
   document.getElementById('tmpl-picker').style.display='flex';
 }
 function closeTmplPicker(){document.getElementById('tmpl-picker').style.display='none';}
@@ -1025,7 +1080,7 @@ async function launchMission(){
   });
   var done=document.createElement('div');done.className='mdone';done.id='mdone';
   done.innerHTML='<div><div class="mdt-t">MISSION COMPLETE</div><div class="mdt-s" id="mdt-status">ALL OPERATIVES DELIVERED</div></div>'+
-    '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="mdbtn pres" onclick="openDeck()">📊 SLIDE DECK</button><button class="mdbtn pres" onclick="exportPPTX()" style="border-color:#c8b97a;color:#c8b97a">⬇ EXPORT PPTX</button><button class="mdbtn" onclick="exportM()">TXT</button><button class="mdbtn" onclick="resetM()">NEW MISSION</button></div>';
+    '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="mdbtn pres" onclick="openDeck()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:3px"><path d="M4 19V9M11 19V4M18 19v-7"/><path d="M3 19h18"/></svg>SLIDE DECK</button><button class="mdbtn pres" onclick="exportPPTX()" style="border-color:#c8b97a;color:#c8b97a"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:3px"><path d="M12 3v12m0 0l-4-4m4 4l4-4"/><path d="M5 19h14"/></svg>EXPORT PPTX</button><button class="mdbtn" onclick="exportM()">TXT</button><button class="mdbtn" onclick="resetM()">NEW MISSION</button></div>';
   scroll.appendChild(done);
   for(var i=0;i<pipe.length;i++){
     var aid=pipe[i],a=ag(aid);
@@ -1047,7 +1102,9 @@ async function launchMission(){
       stEl.className='pss d';stEl.textContent='DONE';document.getElementById('ddp-'+aid).style.display='block';
     }catch(e){
       outEl.textContent='[ERROR] '+(e.message||'เติม credit ที่ console.anthropic.com');
-      stEl.className='pss e';stEl.textContent='ERROR';break;
+      stEl.className='pss e';stEl.textContent='ERROR';
+      RUNNING=false;document.getElementById('lbtn').disabled=false;document.getElementById('lbtn').textContent='LAUNCH ↗';
+      return; // stop here — do NOT show complete banner or autosave a failed mission
     }
   }
   document.getElementById('mdone').classList.add('on');
@@ -1209,20 +1266,19 @@ async function standaloneGenerateImage(){
   var imgBox=document.getElementById('ig-imgbox');
   var promptBox=document.getElementById('ig-finalprompt');
 
-  btn.disabled=true;btn.textContent='⏳ กำลังคิด prompt...';
+  btn.disabled=true;btn.textContent='กำลังคิด prompt...';
   resultBox.style.display='block';
-  imgBox.innerHTML='<span style="font-size:10px;color:var(--bd3)">⏳ กำลังเตรียม prompt...</span>';
+  imgBox.innerHTML='<span style="font-size:10px;color:var(--bd3)">กำลังเตรียม prompt...</span>';
   promptBox.textContent='—';
 
   var finalPrompt='';
   try{
     if(KEY&&KEY!=='demo'){
-      // Use Claude to translate/improve the prompt (handles Thai input naturally)
-      var sysPrompt='คุณคือ AI image prompt specialist แปลงคำอธิบายภาพ (ไทยหรืออังกฤษ) ให้เป็น English prompt สำหรับ AI image generation ที่มีรายละเอียดชัดเจน เน้น: subject, lighting, composition, mood, color\\n\\nตอบแค่ prompt ภาษาอังกฤษล้วนๆ ไม่ต้องมีคำอธิบายอื่น ไม่ต้องมี quote ไม่ต้องมี markdown ความยาวไม่เกิน 2-3 ประโยค กระชับแต่ละเอียด';
+      var sysPrompt='คุณคือ AI image prompt specialist แปลงคำอธิบายภาพ (ไทยหรืออังกฤษ) ให้เป็น English prompt สำหรับ AI image generation ที่มีรายละเอียดชัดเจน เน้น: subject, lighting, composition, mood, color\n\nตอบแค่ prompt ภาษาอังกฤษล้วนๆ ไม่ต้องมีคำอธิบายอื่น ไม่ต้องมี quote ไม่ต้องมี markdown ความยาวไม่เกิน 2-3 ประโยค กระชับแต่ละเอียด';
       var rep=await callAPI(MC,sysPrompt,[{role:'user',content:rawInput}],300);
       finalPrompt=rep.trim().replace(/^["']|["']$/g,'');
     }else{
-      finalPrompt=rawInput; // demo mode — use raw input directly
+      finalPrompt=rawInput;
     }
   }catch(e){
     console.error('prompt translation failed, using raw input',e);
@@ -1231,33 +1287,78 @@ async function standaloneGenerateImage(){
 
   finalPrompt=finalPrompt+', '+IG_STYLE_SUFFIX[style];
   promptBox.textContent=finalPrompt;
-  imgBox.innerHTML='<span style="font-size:10px;color:var(--bd3)">⏳ กำลัง generate ภาพ... (10-20 วิ)</span>';
-  btn.textContent='⏳ กำลัง generate ภาพ...';
+  btn.textContent='กำลัง generate ภาพ...';
 
+  if(IG_PROVIDER==='dalle'){
+    await generateWithDalle(finalPrompt,ratio,imgBox,btn);
+  }else{
+    await generateWithPollinations(finalPrompt,ratio,imgBox,btn);
+  }
+}
+
+async function generateWithPollinations(finalPrompt,ratio,imgBox,btn){
+  imgBox.innerHTML='<span style="font-size:10px;color:var(--bd3)">กำลัง generate ภาพ... (10-20 วิ)</span>';
   var wh=igRatioToWH(ratio);
   var seed=Math.floor(Math.random()*100000);
   var url='https://image.pollinations.ai/prompt/'+encodeURIComponent(finalPrompt.substring(0,800))+'?width='+wh[0]+'&height='+wh[1]+'&seed='+seed+'&nologo=true';
 
-  var img=new Image();
-  var done=false;
-  var timer=setTimeout(function(){
-    if(!done){done=true;
-      imgBox.innerHTML='<span style="font-size:10px;color:var(--red);text-align:center;padding:20px;line-height:1.7">⚠ generate ใช้เวลานานเกินไป<br>ลองใหม่อีกครั้ง</span>';
-      btn.disabled=false;btn.textContent='✨ สร้างภาพ';
+  return new Promise(function(resolve){
+    var img=new Image();
+    var done=false;
+    var timer=setTimeout(function(){
+      if(!done){done=true;
+        imgBox.innerHTML='<span style="font-size:10px;color:var(--red);text-align:center;padding:20px;line-height:1.7">⚠ generate ใช้เวลานานเกินไป<br>ลองใหม่อีกครั้ง</span>';
+        btn.disabled=false;btn.textContent='สร้างภาพ';resolve();
+      }
+    },45000);
+    img.onload=function(){
+      if(done)return;done=true;clearTimeout(timer);
+      imgBox.innerHTML='<img src="'+url+'" style="width:100%;height:100%;object-fit:contain" alt="generated">';
+      IG_LAST={prompt:finalPrompt,url:url,seed:seed};
+      btn.disabled=false;btn.textContent='สร้างภาพ';resolve();
+    };
+    img.onerror=function(){
+      if(done)return;done=true;clearTimeout(timer);
+      imgBox.innerHTML='<span style="font-size:10px;color:var(--red);text-align:center;padding:20px;line-height:1.7">⚠ generate ไม่สำเร็จ<br>ลองเปลี่ยนคำอธิบายแล้วลองใหม่</span>';
+      btn.disabled=false;btn.textContent='สร้างภาพ';resolve();
+    };
+    img.src=url;
+  });
+}
+
+async function generateWithDalle(finalPrompt,ratio,imgBox,btn){
+  if(!OPENAI_KEY){
+    imgBox.innerHTML='<span style="font-size:10px;color:var(--red);text-align:center;padding:20px">⚠ ยังไม่ได้ตั้งค่า OpenAI Key</span>';
+    btn.disabled=false;btn.textContent='สร้างภาพ';
+    openOpenAIKeyModal();
+    return;
+  }
+  imgBox.innerHTML='<span style="font-size:10px;color:var(--bd3)">กำลัง generate ด้วย DALL·E 3... (15-30 วิ)</span>';
+
+  // DALL-E 3 only supports specific sizes
+  var sizeMap={'1:1':'1024x1024','16:9':'1792x1024','9:16':'1024x1792','4:5':'1024x1792'};
+  var size=sizeMap[ratio]||'1024x1024';
+
+  try{
+    var res=await fetch('https://api.openai.com/v1/images/generations',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+OPENAI_KEY},
+      body:JSON.stringify({model:'dall-e-3',prompt:finalPrompt.substring(0,4000),n:1,size:size,quality:'standard'})
+    });
+    if(!res.ok){
+      var errData=await res.json().catch(function(){return{};});
+      throw new Error(errData.error?.message||'OpenAI API error '+res.status);
     }
-  },45000);
-  img.onload=function(){
-    if(done)return;done=true;clearTimeout(timer);
-    imgBox.innerHTML='<img src="'+url+'" style="width:100%;height:100%;object-fit:contain" alt="generated">';
-    IG_LAST={prompt:finalPrompt,url:url,seed:seed};
-    btn.disabled=false;btn.textContent='✨ สร้างภาพ';
-  };
-  img.onerror=function(){
-    if(done)return;done=true;clearTimeout(timer);
-    imgBox.innerHTML='<span style="font-size:10px;color:var(--red);text-align:center;padding:20px;line-height:1.7">⚠ generate ไม่สำเร็จ<br>ลองเปลี่ยนคำอธิบายแล้วลองใหม่</span>';
-    btn.disabled=false;btn.textContent='✨ สร้างภาพ';
-  };
-  img.src=url;
+    var data=await res.json();
+    var imgUrl=data.data[0].url;
+    imgBox.innerHTML='<img src="'+imgUrl+'" style="width:100%;height:100%;object-fit:contain" alt="generated">';
+    IG_LAST={prompt:finalPrompt,url:imgUrl,seed:0};
+    btn.disabled=false;btn.textContent='สร้างภาพ';
+  }catch(e){
+    console.error('DALL-E error',e);
+    imgBox.innerHTML='<span style="font-size:10px;color:var(--red);text-align:center;padding:20px;line-height:1.7">⚠ '+(e.message||'generate ไม่สำเร็จ')+'<br>เช็ค API key หรือ credit ที่ platform.openai.com</span>';
+    btn.disabled=false;btn.textContent='สร้างภาพ';
+  }
 }
 
 function standaloneDownload(){
@@ -1484,17 +1585,17 @@ async function exportPPTX(){
     var projSlug=MBRIEF.replace(/[^a-zA-Z0-9฀-๿]/g,'-').substring(0,30);
     await pptx.writeFile({fileName:'HYH-'+projSlug+'-'+Date.now()+'.pptx'});
     
-    if(btn){btn.textContent='⬇ EXPORT PPTX';btn.disabled=false;}
+    if(btn){btn.innerHTML='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:3px"><path d="M12 3v12m0 0l-4-4m4 4l4-4"/><path d="M5 19h14"/></svg>EXPORT PPTX';btn.disabled=false;}
     
   }catch(e){
     console.error(e);
     alert('Error: '+e.message);
-    if(btn){btn.textContent='⬇ EXPORT PPTX';btn.disabled=false;}
+    if(btn){btn.innerHTML='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:3px"><path d="M12 3v12m0 0l-4-4m4 4l4-4"/><path d="M5 19h14"/></svg>EXPORT PPTX';btn.disabled=false;}
   }
 }
 function resetM(){
   RUNNING=false;MOUTS={};MPIPE=[];SAPPROVED={};STHREADS={};DPROMPTS={};DIMAGES={};
-  document.getElementById('pwr').innerHTML='<div class="idle"><div class="idle-sym">⬡</div><div class="idle-t">AWAITING MISSION</div><div class="idle-s">ใส่ brief → LAUNCH<br>ทีมจะทำงานต่อกันอัตโนมัติ<br>จบแล้วกด PRESENT เพื่อดู pitch deck</div></div>';
+  document.getElementById('pwr').innerHTML='<div class="idle"><div class="idle-sym"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M12 2l8 4.6v10.8L12 22l-8-4.6V6.6z"/></svg></div><div class="idle-t">AWAITING MISSION</div><div class="idle-s">ใส่ brief → LAUNCH<br>ทีมจะทำงานต่อกันอัตโนมัติ<br>จบแล้วกด PRESENT เพื่อดู pitch deck</div></div>';
   document.getElementById('mbta').value='';document.getElementById('mprog').textContent='';document.getElementById('lbtn').disabled=false;document.getElementById('lbtn').textContent='LAUNCH ↗';
 }
 
@@ -1568,10 +1669,10 @@ function renderDk(idx){
     if(s.aid==='HYH-014'&&matchKey){
       wrap.style.display='block';loading.style.display='none';errEl.style.display='none';
       imgEl.src=DIMAGES[matchKey].url;imgEl.style.display='block';imgEl.dataset.downloadUrl=DIMAGES[matchKey].url;
-      dlBtn.style.display='block';genBtn.textContent='🎨 RE-GENERATE';
+      dlBtn.style.display='block';genBtn.innerHTML='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:4px"><path d="M12 21a8 8 0 1 1 0-16c4 0 8 2.5 8 6.5 0 2-1.5 3.5-3.5 3.5h-2c-1 0-1.5.7-1.5 1.5 0 1.2.8 1.5.8 2.5 0 1.1-1 2-1.8 2z"/></svg>RE-GENERATE';
     }else{
       wrap.style.display='none';loading.style.display='none';imgEl.style.display='none';errEl.style.display='none';dlBtn.style.display='none';
-      genBtn.textContent='🎨 GENERATE';
+      genBtn.innerHTML='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:4px"><path d="M12 21a8 8 0 1 1 0-16c4 0 8 2.5 8 6.5 0 2-1.5 3.5-3.5 3.5h-2c-1 0-1.5.7-1.5 1.5 0 1.2.8 1.5.8 2.5 0 1.1-1 2-1.8 2z"/></svg>GENERATE';
     }
     genBtn.disabled=false;
   }
@@ -1769,7 +1870,7 @@ function dkGenerateImage(){
     loading.style.display='none';
     errEl.style.display='block';
     errEl.textContent='⚠ Generate ใช้เวลานานเกินไป (>45s) — ลองใหม่ หรือ copy prompt ไปใช้ Midjourney/Flux โดยตรงแทน';
-    genBtn.disabled=false;genBtn.textContent='🎨 GENERATE';
+    genBtn.disabled=false;genBtn.innerHTML='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:4px"><path d="M12 21a8 8 0 1 1 0-16c4 0 8 2.5 8 6.5 0 2-1.5 3.5-3.5 3.5h-2c-1 0-1.5.7-1.5 1.5 0 1.2.8 1.5.8 2.5 0 1.1-1 2-1.8 2z"/></svg>GENERATE';
   },45000);
   
   testImg.onload=function(){
@@ -1779,7 +1880,7 @@ function dkGenerateImage(){
     imgEl.src=url;
     imgEl.style.display='block';
     dlBtn.style.display='block';
-    genBtn.disabled=false;genBtn.textContent='🎨 GENERATE';
+    genBtn.disabled=false;genBtn.innerHTML='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:4px"><path d="M12 21a8 8 0 1 1 0-16c4 0 8 2.5 8 6.5 0 2-1.5 3.5-3.5 3.5h-2c-1 0-1.5.7-1.5 1.5 0 1.2.8 1.5.8 2.5 0 1.1-1 2-1.8 2z"/></svg>GENERATE';
     imgEl.dataset.downloadUrl=url;
   };
   testImg.onerror=function(){
@@ -1788,7 +1889,7 @@ function dkGenerateImage(){
     loading.style.display='none';
     errEl.style.display='block';
     errEl.textContent='⚠ Generate ไม่สำเร็จ — เครือข่ายอาจ block หรือ prompt มีปัญหา ลอง copy prompt ไปใช้ Midjourney/Flux แทน';
-    genBtn.disabled=false;genBtn.textContent='🎨 GENERATE';
+    genBtn.disabled=false;genBtn.innerHTML='<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:4px"><path d="M12 21a8 8 0 1 1 0-16c4 0 8 2.5 8 6.5 0 2-1.5 3.5-3.5 3.5h-2c-1 0-1.5.7-1.5 1.5 0 1.2.8 1.5.8 2.5 0 1.1-1 2-1.8 2z"/></svg>GENERATE';
   };
   testImg.src=url;
 }
