@@ -72,6 +72,17 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
 
 /* ── ROSTER ── */
 .lobby{flex:1;overflow-y:auto;padding:20px 22px}
+
+/* ── OFFICE SCENE ── */
+.office-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:16px;position:relative;overflow:hidden;background:#040302}
+#office-svg{width:100%;height:100%;max-width:1100px}
+.of-figure{cursor:pointer}
+.of-figure-img{transition:filter .15s,opacity .15s}
+.of-figure:hover .of-figure-img{filter:brightness(1.25) saturate(1.1);}
+.of-figure:hover .of-ring{stroke-width:1.6;filter:drop-shadow(0 0 4px currentColor)}
+.of-name-label{font-family:'Share Tech Mono',monospace;letter-spacing:0.06em;opacity:0;transition:opacity .15s;pointer-events:none}
+.of-figure:hover .of-name-label{opacity:1}
+.office-tooltip{position:absolute;display:none;background:#0d0c0a;border:0.5px solid #2a2318;border-radius:5px;padding:7px 12px;font-family:var(--M);font-size:10px;color:#e8d49a;letter-spacing:0.05em;pointer-events:none;white-space:nowrap;z-index:5;box-shadow:0 4px 16px rgba(0,0,0,.6)}
 .lobby::-webkit-scrollbar{width:4px}
 .lobby::-webkit-scrollbar-thumb{background:var(--bd2)}
 .dsec{margin-bottom:28px}
@@ -518,6 +529,7 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
     </div>
     <div class="tb-nav">
       <div class="tni on" id="n-roster" onclick="sv('roster')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="vertical-align:-2px;margin-right:5px"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/></svg>ROSTER</div>
+      <div class="tni" id="n-office" onclick="sv('office')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="vertical-align:-2px;margin-right:5px"><path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/><path d="M10 20v-6h4v6"/></svg>OFFICE</div>
       <div class="tni" id="n-mission" onclick="sv('mission')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="vertical-align:-2px;margin-right:5px"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8z"/></svg>MISSION RUN</div>
       <div class="tni" id="n-projects" onclick="sv('projects')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="vertical-align:-2px;margin-right:5px"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>PROJECTS</div>
       <div class="tni" id="n-bdev" onclick="sv('bdev')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="vertical-align:-2px;margin-right:5px"><rect x="4" y="4" width="16" height="16" rx="1.5"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>BIZ DEV</div>
@@ -548,6 +560,91 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
       <div class="view on" id="v-roster">
         <div class="chdr"><div><div class="chdr-t">OPERATIVE ROSTER</div><div class="chdr-s">14 OPERATIVES · 4 DIVISIONS · CLICK TO ENGAGE</div></div></div>
         <div class="lobby" id="lobby"></div>
+      </div>
+
+      <div class="view" id="v-office">
+        <div class="chdr"><div><div class="chdr-t">THE CONTINENTAL</div><div class="chdr-s">HELLYEAH HOUSE GRAND HALL · CLICK A FIGURE TO ENGAGE</div></div></div>
+        <div class="office-wrap" id="office-wrap">
+          <svg id="office-svg" viewBox="0 0 960 600" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <linearGradient id="ofBgGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#0e0c08"/>
+                <stop offset="55%" stop-color="#08070a"/>
+                <stop offset="100%" stop-color="#020303"/>
+              </linearGradient>
+              <linearGradient id="ofWindowGlow" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#c8a96a" stop-opacity="0.5"/>
+                <stop offset="100%" stop-color="#6a5530" stop-opacity="0.25"/>
+              </linearGradient>
+              <radialGradient id="ofCenterLight" cx="50%" cy="28%" r="60%">
+                <stop offset="0%" stop-color="#c8a96a" stop-opacity="0.16"/>
+                <stop offset="100%" stop-color="#c8a96a" stop-opacity="0"/>
+              </radialGradient>
+              <linearGradient id="ofFloor" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#1a1006"/>
+                <stop offset="100%" stop-color="#0a0603"/>
+              </linearGradient>
+              <linearGradient id="ofPillar" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#1c1410"/>
+                <stop offset="50%" stop-color="#2a2018"/>
+                <stop offset="100%" stop-color="#14100c"/>
+              </linearGradient>
+              <clipPath id="ofPortraitClip"><circle cx="0" cy="0" r="1"/></clipPath>
+            </defs>
+
+            <rect x="0" y="0" width="960" height="600" fill="url(#ofBgGrad)"/>
+            <polygon points="0,600 960,600 960,440 0,440" fill="url(#ofFloor)"/>
+            <g stroke="#2a1c0e" stroke-width="0.5" opacity="0.4">
+              <line x1="0" y1="470" x2="960" y2="470"/>
+              <line x1="0" y1="510" x2="960" y2="510"/>
+              <line x1="0" y1="550" x2="960" y2="550"/>
+              <line x1="160" y1="440" x2="80" y2="600"/>
+              <line x1="320" y1="440" x2="280" y2="600"/>
+              <line x1="480" y1="440" x2="480" y2="600"/>
+              <line x1="640" y1="440" x2="680" y2="600"/>
+              <line x1="800" y1="440" x2="880" y2="600"/>
+            </g>
+
+            <rect x="120" y="40" width="720" height="400" fill="url(#ofWindowGlow)" opacity="0.45"/>
+            <g stroke="#0a0805" stroke-width="3">
+              <line x1="120" y1="40" x2="120" y2="440"/><line x1="240" y1="40" x2="240" y2="440"/>
+              <line x1="360" y1="40" x2="360" y2="440"/><line x1="480" y1="40" x2="480" y2="440"/>
+              <line x1="600" y1="40" x2="600" y2="440"/><line x1="720" y1="40" x2="720" y2="440"/>
+              <line x1="840" y1="40" x2="840" y2="440"/>
+              <line x1="120" y1="40" x2="840" y2="40"/><line x1="120" y1="140" x2="840" y2="140"/>
+              <line x1="120" y1="240" x2="840" y2="240"/><line x1="120" y1="340" x2="840" y2="340"/>
+              <line x1="120" y1="440" x2="840" y2="440"/>
+            </g>
+
+            <ellipse cx="480" cy="200" rx="420" ry="220" fill="url(#ofCenterLight)"/>
+            <polygon points="0,0 90,0 70,600 0,600" fill="url(#ofPillar)"/>
+            <polygon points="870,0 960,0 960,600 890,600" fill="url(#ofPillar)"/>
+
+            <text x="480" y="100" text-anchor="middle" font-family="Cinzel" font-size="44" font-weight="600" fill="#e8d49a" opacity="0.8" letter-spacing="0.25em">HELLYEAH</text>
+            <text x="480" y="158" text-anchor="middle" font-family="Cinzel" font-size="44" font-weight="600" fill="#e8d49a" opacity="0.8" letter-spacing="0.4em">HOUSE</text>
+
+            <ellipse cx="480" cy="480" rx="130" ry="34" fill="#0e0805" stroke="#3a2a14" stroke-width="1"/>
+            <ellipse cx="480" cy="474" rx="120" ry="28" fill="#1a1108" stroke="#4a3a20" stroke-width="0.5"/>
+
+            <!-- Agent figures injected by JS into #office-figures -->
+            <g id="office-figures"></g>
+
+            <g opacity="0.35" id="office-dust">
+              <circle cx="300" cy="150" r="1" fill="#e8d49a"/>
+              <circle cx="650" cy="180" r="1" fill="#e8d49a"/>
+              <circle cx="450" cy="120" r="0.8" fill="#e8d49a"/>
+              <circle cx="550" cy="250" r="1" fill="#e8d49a"/>
+              <circle cx="200" cy="280" r="0.8" fill="#e8d49a"/>
+            </g>
+
+            <rect x="40" y="555" width="880" height="34" rx="4" fill="#06050a" stroke="#2a2318" stroke-width="0.5" opacity="0.92"/>
+            <circle cx="62" cy="572" r="3" fill="#4a8a4a"/>
+            <text x="74" y="576" font-family="Share Tech Mono" font-size="9" fill="#8a7a50">14 OPERATIVES PRESENT</text>
+            <text x="380" y="576" font-family="Share Tech Mono" font-size="9" fill="#5a5040">CLICK A FIGURE TO OPEN CHAT</text>
+            <text x="780" y="578" font-family="Cinzel" font-size="11" fill="#c8a96a" letter-spacing="0.1em">THE CONTINENTAL</text>
+          </svg>
+          <div id="office-tooltip" class="office-tooltip"></div>
+        </div>
       </div>
 
       <div class="view" id="v-mission">
@@ -675,7 +772,7 @@ html,body{height:100%;background:var(--bg);color:var(--gold);font-family:var(--M
 </div>
 
 <script>
-var KEY=localStorage.getItem('hh_key')||'',CUR=null,HISTS={},RUNNING=false;
+var KEY=localStorage.getItem('hh_key')||'',CUR=null,HISTS={},RUNNING=false,OFFICE_BUILT=false;
 var OPENAI_KEY=localStorage.getItem('hh_openai_key')||'',IG_PROVIDER='poll';
 var MOUTS={},MPIPE=[],MBRIEF='',SAPPROVED={},STHREADS={},DPROMPTS={};
 var DK_IDX=0,DK_SLIDES=[],DK_TAB='mj';
@@ -891,6 +988,67 @@ function buildLobby(){
   document.getElementById('lobby').innerHTML=html;
 }
 
+/* ── OFFICE SCENE — The Continental grand hall ── */
+var OFFICE_POSITIONS=[
+  // Center — THE HANDLER, presiding like the lead seat
+  {id:'HYH-010',x:480,y:368,r:17,seatY:455,seatH:75,seatW:32,label:'THE HANDLER'},
+  // Inner ring — division leads, seated either side
+  {id:'HYH-009',x:343,y:384,r:14,seatY:460,seatH:65,seatW:26,label:'THE ACCOUNT'},
+  {id:'HYH-005',x:617,y:384,r:14,seatY:460,seatH:65,seatW:26,label:'THE DIRECTOR'},
+  {id:'HYH-008',x:252,y:390,r:13,seatY:460,seatH:60,seatW:24,label:'THE SCOUT'},
+  {id:'HYH-014',x:708,y:390,r:13,seatY:460,seatH:60,seatW:24,label:'THE LENS'},
+  // Standing — Creative (left side)
+  {id:'HYH-001',x:138,y:330,r:11,seatY:410,seatH:90,seatW:16,label:'THE INTAKE'},
+  {id:'HYH-002',x:183,y:335,r:11,seatY:415,seatH:85,seatW:16,label:'THE THINKER'},
+  {id:'HYH-003',x:95,y:325,r:11,seatY:405,seatH:95,seatW:16,label:'THE WRITER'},
+  {id:'HYH-004',x:228,y:340,r:10,seatY:420,seatH:80,seatW:15,label:'THE CRITIC'},
+  // Standing — Design (right side)
+  {id:'HYH-006',x:822,y:330,r:11,seatY:410,seatH:90,seatW:16,label:'THE HAND'},
+  {id:'HYH-007',x:777,y:335,r:11,seatY:415,seatH:85,seatW:16,label:'THE MOTION'},
+  {id:'HYH-013',x:865,y:325,r:11,seatY:405,seatH:95,seatW:16,label:'THE WEB'},
+  // Standing — Tech (back corners)
+  {id:'HYH-011',x:778,y:300,r:10,seatY:380,seatH:70,seatW:15,label:'THE ARCHITECT'},
+  {id:'HYH-012',x:182,y:300,r:10,seatY:380,seatH:70,seatW:15,label:'THE ENGINEER'}
+];
+
+function buildOfficeScene(){
+  var g=document.getElementById('office-figures');
+  if(!g)return;
+  var html='';
+  OFFICE_POSITIONS.forEach(function(pos){
+    var a=ag(pos.id);if(!a)return;
+    var imgId='ofimg-'+pos.id;
+    html+='<g class="of-figure" data-agent="'+pos.id+'" onclick="openChat(\''+pos.id+'\')">';
+    // seat/stand block
+    html+='<rect x="'+(pos.x-pos.seatW/2)+'" y="'+pos.seatY+'" width="'+pos.seatW+'" height="'+pos.seatH+'" rx="3" fill="#0c0c0e" stroke="'+a.dc+'33" stroke-width="0.6"/>';
+    // portrait circle clipped
+    html+='<clipPath id="clip-'+pos.id+'"><circle cx="'+pos.x+'" cy="'+pos.y+'" r="'+pos.r+'"/></clipPath>';
+    html+='<circle class="of-ring" cx="'+pos.x+'" cy="'+pos.y+'" r="'+(pos.r+1.5)+'" fill="none" stroke="'+a.dc+'" stroke-width="1" opacity="0.8"/>';
+    html+='<image href="'+a.img+'" x="'+(pos.x-pos.r)+'" y="'+(pos.y-pos.r*1.3)+'" width="'+(pos.r*2)+'" height="'+(pos.r*2.6)+'" preserveAspectRatio="xMidYMid slice" clip-path="url(#clip-'+pos.id+')" class="of-figure-img"/>';
+    // name label above on hover
+    html+='<text class="of-name-label" x="'+pos.x+'" y="'+(pos.y-pos.r-8)+'" text-anchor="middle" font-size="9" fill="'+a.dc+'">'+a.name+'</text>';
+    // permanent small label below seat
+    html+='<text x="'+pos.x+'" y="'+(pos.seatY+pos.seatH+16)+'" text-anchor="middle" font-family="Share Tech Mono" font-size="8" letter-spacing="1" fill="#6a5a40">'+pos.label+'</text>';
+    html+='</g>';
+  });
+  g.innerHTML=html;
+
+  // Tooltip on hover
+  var tooltip=document.getElementById('office-tooltip');
+  var wrap=document.getElementById('office-wrap');
+  g.querySelectorAll('.of-figure').forEach(function(fig){
+    fig.addEventListener('mousemove',function(e){
+      var aid=fig.getAttribute('data-agent');var a=ag(aid);if(!a)return;
+      tooltip.textContent=a.name+' — '+a.role;
+      tooltip.style.display='block';
+      var rect=wrap.getBoundingClientRect();
+      tooltip.style.left=(e.clientX-rect.left+14)+'px';
+      tooltip.style.top=(e.clientY-rect.top-10)+'px';
+    });
+    fig.addEventListener('mouseleave',function(){tooltip.style.display='none';});
+  });
+}
+
 function buildTools(){
   Object.keys(TOOLS).forEach(function(cat){
     var g=document.getElementById('g-'+cat);if(!g)return;
@@ -994,17 +1152,18 @@ function selectTmpl(id){var p=PM.find(function(x){return x.id===id;});if(!p)retu
 
 /* ── VIEWS ── */
 function sv(v){
-  var allV=['roster','mission','projects','bdev','content','ops','client','web','image','chat'];
+  var allV=['roster','office','mission','projects','bdev','content','ops','client','web','image','chat'];
   allV.forEach(function(id){var el=document.getElementById('v-'+id);if(el)el.classList.remove('on');});
   allV.filter(function(id){return id!=='chat';}).forEach(function(id){var el=document.getElementById('n-'+id);if(el)el.classList.remove('on');});
   var vEl=document.getElementById('v-'+v);if(vEl)vEl.classList.add('on');
   var nEl=document.getElementById('n-'+v);if(nEl)nEl.classList.add('on');
   if(v!=='chat'){CUR=null;document.querySelectorAll('.sb-a').forEach(function(e){e.classList.remove('on');});document.querySelectorAll('.ac').forEach(function(e){e.classList.remove('on');});}
+  if(v==='office'&&!OFFICE_BUILT){buildOfficeScene();OFFICE_BUILT=true;}
 }
 function openChat(id){
   var a=ag(id);if(!a)return;CUR=a;
-  ['roster','mission','projects','bdev','content','ops','client','web','image'].forEach(function(n){var el=document.getElementById('n-'+n);if(el)el.classList.remove('on');});
-  ['roster','mission','projects','bdev','content','ops','client','web','image','chat'].forEach(function(vid){var el=document.getElementById('v-'+vid);if(el)el.classList.remove('on');});
+  ['roster','office','mission','projects','bdev','content','ops','client','web','image'].forEach(function(n){var el=document.getElementById('n-'+n);if(el)el.classList.remove('on');});
+  ['roster','office','mission','projects','bdev','content','ops','client','web','image','chat'].forEach(function(vid){var el=document.getElementById('v-'+vid);if(el)el.classList.remove('on');});
   document.getElementById('v-chat').classList.add('on');
   document.querySelectorAll('.sb-a').forEach(function(e){e.classList.remove('on');});
   document.querySelectorAll('.ac').forEach(function(e){e.classList.remove('on');});
